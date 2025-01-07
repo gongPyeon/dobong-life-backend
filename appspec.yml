@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/app/
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  ApplicationStart:
+    - location: deploy.sh
+      timeout: 60
+      runas: ubuntu
+출처: https://kang-james.tistory.com/entry/CICD-Github-Action-AWS로-Java-자동-빌드배포하기 [내 꿈을 JAVA:티스토리]
