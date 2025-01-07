@@ -1,6 +1,6 @@
 package dobong.life.dto;
 
-import com.pro.oauth2.enums.Role;
+import dobong.life.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

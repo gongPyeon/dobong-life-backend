@@ -1,7 +1,7 @@
 package dobong.life.handler;
 
-import com.pro.oauth2.lib.CookieUtils;
-import com.pro.oauth2.repository.CookieAuthorizationRequestRepository;
+import dobong.life.lib.CookieUtils;
+import dobong.life.repository.CookieAuthorizationRequestRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import jakarta.servlet.http.Cookie;
 
 import java.io.IOException;
 
-import static com.pro.oauth2.repository.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static dobong.life.repository.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 @RequiredArgsConstructor

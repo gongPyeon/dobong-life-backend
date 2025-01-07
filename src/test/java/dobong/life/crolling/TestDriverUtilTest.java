@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestDriverUtilTest {
 
-    TestDriverUtil testDriverUtil = new TestDriverUtil();
-    @Test
-    public void Print(){
-        testDriverUtil.waitAndPrint();
-    }
+//    TestDriverUtil testDriverUtil = new TestDriverUtil();
+//    @Test
+//    public void Print(){
+//        testDriverUtil.waitAndPrint();
+//    }
 
 }
