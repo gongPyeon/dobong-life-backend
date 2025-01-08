@@ -25,4 +25,10 @@ public class TestController {
     public String hiInfo() {
         return "hi"; // accessToken 재발급 확인 테스트용
     }
+
+    @GetMapping("/ec2")
+    @ResponseBody
+    public String ec2Info() {
+        return "ec2"; //ec2 테스트용
+    }
 }
