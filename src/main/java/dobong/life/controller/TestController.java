@@ -31,4 +31,10 @@ public class TestController {
     public String ec2Info() {
         return "ec2"; //ec2 테스트용
     }
+
+    @GetMapping("/ssh")
+    @ResponseBody
+    public String sshInfo() {
+        return "ssh"; //ec2 테스트용
+    }
 }
