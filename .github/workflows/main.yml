@@ -42,6 +42,14 @@ jobs:
     - name: Copy appspec.yml
       run: cp appspec.yml ./deploy
 
+    - name: Create application.yml
+      env:
+        APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
+      run: |
+        mkdir -p ./src/main/resources
+        echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
+      shell: bash
+
     # script files 복사
     - name: Copy script
       run: cp ./scripts/*.sh ./deploy

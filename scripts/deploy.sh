@@ -1,26 +1,31 @@
-# scripts/before_install.sh /bin/bash
+#!/usr/bin/env bash
 
-cd /home/ubuntu/app
-# 기존 프로세스 종료
-pid=$(sudo lsof -t -i:8080 || true)
-if [ ! -z "$pid" ]; then
-  echo "Killing process $pid"
-  sudo kill -15 $pid
+REPOSITORY=/home/ubuntu/app
+
+echo "> 현재 구동 중인 애플리케이션 pid 확인"
+PORT=$(8080)
+CURRENT_PID=$(sudo lsof -t -i:$PORT)
+
+echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
+
+if [ -z "$CURRENT_PID" ]; then
+  echo "현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+  echo "> kill -9 $CURRENT_PID"
+  kill -9 $CURRENT_PID
   sleep 5
 fi
 
-# scripts/start_application.sh
-#!/bin/bash
-cd /home/ubuntu/app
-echo "${APPLICATION_PROPERTIES}" > src/main/resources/application.yml
-./gradlew clean build
-nohup java -jar -Duser.timezone=Asia/Seoul build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
+echo "> 새 애플리케이션 배포"
 
-# scripts/health_check.sh
-#!/bin/bash
-sleep 10
-if ! sudo lsof -i:8080; then
-  echo "Application failed to start"
-  exit 1
-fi
-echo "Application successfully started"
+JAR_NAME=$(ls -tr $REPOSITORY/*SNAPSHOT.jar | tail -n 1)
+
+echo "> JAR NAME: $JAR_NAME"
+
+echo "> $JAR_NAME 에 실행권한 추가"
+
+chmod +x $JAR_NAME
+
+echo "> $JAR_NAME 실행"
+
+nohup java -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
