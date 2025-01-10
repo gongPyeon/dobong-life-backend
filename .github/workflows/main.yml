@@ -74,24 +74,25 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         run: |
-          # 현재 진행 중인 배포 확인 및 중지
+        # 현재 진행 중인 배포 확인 및 중지
           DEPLOYMENT_ID=$(aws deploy list-deployments \
-            --application-name dobong-codedeploy \
-            --deployment-group-name dobong-codedeploy-group \
-            --include-only-statuses "Created,Queued,InProgress" \
-            --query 'deployments[0]' \
-            --output text)
-
+          --application-name dobong-codedeploy \
+          --deployment-group-name dobong-codedeploy-group \
+          --include-only-statuses Created Queued InProgress \
+          --query 'deployments[0]' \
+          --output text)
+          
           if [ ! -z "$DEPLOYMENT_ID" ] && [ "$DEPLOYMENT_ID" != "None" ]; then
-            echo "Stopping existing deployment: $DEPLOYMENT_ID"
-            aws deploy stop-deployment --deployment-id $DEPLOYMENT_ID
-            sleep 30  # 배포 중지가 완료될 때까지 대기
+        echo "Stopping existing deployment: $DEPLOYMENT_ID"
+          aws deploy stop-deployment --deployment-id $DEPLOYMENT_ID
+          sleep 30  # 배포 중지가 완료될 때까지 대기
           fi
-
+          
           # 새로운 배포 시작
           aws deploy create-deployment \
-            --application-name dobong-codedeploy \
-            --deployment-group-name dobong-codedeploy-group \
-            --file-exists-behavior OVERWRITE \
-            --s3-location bucket=dobong-life-s3,bundleType=zip,key=dobong.zip \
-            --region ap-northeast-2
+          --application-name dobong-codedeploy \
+          --deployment-group-name dobong-codedeploy-group \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=dobong-life-s3,bundleType=zip,key=dobong.zip \
+          --region ap-northeast-2
+
