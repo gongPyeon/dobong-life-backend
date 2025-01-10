@@ -3,7 +3,7 @@
 REPOSITORY=/home/ubuntu/app
 
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
-PORT=$(8080)
+PORT=8080
 CURRENT_PID=$(sudo lsof -t -i:$PORT)
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
@@ -18,7 +18,9 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
-JAR_NAME=$(ls -tr $REPOSITORY/*SNAPSHOT.jar | tail -n 1)
+cd $REPOSITORY  # 작업 디렉토리로 이동
+
+JAR_NAME=$(ls -tr *SNAPSHOT.jar | tail -n 1)
 
 echo "> JAR NAME: $JAR_NAME"
 
@@ -28,5 +30,7 @@ chmod +x $JAR_NAME
 
 echo "> $JAR_NAME 실행"
 
-cd $REPOSITORY  # 작업 디렉토리를 명시적으로 지정
-nohup java -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar \
+    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/app/src/main/resources/application.yml \
+    -Duser.timezone=Asia/Seoul \
+    $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
