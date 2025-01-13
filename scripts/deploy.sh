@@ -30,9 +30,7 @@ chmod +x $JAR_NAME
 echo "> $JAR_NAME 실행"
 
 # 기존 작동하는 방식과 동일하게 설정
-nohup java -jar \
-    -Duser.timezone=Asia/Seoul \
-    $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
 
 # 실행 확인
 sleep 5
