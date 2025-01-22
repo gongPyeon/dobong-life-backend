@@ -1,8 +1,9 @@
 package dobong.life.entity;
 
-import dobong.life.enums.SocialType;
-import dobong.life.enums.TagType;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private TagType tagType;
-    private String name;
+    private String parentTagName; // 일상의 작은 행복
+
+    private String subTagName; // 소소한 한끼가 필요할 때
 }

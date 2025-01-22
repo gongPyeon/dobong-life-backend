@@ -29,5 +29,8 @@ public class Domain {
     private String imageUrl;
     private int favoriteCount;
     private int reviewCount;
+    private String mapUrl;
+    private String addressDetail;
+    private String addressDong;
 
 }

@@ -10,20 +10,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DomainTag {
+public class DomainItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
 
     @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewTag_id")
-    private ReviewTag reviewTag;
+    private String name;
 }

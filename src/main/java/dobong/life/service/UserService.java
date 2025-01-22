@@ -2,6 +2,7 @@ package dobong.life.service;
 
 import dobong.life.dto.UserSignUpDto;
 import dobong.life.entity.User;
+import dobong.life.enums.Role;
 import dobong.life.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class UserService {
                 .email(userSignUpDto.getEmail())
                 .password(userSignUpDto.getPassword())
                 .name(userSignUpDto.getName())
-                .role(userSignUpDto.getRole()).build();
+                .role(Role.ROLE_USER).build();
 
         user.passwordEncode(passwordEncoder);
         userRepository.save(user);

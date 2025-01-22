@@ -1,6 +1,7 @@
 package dobong.life.entity;
 
-import dobong.life.enums.CategoryType;
+import dobong.life.enums.ParentCategoryType;
+import dobong.life.enums.SubCategoryType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,9 @@ public class Category {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private CategoryType categoryType;
+    private ParentCategoryType parentCategoryType;
+
+    private SubCategoryType subCategoryType;
 
     private String name;
 }

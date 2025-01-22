@@ -1,5 +1,6 @@
 package dobong.life.entity;
 
+import dobong.life.enums.ReviewTagType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,20 +11,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DomainTag {
+public class ReviewTag {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "domain_id")
-    private Domain domain;
-
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewTag_id")
-    private ReviewTag reviewTag;
+    @Enumerated(EnumType.STRING)
+    private ReviewTagType reviewTagType;
+    private String name;
 }

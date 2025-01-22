@@ -78,9 +78,9 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         CookieUtils.addCookie(response, ACCESS_TOKEN, tokenInfo.getAccessToken(), ACCESS_TOKEN_MAXAGE);
 
         //Redis 설정
-        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
-        RefreshToken refreshToken  = new RefreshToken(userDetails.getEmail(), tokenInfo.getRefreshToken());
-        refreshTokenRepository.save(refreshToken);
+//        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
+//        RefreshToken refreshToken  = new RefreshToken(userDetails.getEmail(), tokenInfo.getRefreshToken());
+//        refreshTokenRepository.save(refreshToken);
 
         log.info("access = {}", tokenInfo.getAccessToken());
         log.info("refresh = {}", tokenInfo.getRefreshToken());
