@@ -36,14 +36,8 @@ public class StoreReviewResponseDto {
         private int userReviewCount;
         private String reviewDate;
         private String reviewContent;
-        private List<KeyWord> selectedKeywords;
+        private List<String> selectedKeywords;
         private boolean likedByUser;
         private int likeCount;
-
-        @Getter
-        @NoArgsConstructor
-        public class KeyWord{
-            private String name;
-        }
     }
 }

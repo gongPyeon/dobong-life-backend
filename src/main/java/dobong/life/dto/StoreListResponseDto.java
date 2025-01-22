@@ -1,5 +1,7 @@
 package dobong.life.dto;
 
+import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.dto.info.TagInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,20 +15,8 @@ public class StoreListResponseDto {
 
     @NoArgsConstructor
     @Getter
-    public class Result{
-        private Long tagId;
-        private String tagCategory;
-        private String hashTag;
-        private List<Content> contents;
-    }
-
-    @NoArgsConstructor
-    @Getter
-    public class Content{
-        private Long storeId;
-        private String storeName;
-        private String storeLocation;
-        private String imgUrl;
-        private boolean storeLike;
+    public static class Result{
+        private TagInfo tag;
+        private List<StoreBasicInfo> contents;
     }
 }

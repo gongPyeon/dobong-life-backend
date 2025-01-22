@@ -20,19 +20,7 @@ public class StoreItemResponseDto {
         private String storeLocationDetail;
         private String storeLocation;
         private int storeLike;
-        private List<Menu> storeMenu;
-        private List<Keyword> storeKeyword;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public class Menu{
-        private String name;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public class Keyword{
-        private String name;
+        private List<String> storeMenu;
+        private List<String> storeKeyword;
     }
 }
