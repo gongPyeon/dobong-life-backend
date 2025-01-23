@@ -42,4 +42,12 @@ public class StoreController {
         return baseResponseService.getSuccessResponse(storeListResponseDto);
     }
 
+    @GetMapping("/food/more")
+    public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @RequestParam Long categoryId, @RequestParam Long tagCategoryId, @RequestParam String hashTag){
+        String email = userPrincipal.getEmail();
+        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagCategoryId, hashTag);
+        return baseResponseService.getSuccessResponse(storeListResponseDto);
+    }
+
 }

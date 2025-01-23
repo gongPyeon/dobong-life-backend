@@ -41,4 +41,10 @@ public class TagQueryService {
                 .map(this::createTagGroup)
                 .collect(Collectors.toList());
     }
+
+    public List<TagGroup> getTagGroupsMore(Category category, Long tagCategoryId, String hashTag) {
+        return tagRepository.findByIdAndCategoryAndSubTagName(tagCategoryId, category, hashTag).stream()
+                .map(this::createTagGroup)
+                .collect(Collectors.toList());
+    }
 }

@@ -71,4 +71,15 @@ public class StoreService {
                 .results(createStoreGroups(tagGroups, user))
                 .build();
     }
+
+    public StoreListResponseDto getStoreList(Long categoryId, String email, Long tagCategoryId, String hashTag) {
+        Category category = storeQueryService.getCategory(categoryId);
+        User user = storeQueryService.getUserByEmail(email);
+        List<TagGroup> tagGroups = tagQueryService.getTagGroupsMore(category, tagCategoryId, hashTag);
+
+        return StoreListResponseDto.builder()
+                .categoryId(categoryId)
+                .results(createStoreGroups(tagGroups, user))
+                .build();
+    }
 }
