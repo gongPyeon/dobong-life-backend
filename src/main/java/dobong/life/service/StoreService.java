@@ -26,7 +26,7 @@ public class StoreService {
     public StoreListResponseDto getStoreList(Long categoryId, String email){
         Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
-        List<TagGroup> tagGroups = tagQueryService.getTagGroups();
+        List<TagGroup> tagGroups = tagQueryService.getTagGroups(category);
 
         return StoreListResponseDto.builder()
                 .categoryId(categoryId)
@@ -60,38 +60,4 @@ public class StoreService {
         return storeMapper.toStoreBasicInfo(domain, isFavorite);
 
     }
-
-
-//    public StoreListResponseDto getStoreList1(Long categoryId, String email) {
-//        Category category = categoryRepository.findById(categoryId).get();
-//        User user = userRepository.findByEmail(email).get();
-//        List<Tag> tags = tagRepository.findAll();
-//        List<StoreListResponseDto.Result> results = new ArrayList<>();
-//        List<StoreBasicInfo> storeBasicInfos = new ArrayList<>();
-//        for(int i=0; i<tags.size(); i++){
-//            Tag tag = tags.get(i);
-//            TagInfo tokenInfo = getTagInfo(tag);
-//            List<DomainTag> domainTags = domainTagRepository.findByTag(tag);
-//            for(int j=0; j<domainTags.size(); j++){
-//                Domain domain = domainTags.get(i).getDomain();
-//                StoreBasicInfo storeBasicInfo = getStoreBasicInfo(domain, user);
-//                storeBasicInfos.add(storeBasicInfo);
-//            }
-//            StoreListResponseDto.Result result = new StoreListResponseDto.Result(tokenInfo, storeBasicInfos);
-//            results.add(result);
-//        }
-//
-//        return new StoreListResponseDto(categoryId, results);
-//    }
-//
-//    private StoreBasicInfo getStoreBasicInfo(Domain domain, User user) {
-//        Optional<Favorite> favoriteOptional = favoriteRepository.findByDomainAndUser(domain, user);
-//        if(!favoriteOptional.isPresent()) return null;
-//        return new StoreBasicInfo(domain.getId(), domain.getNameKr(), domain.getAddressDong(), domain.getImageUrl(), true);
-//    }
-//
-//    private TagInfo getTagInfo(Tag tag) {
-//        return new TagInfo(tag.getId(), tag.getParentTagName(), tag.getSubTagName());
-//    }
-
 }
