@@ -60,4 +60,15 @@ public class StoreService {
         return storeMapper.toStoreBasicInfo(domain, isFavorite);
 
     }
+
+    public StoreListResponseDto getStoreList(Long categoryId, String email, String query) {
+        Category category = storeQueryService.getCategory(categoryId);
+        User user = storeQueryService.getUserByEmail(email);
+        List<TagGroup> tagGroups = tagQueryService.getTagGroupsByQuery(category, query);
+
+        return StoreListResponseDto.builder()
+                .categoryId(categoryId)
+                .results(createStoreGroups(tagGroups, user))
+                .build();
+    }
 }

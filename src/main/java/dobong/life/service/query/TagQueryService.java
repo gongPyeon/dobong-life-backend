@@ -36,4 +36,9 @@ public class TagQueryService {
         return new TagGroup(tag, domains);
     }
 
+    public List<TagGroup> getTagGroupsByQuery(Category category, String query) {
+        return tagRepository.findByCategoryAndQuery(category, query).stream()
+                .map(this::createTagGroup)
+                .collect(Collectors.toList());
+    }
 }
