@@ -71,6 +71,7 @@ public class JwtService {
                 .getBody();
 
         String username = claims.getSubject();
+        log.info("username = {}", username);
         String authorities = claims.get(AUTHORITIES_KEY, String.class);
 
         return createAccessToken(username, authorities);

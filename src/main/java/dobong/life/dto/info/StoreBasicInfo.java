@@ -1,10 +1,13 @@
 package dobong.life.dto.info;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StoreBasicInfo {
     private Long storeId;
     private String storeName;
