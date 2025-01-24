@@ -10,6 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DomainTagRepository extends JpaRepository<DomainTag, Long> {
-
-    List<DomainTag> findByTag(Tag tag);
 }
