@@ -5,6 +5,7 @@ import dobong.life.entity.Category;
 import dobong.life.entity.Domain;
 import dobong.life.entity.DomainTag;
 import dobong.life.entity.Tag;
+import dobong.life.repository.DomainRepository;
 import dobong.life.repository.DomainTagRepository;
 import dobong.life.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,9 @@ public class TagQueryService {
         return tagRepository.findByIdAndCategoryAndSubTagName(tagCategoryId, category, hashTag).stream()
                 .map(this::createTagGroup)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getHashTags(Domain domain) {
+        return tagRepository.findByDomain(domain);
     }
 }

@@ -16,6 +16,10 @@ public class Domain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
+
     private String nameKr;
     private String nameEn;
 

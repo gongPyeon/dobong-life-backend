@@ -1,5 +1,6 @@
 package dobong.life.controller;
 
+import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.StoreListResponseDto;
 import dobong.life.jwt.JwtService;
 import dobong.life.service.StoreService;
@@ -48,6 +49,14 @@ public class StoreController {
         String email = userPrincipal.getEmail();
         StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagCategoryId, hashTag);
         return baseResponseService.getSuccessResponse(storeListResponseDto);
+    }
+
+    @GetMapping("/food/item")
+    public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @RequestParam Long categoryId, @RequestParam Long storeId){
+        String email = userPrincipal.getEmail();
+        StoreItemResponseDto storeItemResponseDto = storeService.getStore(categoryId, email, storeId);
+        return baseResponseService.getSuccessResponse(storeItemResponseDto);
     }
 
 }

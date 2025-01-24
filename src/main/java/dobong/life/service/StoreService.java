@@ -1,5 +1,6 @@
 package dobong.life.service;
 
+import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.StoreListResponseDto;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.dto.info.StoreGroup;
@@ -81,5 +82,24 @@ public class StoreService {
                 .categoryId(categoryId)
                 .results(createStoreGroups(tagGroups, user))
                 .build();
+    }
+
+    public StoreItemResponseDto getStore(Long categoryId, String email, Long storeId) {
+        Category category = storeQueryService.getCategory(categoryId);
+        User user = storeQueryService.getUserByEmail(email);
+        Domain domain = storeQueryService.getStore(category, storeId);
+        String subCategory = category.getName();
+
+        return StoreItemResponseDto.builder()
+                .categoryId(categoryId)
+                .result(createStoreInfoDetail(domain, user, subCategory))
+                .build();
+    }
+
+    private StoreBasicInfo createStoreInfoDetail(Domain domain, User user, String subCategory) {
+        boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
+        List<String> items = storeQueryService.getItems(domain);
+        List<String> keywords = tagQueryService.getHashTags(domain);
+        return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, subCategory, items, keywords);
     }
 }
