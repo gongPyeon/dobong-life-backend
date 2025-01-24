@@ -20,8 +20,4 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private ParentCategoryType parentCategoryType;
-
-    private SubCategoryType subCategoryType;
-
-    private String name;
 }

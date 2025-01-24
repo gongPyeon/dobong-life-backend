@@ -5,16 +5,20 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 
-@Entity
 @Getter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tag {
-
+public class SubTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String parentTagName; // 일상의 작은 행복
+    private String subTagName; // 소소한 한끼가 필요할 때
+
+    @ManyToOne
+    @JoinColumn(name = "domain_id")
+    private Domain domain;
 }

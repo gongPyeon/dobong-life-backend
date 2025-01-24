@@ -39,4 +39,9 @@ public class StoreQueryService {
     public List<String> getItems(Domain domain) {
         return itemRepository.findByDomain(domain); // orElseThrow 고려 (Optional)
     }
+
+    public List<String> getHashTags(Domain domain) {
+        //return domainRepository.findByTag(domain.getTag()).stream()
+        return null;
+    }
 }

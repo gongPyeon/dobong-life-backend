@@ -48,8 +48,4 @@ public class TagQueryService {
                 .map(this::createTagGroup)
                 .collect(Collectors.toList());
     }
-
-    public List<String> getHashTags(Domain domain) {
-        return tagRepository.findByDomain(domain);
-    }
 }

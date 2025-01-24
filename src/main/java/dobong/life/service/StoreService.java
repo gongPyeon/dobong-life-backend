@@ -99,7 +99,7 @@ public class StoreService {
     private StoreBasicInfo createStoreInfoDetail(Domain domain, User user, String subCategory) {
         boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
         List<String> items = storeQueryService.getItems(domain);
-        List<String> keywords = tagQueryService.getHashTags(domain);
+        List<String> keywords = storeQueryService.getHashTags(domain);
         return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, subCategory, items, keywords);
     }
 }
