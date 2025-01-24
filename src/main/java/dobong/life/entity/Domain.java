@@ -20,6 +20,10 @@ public class Domain {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+    @OneToOne
+    @JoinColumn(name = "sub_category_id")
+    private SubCategory subCategory;
+
     private String nameKr;
     private String nameEn;
 

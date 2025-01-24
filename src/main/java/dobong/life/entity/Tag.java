@@ -17,4 +17,8 @@ public class Tag {
     private Long id;
 
     private String parentTagName; // 일상의 작은 행복
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
