@@ -19,6 +19,6 @@ public class SubTag {
     private String subTagName; // 소소한 한끼가 필요할 때
 
     @ManyToOne
-    @JoinColumn(name = "domain_id")
-    private Domain domain;
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 }

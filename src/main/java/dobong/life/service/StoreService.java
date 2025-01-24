@@ -4,6 +4,7 @@ import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.StoreListResponseDto;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.dto.info.StoreGroup;
+import dobong.life.dto.info.SubTagDomain;
 import dobong.life.dto.info.TagGroup;
 import dobong.life.entity.*;
 import dobong.life.service.mapper.StoreMapper;
@@ -44,13 +45,14 @@ public class StoreService {
 
     private StoreGroup createStoreGroup(TagGroup tagGroup, User user) {
         return StoreGroup.builder()
-                .tag(storeMapper.toTagInfo(tagGroup.getTag()))
-                .stores(createStoreList(tagGroup.getDomains(), user))
+                .tag(storeMapper.toTagInfo(tagGroup.getTag(), tagGroup.getSubTagDomains().getFirst().getSubTag())) // subTag?
+                .stores(createStoreList(tagGroup.getSubTagDomains(), user))
                 .build();
     }
 
-    private List<StoreBasicInfo> createStoreList(List<Domain> domains, User user) {
-        return domains.stream()
+    private List<StoreBasicInfo> createStoreList(List<SubTagDomain> subTagDomains, User user) {
+        return subTagDomains.stream()
+                .flatMap(subTagDomain -> subTagDomain.getDomains().stream())
                 .map(domain -> createStoreInfo(domain, user))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -88,7 +90,7 @@ public class StoreService {
         Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
         Domain domain = storeQueryService.getStore(category, storeId);
-        String subCategory = category.getName();
+        String subCategory = domain.getSubCategory().getName();
 
         return StoreItemResponseDto.builder()
                 .categoryId(categoryId)

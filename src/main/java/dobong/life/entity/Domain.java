@@ -17,8 +17,8 @@ public class Domain {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+    @JoinColumn(name = "sub_tag_id")
+    private SubTag subTag;
 
     @OneToOne
     @JoinColumn(name = "sub_category_id")

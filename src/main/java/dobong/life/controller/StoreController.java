@@ -40,7 +40,7 @@ public class StoreController {
     }
 
     @GetMapping("/more")
-    public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<Object> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @RequestParam Long tagCategoryId, @RequestParam String hashTag){
         String email = userPrincipal.getEmail();
         StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagCategoryId, hashTag);
@@ -48,7 +48,7 @@ public class StoreController {
     }
 
     @GetMapping("/item")
-    public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<Object> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
         String email = userPrincipal.getEmail();
         StoreItemResponseDto storeItemResponseDto = storeService.getStore(categoryId, email, storeId);
