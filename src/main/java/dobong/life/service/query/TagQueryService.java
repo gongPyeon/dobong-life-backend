@@ -47,7 +47,11 @@ public class TagQueryService {
     }
 
     public List<TagGroup> getTagGroupsByQuery(Category category, String query) {
-        return subCategoryRepository.findByCategoryAndQuery(category, query).stream()
+//        return subCategoryRepository.findByCategoryAndQuery(category, query).stream()
+//                .map(this::createTagGroupBySubCategory)
+//                .collect(Collectors.toList());
+
+        return subCategoryRepository.findByCategory(category).stream()
                 .map(this::createTagGroupBySubCategory)
                 .collect(Collectors.toList());
     }
@@ -65,7 +69,7 @@ public class TagQueryService {
     }
 
     public List<TagGroup> getTagGroupsMore(Category category, Long tagCategoryId, String hashTag) {
-        return subTagRepository.findByHashTag(hashTag).stream()
+        return subTagRepository.findBySubTagName(hashTag).stream()
                 .map(this::createTagGroupBySubTag)
                 .collect(Collectors.toList());
     }

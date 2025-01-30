@@ -2,6 +2,7 @@ package dobong.life.controller;
 
 import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.StoreListResponseDto;
+import dobong.life.dto.StoreReviewResponseDto;
 import dobong.life.jwt.JwtService;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
@@ -26,7 +27,7 @@ public class StoreController {
 
     @GetMapping
     public BaseResponse<Object> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
-        String email = userPrincipal.getEmail();
+        String email = userPrincipal.getUsername();
         StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email);
         return baseResponseService.getSuccessResponse(storeListResponseDto);
     }
@@ -53,6 +54,14 @@ public class StoreController {
         String email = userPrincipal.getEmail();
         StoreItemResponseDto storeItemResponseDto = storeService.getStore(categoryId, email, storeId);
         return baseResponseService.getSuccessResponse(storeItemResponseDto);
+    }
+
+    @GetMapping("/review")
+    public BaseResponse<Object> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
+        String email = userPrincipal.getEmail();
+        StoreReviewResponseDto storeReviewResponseDto = storeService.getStoreReview(categoryId, email, storeId);
+        return baseResponseService.getSuccessResponse(storeReviewResponseDto);
     }
 
 }

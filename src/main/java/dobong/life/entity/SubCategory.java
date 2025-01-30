@@ -16,7 +16,8 @@ public class SubCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private SubCategoryType subCategoryType;
+    //@Enumerated(EnumType.STRING)
+    private String subCategoryType;
 
     private String name;
 

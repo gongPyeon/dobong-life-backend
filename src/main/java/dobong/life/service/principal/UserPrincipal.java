@@ -16,29 +16,49 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails {
 
     private Long id;
     private String email;
+    private String password;  // 추가
     private Collection<? extends GrantedAuthority> authorities;
 
     @Setter
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String email, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(User user) {
+        this.id = user.getId();        // id 설정 추가
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().getDescription())
+        );
+    }
+
+    public static UserPrincipal create(User user) {
+        return new UserPrincipal(user);
+    }
+
+    public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.authorities = authorities;
     }
 
     public static UserPrincipal create(User user, Map<String, Object> attributes){
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(Role.ROLE_USER.name()));
-        UserPrincipal userPrincipal = new UserPrincipal(user.getId(), user.getEmail(), authorities);
+        UserPrincipal userPrincipal = new UserPrincipal(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),  // 패스워드 추가
+                authorities
+        );
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
-
 
     @Override
     public String getUsername() {
@@ -77,7 +97,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override

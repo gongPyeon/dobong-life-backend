@@ -10,5 +10,5 @@ import java.util.List;
 public interface SubTagRepository extends JpaRepository<SubTag, Long> {
     List<SubTag> findByTag(Tag tag);
 
-    List<SubTag> findByHashTag(String hashTag);
+    List<SubTag> findBySubTagName(String subTagName);
 }

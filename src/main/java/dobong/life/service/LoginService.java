@@ -2,11 +2,15 @@ package dobong.life.service;
 
 import dobong.life.entity.User;
 import dobong.life.repository.UserRepository;
+import dobong.life.service.principal.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +23,12 @@ public class LoginService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword()) // ROLE 설정
-                .roles(user.getRole().getDescription())
-                .build();
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(user.getEmail())
+//                .password(user.getPassword()) // ROLE 설정
+//                .roles(user.getRole().getDescription())
+//                .build();
+
+        return UserPrincipal.create(user);
     }
 }

@@ -17,6 +17,7 @@ public class Review {
     private String content;
     private int likeCount;
     private LocalDateTime date;
+    private Double score;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

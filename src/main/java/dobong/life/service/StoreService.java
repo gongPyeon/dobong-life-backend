@@ -2,12 +2,11 @@ package dobong.life.service;
 
 import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.StoreListResponseDto;
-import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.dto.info.StoreGroup;
-import dobong.life.dto.info.SubTagDomain;
-import dobong.life.dto.info.TagGroup;
+import dobong.life.dto.StoreReviewResponseDto;
+import dobong.life.dto.info.*;
 import dobong.life.entity.*;
 import dobong.life.service.mapper.StoreMapper;
+import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.TagQueryService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ public class StoreService {
 
     private final StoreQueryService storeQueryService;
     private final TagQueryService tagQueryService;
+    private final ReviewQueryService reviewQueryService;
     private final StoreMapper storeMapper;
 
     public StoreListResponseDto getStoreList(Long categoryId, String email){
@@ -60,6 +60,7 @@ public class StoreService {
 
     private StoreBasicInfo createStoreInfo(Domain domain, User user) {
         boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
+        System.out.println("isFavorite!!! : " + isFavorite);
         return storeMapper.toStoreBasicInfo(domain, isFavorite);
 
     }
@@ -103,5 +104,18 @@ public class StoreService {
         List<String> items = storeQueryService.getItems(domain);
         List<String> keywords = storeQueryService.getHashTags(domain);
         return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, subCategory, items, keywords);
+    }
+
+    public StoreReviewResponseDto getStoreReview(Long categoryId, String email, Long storeId) {
+        Category category = storeQueryService.getCategory(categoryId);
+        User user = storeQueryService.getUserByEmail(email);
+        Domain domain  = storeQueryService.getStore(category, storeId);
+        ReviewInfoGroup reviewInfoGroup = reviewQueryService.getReviewInfoGroup(domain, user);
+
+        return StoreReviewResponseDto.builder().
+                categoryId(categoryId)
+                .storeId(storeId)
+                .result(storeMapper.createReviewInfo(reviewInfoGroup))
+                .build();
     }
 }

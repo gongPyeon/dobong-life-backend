@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ParentCategoryType {
-    FOOD,
-    PLACE,
-    BUSINESS
+    맛집,
+    명소,
+    비즈니스
 }

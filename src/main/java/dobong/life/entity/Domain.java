@@ -36,5 +36,6 @@ public class Domain {
     private String mapUrl;
     private String addressDetail;
     private String addressDong;
+    private String itemName;
 
 }
