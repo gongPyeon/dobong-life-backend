@@ -47,6 +47,26 @@ public class TagQueryService {
         return new SubTagDomain(subTag, domains);
     }
 
+    public List<TagGroup> getTagGroupsByQuery(Category category, String query) {
+        return tagRepository.findByCategory(category).stream()
+                .map(tag -> createTagGroupByTagAndQuery(tag, query))
+                .collect(Collectors.toList());
+    }
+
+    private TagGroup createTagGroupByTagAndQuery(Tag tag, String query) {
+        List<SubTagDomain> subTagDomains = subTagRepository.findByTag(tag).stream()
+                .map(subTag -> createSubTagDomainByQuery(subTag, query))
+                .collect(Collectors.toList());
+
+        return new TagGroup(tag, subTagDomains);
+    }
+
+    private SubTagDomain createSubTagDomainByQuery(SubTag subTag, String query) {
+        List<Domain> domains = domainRepository.findBySubTagAndQuery(subTag, query).stream()
+                .collect(Collectors.toList());
+        return new SubTagDomain(subTag, domains);
+    }
+
 //    private TagGroup createSubTagDomainByQuery(SubCategory subCategory) {
 //        Domain domain = domainRepository.findBySubCategory(subCategory);
 //        SubTag subTag = domain.getSubTag();
