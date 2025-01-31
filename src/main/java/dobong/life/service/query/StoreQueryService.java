@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +45,8 @@ public class StoreQueryService {
     }
 
     public List<String> getHashTags(Domain domain) {
-        //return domainRepository.findByTag(domain.getTag()).stream()
-        //domain.getSubTag()
-        return null;
+        return domainRepository.findByNameKr(domain.getNameKr()).stream()
+                .map(d -> d.getSubTag().getSubTagName())
+                .collect(Collectors.toList());
     }
 }

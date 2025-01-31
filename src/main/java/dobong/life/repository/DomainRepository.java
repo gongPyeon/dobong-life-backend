@@ -21,6 +21,8 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
             "AND (:subTagNames IS NULL OR d.subTag.subTagName IN :subTagNames)")
     List<Domain> findByFilters(List<String> categoryNames, List<String> subTagNames);
 
+    List<Domain> findByNameKr(String nameKr);
+
     /**
      * query DSL
      *
