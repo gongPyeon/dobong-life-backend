@@ -8,6 +8,7 @@ import dobong.life.repository.SubCategoryRepository;
 import dobong.life.repository.SubTagRepository;
 import dobong.life.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TagQueryService {
     private final TagRepository tagRepository;
     private final DomainRepository domainRepository;
@@ -42,31 +44,20 @@ public class TagQueryService {
         List<Domain> domains = domainRepository.findBySubTag(subTag).stream()
                 .limit(MAX_DOMAINS_PER_SUBTAG)
                 .collect(Collectors.toList());
-
         return new SubTagDomain(subTag, domains);
     }
 
-    public List<TagGroup> getTagGroupsByQuery(Category category, String query) {
-//        return subCategoryRepository.findByCategoryAndQuery(category, query).stream()
-//                .map(this::createTagGroupBySubCategory)
-//                .collect(Collectors.toList());
-
-        return subCategoryRepository.findByCategory(category).stream()
-                .map(this::createTagGroupBySubCategory)
-                .collect(Collectors.toList());
-    }
-
-    private TagGroup createTagGroupBySubCategory(SubCategory subCategory) {
-        Domain domain = domainRepository.findBySubCategory(subCategory);
-        SubTag subTag = domain.getSubTag();
-
-        SubTagDomain subTagDomain = new SubTagDomain(
-                subTag,
-                Collections.singletonList(domain)
-        );
-
-        return new TagGroup(subTag.getTag(), Collections.singletonList(subTagDomain));
-    }
+//    private TagGroup createSubTagDomainByQuery(SubCategory subCategory) {
+//        Domain domain = domainRepository.findBySubCategory(subCategory);
+//        SubTag subTag = domain.getSubTag();
+//
+//        SubTagDomain subTagDomain = new SubTagDomain(
+//                subTag,
+//                Collections.singletonList(domain)
+//        );
+//
+//        return new TagGroup(subTag.getTag(), Collections.singletonList(subTagDomain));
+//    }
 
     public List<TagGroup> getTagGroupsMore(Category category, Long tagCategoryId, String hashTag) {
         return subTagRepository.findBySubTagName(hashTag).stream()

@@ -10,6 +10,7 @@ import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.TagQueryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StoreService {
 
     private final StoreQueryService storeQueryService;
@@ -38,21 +40,22 @@ public class StoreService {
 
     private List<StoreGroup> createStoreGroups(List<TagGroup> tagGroups, User user) {
         return tagGroups.stream()
-                .map(tagGroup -> createStoreGroup(tagGroup, user))
+                .flatMap(tagGroup -> createStoreGroupsForTagGroup(tagGroup, user).stream())
                 .filter(group -> !group.getStores().isEmpty())
                 .collect(Collectors.toList());
     }
 
-    private StoreGroup createStoreGroup(TagGroup tagGroup, User user) {
-        return StoreGroup.builder()
-                .tag(storeMapper.toTagInfo(tagGroup.getTag(), tagGroup.getSubTagDomains().getFirst().getSubTag())) // subTag?
-                .stores(createStoreList(tagGroup.getSubTagDomains(), user))
-                .build();
+    private List<StoreGroup> createStoreGroupsForTagGroup(TagGroup tagGroup, User user) {
+        return tagGroup.getSubTagDomains().stream()
+                .map(subTagDomain -> StoreGroup.builder()
+                        .tag(storeMapper.toTagInfo(tagGroup.getTag(), subTagDomain.getSubTag()))
+                        .stores(createStoreList(subTagDomain.getDomains(), user))
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    private List<StoreBasicInfo> createStoreList(List<SubTagDomain> subTagDomains, User user) {
-        return subTagDomains.stream()
-                .flatMap(subTagDomain -> subTagDomain.getDomains().stream())
+    private List<StoreBasicInfo> createStoreList(List<Domain> domains, User user) {
+        return domains.stream()
                 .map(domain -> createStoreInfo(domain, user))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -60,9 +63,7 @@ public class StoreService {
 
     private StoreBasicInfo createStoreInfo(Domain domain, User user) {
         boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
-        System.out.println("isFavorite!!! : " + isFavorite);
         return storeMapper.toStoreBasicInfo(domain, isFavorite);
-
     }
 
     public StoreListResponseDto getStoreList(Long categoryId, String email, String query) {

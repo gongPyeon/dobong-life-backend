@@ -27,7 +27,7 @@ public class StoreController {
 
     @GetMapping
     public BaseResponse<Object> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
-        String email = userPrincipal.getUsername();
+        String email = userPrincipal.getEmail();
         StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email);
         return baseResponseService.getSuccessResponse(storeListResponseDto);
     }
