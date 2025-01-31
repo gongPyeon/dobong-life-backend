@@ -22,9 +22,9 @@ public class TagQueryService {
     private final TagRepository tagRepository;
     private final DomainRepository domainRepository;
     private final SubTagRepository subTagRepository;
-    private final SubCategoryRepository subCategoryRepository;
 
     private static final int MAX_DOMAINS_PER_SUBTAG = 4;
+    private static final int MAX_DOMAINS_MORE = 25;
 
     public List<TagGroup> getTagGroups(Category category) {
         return tagRepository.findByCategory(category).stream()
@@ -34,15 +34,15 @@ public class TagQueryService {
 
     private TagGroup createTagGroupByTag(Tag tag) {
         List<SubTagDomain> subTagDomains = subTagRepository.findByTag(tag).stream()
-                .map(this::createSubTagDomain)
+                .map(sub -> createSubTagDomain(sub, MAX_DOMAINS_PER_SUBTAG))
                 .collect(Collectors.toList());
 
         return new TagGroup(tag, subTagDomains);
     }
 
-    private SubTagDomain createSubTagDomain(SubTag subTag) {
+    private SubTagDomain createSubTagDomain(SubTag subTag, int max) {
         List<Domain> domains = domainRepository.findBySubTag(subTag).stream()
-                .limit(MAX_DOMAINS_PER_SUBTAG)
+                .limit(max)
                 .collect(Collectors.toList());
         return new SubTagDomain(subTag, domains);
     }
@@ -75,18 +75,16 @@ public class TagQueryService {
     }
 
     public List<TagGroup> getTagGroupsMore(Category category, Long tagId, String subTagName) {
-        return subTagRepository.findBySubTagName(subTagName).stream()
-                .map(this::createTagGroupBySubTag)
+        return tagRepository.findByCategoryAndId(category, tagId).stream()
+                .map(tag -> createTagGroupMoreByTag(tag, subTagName))
                 .collect(Collectors.toList());
     }
 
-    private TagGroup createTagGroupBySubTag(SubTag subTag) {
-        List<Domain> domains = domainRepository.findBySubTag(subTag).stream()
-                .limit(MAX_DOMAINS_PER_SUBTAG)
+    private TagGroup createTagGroupMoreByTag(Tag tag, String subTagName) {
+        List<SubTagDomain> subTagDomains = subTagRepository.findBySubTagName(subTagName).stream()
+                .map(sub -> createSubTagDomain(sub, MAX_DOMAINS_MORE))
                 .collect(Collectors.toList());
 
-        SubTagDomain subTagDomain = new SubTagDomain(subTag, domains);
-
-        return new TagGroup(subTag.getTag(), Collections.singletonList(subTagDomain));
+        return new TagGroup(tag, subTagDomains);
     }
 }

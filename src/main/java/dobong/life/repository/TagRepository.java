@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findByCategory(Category category);
+
+    List<Tag> findByCategoryAndId(Category category, Long tagId);
 }

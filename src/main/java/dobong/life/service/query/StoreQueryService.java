@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,6 +19,7 @@ public class StoreQueryService {
     private final UserRepository userRepository;
     private final FavoriteRepository favoriteRepository;
     private final DomainRepository domainRepository;
+    private final SubTagRepository subTagRepository;
 
     public Category getCategory(Long categoryId){
         return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다."));
@@ -36,12 +38,13 @@ public class StoreQueryService {
     }
 
     public List<String> getItems(Domain domain) {
-        //return itemRepository.findByDomain(domain); // orElseThrow 고려 (Optional)
-        return null;
+        List<String> itemList = Arrays.asList(domain.getItemName().split(","));
+        return itemList;
     }
 
     public List<String> getHashTags(Domain domain) {
         //return domainRepository.findByTag(domain.getTag()).stream()
+        //domain.getSubTag()
         return null;
     }
 }
