@@ -67,20 +67,15 @@ public class TagQueryService {
         return new SubTagDomain(subTag, domains);
     }
 
-//    private TagGroup createSubTagDomainByQuery(SubCategory subCategory) {
-//        Domain domain = domainRepository.findBySubCategory(subCategory);
-//        SubTag subTag = domain.getSubTag();
-//
-//        SubTagDomain subTagDomain = new SubTagDomain(
-//                subTag,
-//                Collections.singletonList(domain)
-//        );
-//
-//        return new TagGroup(subTag.getTag(), Collections.singletonList(subTagDomain));
-//    }
+    public List<Domain> getTagGroupsFilter(List<String> categoryName, List<String> subTagName) {
+        List<Domain> domains = domainRepository.findByFilters(categoryName, subTagName).stream()
+                .collect(Collectors.toList());
 
-    public List<TagGroup> getTagGroupsMore(Category category, Long tagCategoryId, String hashTag) {
-        return subTagRepository.findBySubTagName(hashTag).stream()
+        return domains;
+    }
+
+    public List<TagGroup> getTagGroupsMore(Category category, Long tagId, String subTagName) {
+        return subTagRepository.findBySubTagName(subTagName).stream()
                 .map(this::createTagGroupBySubTag)
                 .collect(Collectors.toList());
     }

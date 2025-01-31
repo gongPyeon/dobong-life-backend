@@ -1,6 +1,7 @@
 package dobong.life.controller;
 
 import dobong.life.dto.StoreItemResponseDto;
+import dobong.life.dto.StoreListFilterResponseDto;
 import dobong.life.dto.StoreListResponseDto;
 import dobong.life.dto.StoreReviewResponseDto;
 import dobong.life.jwt.JwtService;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @ResponseBody
@@ -40,11 +43,20 @@ public class StoreController {
         return baseResponseService.getSuccessResponse(storeListResponseDto);
     }
 
+    @GetMapping("/filter")
+    public BaseResponse<Object> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @PathVariable("categoryId") Long categoryId,
+                                                @RequestParam List<String> categoryName, @RequestParam List<String> subTagName){
+        String email = userPrincipal.getEmail();
+        StoreListFilterResponseDto storeListFilterResponseDto = storeService.getStoreList(categoryId, email, categoryName, subTagName);
+        return baseResponseService.getSuccessResponse(storeListFilterResponseDto);
+    }
+
     @GetMapping("/more")
     public BaseResponse<Object> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long tagCategoryId, @RequestParam String hashTag){
+                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long tagId, @RequestParam String subTagName){
         String email = userPrincipal.getEmail();
-        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagCategoryId, hashTag);
+        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagId, subTagName);
         return baseResponseService.getSuccessResponse(storeListResponseDto);
     }
 

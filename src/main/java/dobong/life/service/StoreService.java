@@ -1,6 +1,7 @@
 package dobong.life.service;
 
 import dobong.life.dto.StoreItemResponseDto;
+import dobong.life.dto.StoreListFilterResponseDto;
 import dobong.life.dto.StoreListResponseDto;
 import dobong.life.dto.StoreReviewResponseDto;
 import dobong.life.dto.info.*;
@@ -77,10 +78,23 @@ public class StoreService {
                 .build();
     }
 
-    public StoreListResponseDto getStoreList(Long categoryId, String email, Long tagCategoryId, String hashTag) {
+    //TODO: filter도 응답형식을 맞춰야할까?
+    public StoreListFilterResponseDto getStoreList(Long categoryId, String email, List<String> categoryNames, List<String> subTagNames) {
+        User user = storeQueryService.getUserByEmail(email);
+        List<Domain> domains = tagQueryService.getTagGroupsFilter(categoryNames, subTagNames);
+
+        return StoreListFilterResponseDto.builder()
+                .categoryId(categoryId)
+                .categoryNames(categoryNames)
+                .subTagNames(subTagNames)
+                .results(createStoreList(domains, user))
+                .build();
+    }
+
+    public StoreListResponseDto getStoreList(Long categoryId, String email, Long tagId, String subTagName) {
         Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
-        List<TagGroup> tagGroups = tagQueryService.getTagGroupsMore(category, tagCategoryId, hashTag);
+        List<TagGroup> tagGroups = tagQueryService.getTagGroupsMore(category, tagId, subTagName);
 
         return StoreListResponseDto.builder()
                 .categoryId(categoryId)
@@ -119,4 +133,6 @@ public class StoreService {
                 .result(storeMapper.createReviewInfo(reviewInfoGroup))
                 .build();
     }
+
+
 }
