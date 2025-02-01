@@ -68,7 +68,7 @@ public class StoreController {
         return baseResponseService.getSuccessResponse(storeItemResponseDto);
     }
 
-    @GetMapping("/review")
+    @GetMapping("/more/review")
     public BaseResponse<Object> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
         String email = userPrincipal.getEmail();

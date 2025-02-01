@@ -106,7 +106,7 @@ public class StoreService {
         Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
         Domain domain = storeQueryService.getStore(category, storeId);
-        String subCategory = domain.getSubCategory().getName();
+        String subCategory = storeQueryService.getSubCategory(domain);
 
         return StoreItemResponseDto.builder()
                 .categoryId(categoryId)
@@ -121,16 +121,22 @@ public class StoreService {
         return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, subCategory, items, keywords);
     }
 
+
+    // TODO: Review Service ?
     public StoreReviewResponseDto getStoreReview(Long categoryId, String email, Long storeId) {
         Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
         Domain domain  = storeQueryService.getStore(category, storeId);
-        ReviewInfoGroup reviewInfoGroup = reviewQueryService.getReviewInfoGroup(domain, user);
+
+        double averageRating = reviewQueryService.getAverageRating(domain);
+        int ratingCount = reviewQueryService.getRatingCount(domain);
+        List<RatingDetails> ratingDetails = reviewQueryService.getRatingDetails(domain);
+        List<ReviewDetails> reviewDetails = reviewQueryService.getReviewDetails(domain, user);
 
         return StoreReviewResponseDto.builder().
                 categoryId(categoryId)
                 .storeId(storeId)
-                .result(storeMapper.createReviewInfo(reviewInfoGroup))
+                .result(storeMapper.createReviewInfo(averageRating, ratingCount, ratingDetails, reviewDetails))
                 .build();
     }
 

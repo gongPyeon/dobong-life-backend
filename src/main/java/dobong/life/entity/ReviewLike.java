@@ -10,15 +10,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DomainItem {
-
+public class ReviewLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "domain_id")
-    private Domain domain;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "review_id")
+    private Review review;
 }

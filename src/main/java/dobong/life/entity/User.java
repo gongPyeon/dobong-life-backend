@@ -34,13 +34,7 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    private int age;
-//
-//    private String phone;
-
     private String password;
-
-//    private LocalDateTime registrationDate;
 
     @Column(nullable = true)
     private int reviewCount;

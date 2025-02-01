@@ -11,17 +11,18 @@ import java.util.Collection;
 import java.util.List;
 
 public interface DomainRepository extends JpaRepository<Domain, Long> {
+    @Query("SELECT d.domain FROM MiddleCategory d " + "WHERE d.subTag = :subTag")
     List<Domain> findBySubTag(SubTag subTag);
 
-    @Query("SELECT d FROM Domain d " + "WHERE d.subTag = :subTag " + "AND d.nameKr LIKE %:query%")
+    @Query("SELECT d.domain FROM MiddleCategory d " + "WHERE d.subTag = :subTag " + "AND d.domain.name LIKE %:query%")
     List<Domain> findBySubTagAndQuery(SubTag subTag, String query);
 
-    @Query("SELECT DISTINCT d FROM Domain d " +
+    @Query("SELECT DISTINCT d.domain FROM MiddleCategory d " +
             "WHERE (:categoryNames IS NULL OR d.subCategory.name IN :categoryNames) " +
             "AND (:subTagNames IS NULL OR d.subTag.subTagName IN :subTagNames)")
     List<Domain> findByFilters(List<String> categoryNames, List<String> subTagNames);
 
-    List<Domain> findByNameKr(String nameKr);
+    List<Domain> findByName(String name);
 
     /**
      * query DSL

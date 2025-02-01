@@ -4,7 +4,6 @@ import dobong.life.dto.info.SubTagDomain;
 import dobong.life.dto.info.TagGroup;
 import dobong.life.entity.*;
 import dobong.life.repository.DomainRepository;
-import dobong.life.repository.SubCategoryRepository;
 import dobong.life.repository.SubTagRepository;
 import dobong.life.repository.TagRepository;
 import lombok.RequiredArgsConstructor;

@@ -16,7 +16,6 @@ import java.util.function.Function;
 @AllArgsConstructor
 public class ReviewDetails {
     private String userName;
-    private String userImage;
     private int userReviewCount;
     private LocalDateTime reviewDate;
     private String reviewContent;

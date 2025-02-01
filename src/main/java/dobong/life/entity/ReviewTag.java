@@ -20,5 +20,4 @@ public class ReviewTag {
     @Enumerated(EnumType.STRING)
     private ReviewTagType reviewTagType;
     private String name;
-    private int count;
 }

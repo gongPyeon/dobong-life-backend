@@ -14,23 +14,12 @@ public class Domain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "sub_tag_id")
-    private SubTag subTag;
-
-    @OneToOne
-    @JoinColumn(name = "sub_category_id")
-    private SubCategory subCategory;
-
-    private String nameKr;
-    private String nameEn;
+    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     private String imageUrl;
-    private int favoriteCount;
-    private int reviewCount;
     private String mapUrl;
     private String addressDetail;
     private String addressDong;

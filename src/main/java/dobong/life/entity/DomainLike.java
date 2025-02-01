@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Event {
+public class DomainLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +22,4 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
-
-    // private String info; (제목, 내용, 이미지 등 이벤트 정보 추가)
 }

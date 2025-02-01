@@ -26,8 +26,4 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
-
-    @OneToOne
-    @JoinColumn(name = "review_image_id")
-    private ReviewImage image;
 }

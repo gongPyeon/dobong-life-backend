@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class StoreQueryService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final FavoriteRepository favoriteRepository;
+    private final DomainLikeRepository domainLikeRepository;
     private final DomainRepository domainRepository;
-    private final SubTagRepository subTagRepository;
+    private final MiddleCategoryRepository middleCategoryRepository;
 
     public Category getCategory(Long categoryId){
         return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다."));
@@ -32,7 +32,7 @@ public class StoreQueryService {
     }
 
     public boolean isUserFavorite(Domain domain, User user){
-        return favoriteRepository.findByDomainAndUser(domain, user).isPresent();
+        return domainLikeRepository.findByDomainAndUser(domain, user).isPresent();
     }
 
     public Domain getStore(Category category, Long storeId) {
@@ -45,8 +45,13 @@ public class StoreQueryService {
     }
 
     public List<String> getHashTags(Domain domain) {
-        return domainRepository.findByNameKr(domain.getNameKr()).stream()
+        return middleCategoryRepository.findByDomain(domain).stream()
                 .map(d -> d.getSubTag().getSubTagName())
                 .collect(Collectors.toList());
+    }
+
+    public String getSubCategory(Domain domain) {
+        return middleCategoryRepository.findByDomain(domain).get(0).getSubCategory().getName();
+        // TODO: get(0)이 아니라 다른 방식 ?
     }
 }
