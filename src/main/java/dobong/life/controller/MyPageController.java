@@ -4,6 +4,7 @@ import dobong.life.dto.MyPageResponseDto;
 import dobong.life.dto.MyPageReviewResponseDto;
 import dobong.life.dto.StoreItemListResponseDto;
 import dobong.life.dto.StoreItemResponseDto;
+import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
@@ -38,14 +39,14 @@ public class MyPageController {
         MyPageReviewResponseDto myPageReviewResponseDto = myPageService.getMyReview(email);
         return baseResponseService.getSuccessResponse(myPageReviewResponseDto);
     }
-//
-//    @PostMapping("/review")
-//    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-//        String email = userPrincipal.getEmail();
-//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-//        return baseResponseService.getSuccessResponse();
-//    }
-//
+
+    @PostMapping("/review")
+    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, MyPageReviewInfo myPageReviewInfo){
+        String email = userPrincipal.getEmail();
+        myPageService.saveReview(myPageReviewInfo, email);
+        return baseResponseService.getSuccessResponse();
+    }
+
     @GetMapping("/review/like")
     public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
         String email = userPrincipal.getEmail();

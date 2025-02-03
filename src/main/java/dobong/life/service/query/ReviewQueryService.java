@@ -1,11 +1,9 @@
 package dobong.life.service.query;
 
+import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.dto.info.RatingDetails;
 import dobong.life.dto.info.ReviewDetails;
-import dobong.life.entity.Domain;
-import dobong.life.entity.Review;
-import dobong.life.entity.ReviewTag;
-import dobong.life.entity.User;
+import dobong.life.entity.*;
 import dobong.life.repository.MiddleTagRepository;
 import dobong.life.repository.ReviewLikeRepository;
 import dobong.life.repository.ReviewRepository;
@@ -66,5 +64,9 @@ public class ReviewQueryService {
 
         return new ReviewDetails(user.getName(), userReviewCount, review.getDate(),
                 review.getContent(), selectedKeywords, likeByUser, review.getLikeCount());
+    }
+
+    public ReviewTag getReviewTag(String name) {
+        return reviewTagRepository.findByName(name);
     }
 }

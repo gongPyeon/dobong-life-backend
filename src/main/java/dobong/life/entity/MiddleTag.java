@@ -22,4 +22,9 @@ public class MiddleTag {
     @ManyToOne
     @JoinColumn(name = "reviewTag_id")
     private ReviewTag reviewTag;
+
+    public MiddleTag(Review review, ReviewTag reviewTag) {
+        this.review = review;
+        this.reviewTag = reviewTag;
+    }
 }

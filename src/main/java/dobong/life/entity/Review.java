@@ -26,4 +26,13 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
+
+    public Review(String content, int likeCount, LocalDateTime date, Double score, User user, Domain domain) {
+        this.content = content;
+        this.likeCount = likeCount;
+        this.date = date;
+        this.score = score;
+        this.user = user;
+        this.domain = domain;
+    }
 }

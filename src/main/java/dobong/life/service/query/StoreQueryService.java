@@ -36,7 +36,7 @@ public class StoreQueryService {
         return domainLikeRepository.findByDomainAndUser(domain, user).isPresent();
     }
 
-    public Domain getStore(Category category, Long storeId) {
+    public Domain getStore(Long storeId) {
         return domainRepository.findById(storeId).orElseThrow(() -> new NotFoundException("가게를 찾을 수 없습니다."));
     }
 

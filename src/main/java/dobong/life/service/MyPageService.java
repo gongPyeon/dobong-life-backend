@@ -7,16 +7,16 @@ import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.dto.info.CountDetails;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.entity.Category;
-import dobong.life.entity.Domain;
-import dobong.life.entity.User;
+import dobong.life.entity.*;
 import dobong.life.service.mapper.StoreMapper;
 import dobong.life.service.query.MyPageQueryService;
+import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +27,7 @@ public class MyPageService {
 
     private final StoreQueryService storeQueryService;
     private final MyPageQueryService myPageQueryService;
+    private final ReviewQueryService reviewQueryService;
     private final StoreMapper storeMapper;
 
     public MyPageResponseDto getMyPage(String email) {
@@ -79,5 +80,15 @@ public class MyPageService {
         List<String> items = storeQueryService.getItems(domain);
         List<String> keywords = storeQueryService.getHashTags(domain);
         return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, "", items, keywords);
+    }
+
+    public void saveReview(MyPageReviewInfo r, String email) {
+        User user = storeQueryService.getUserByEmail(email);
+        Domain domain = storeQueryService.getStore(r.getStoreId());
+        Review review = new Review(r.getReviewContent(), 0, LocalDateTime.now(),0.0, user, domain);
+
+        List<String> selectedKeywords = r.getSelectedKeywords();
+        selectedKeywords.stream()
+                .map(s -> new MiddleTag(review, reviewQueryService.getReviewTag(s)));
     }
 }

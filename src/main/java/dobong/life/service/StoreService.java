@@ -103,9 +103,8 @@ public class StoreService {
     }
 
     public StoreItemResponseDto getStore(Long categoryId, String email, Long storeId) {
-        Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
-        Domain domain = storeQueryService.getStore(category, storeId);
+        Domain domain = storeQueryService.getStore(storeId);
         String subCategory = storeQueryService.getSubCategory(domain);
 
         return StoreItemResponseDto.builder()
@@ -124,9 +123,8 @@ public class StoreService {
 
     // TODO: Review Service ?
     public StoreReviewResponseDto getStoreReview(Long categoryId, String email, Long storeId) {
-        Category category = storeQueryService.getCategory(categoryId);
         User user = storeQueryService.getUserByEmail(email);
-        Domain domain  = storeQueryService.getStore(category, storeId);
+        Domain domain  = storeQueryService.getStore(storeId);
 
         double averageRating = reviewQueryService.getAverageRating(domain);
         int ratingCount = reviewQueryService.getRatingCount(domain);
