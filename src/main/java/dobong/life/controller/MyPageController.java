@@ -1,6 +1,7 @@
 package dobong.life.controller;
 
 import dobong.life.dto.MyPageResponseDto;
+import dobong.life.dto.MyPageReviewResponseDto;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
@@ -29,12 +30,12 @@ public class MyPageController {
         return baseResponseService.getSuccessResponse(myPageResponseDto);
     }
 
-//    @GetMapping("/review")
-//    public BaseResponse<Object> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-//        String email = userPrincipal.getEmail();
-//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-//        return baseResponseService.getSuccessResponse();
-//    }
+    @GetMapping("/review")
+    public BaseResponse<Object> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        String email = userPrincipal.getEmail();
+        MyPageReviewResponseDto myPageReviewResponseDto = myPageService.getMyReview(email);
+        return baseResponseService.getSuccessResponse(myPageReviewResponseDto);
+    }
 //
 //    @PostMapping("/review")
 //    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){

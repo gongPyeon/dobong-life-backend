@@ -1,12 +1,17 @@
 package dobong.life.service;
 
 import dobong.life.dto.MyPageResponseDto;
+import dobong.life.dto.MyPageReviewResponseDto;
 import dobong.life.dto.info.CountDetails;
+import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.entity.User;
+import dobong.life.service.query.MyPageQueryService;
 import dobong.life.service.query.StoreQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,15 @@ public class MyPageService {
                 .myFoodLike(countDetails.getMyFoodLike())
                 .myPlaceLike(countDetails.getMyPlaceLike())
                 .myBusinessLike(countDetails.getMyBusinessLike())
+                .build();
+    }
+
+    public MyPageReviewResponseDto getMyReview(String email) {
+        User user = storeQueryService.getUserByEmail(email);
+        List<MyPageReviewInfo> results  = myPageQueryService.getMyPageReviewInfoList(user);
+
+        return MyPageReviewResponseDto.builder()
+                .results(results)
                 .build();
     }
 }

@@ -1,13 +1,9 @@
 package dobong.life.repository;
 
-import dobong.life.entity.Domain;
-import dobong.life.entity.SubCategory;
-import dobong.life.entity.SubTag;
-import dobong.life.entity.Tag;
+import dobong.life.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface DomainRepository extends JpaRepository<Domain, Long> {
@@ -21,8 +17,6 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
             "WHERE (:categoryNames IS NULL OR d.subCategory.subCategoryName IN :categoryNames) " +
             "AND (:subTagNames IS NULL OR d.subTag.subTagName IN :subTagNames)")
     List<Domain> findByFilters(List<String> categoryNames, List<String> subTagNames);
-
-    List<Domain> findByName(String name);
 
     /**
      * query DSL
