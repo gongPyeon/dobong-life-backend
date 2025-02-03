@@ -1,7 +1,6 @@
 package dobong.life.entity;
 
 import dobong.life.enums.ParentCategoryType;
-import dobong.life.enums.SubCategoryType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

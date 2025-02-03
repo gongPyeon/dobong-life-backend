@@ -24,6 +24,7 @@ public class StoreQueryService {
     private final MiddleCategoryRepository middleCategoryRepository;
 
     public Category getCategory(Long categoryId){
+
         return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다."));
     }
 
@@ -51,7 +52,7 @@ public class StoreQueryService {
     }
 
     public String getSubCategory(Domain domain) {
-        return middleCategoryRepository.findByDomain(domain).get(0).getSubCategory().getName();
+        return middleCategoryRepository.findByDomain(domain).get(0).getSubCategory().getSubCategoryName();
         // TODO: get(0)이 아니라 다른 방식 ?
     }
 }

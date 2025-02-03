@@ -1,6 +1,5 @@
 package dobong.life.entity;
 
-import dobong.life.enums.SubCategoryType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class SubCategory {
     //@Enumerated(EnumType.STRING)
     private String subCategoryType;
 
-    private String name;
+    private String subCategoryName;
 
     @ManyToOne
     @JoinColumn(name = "domain_id")

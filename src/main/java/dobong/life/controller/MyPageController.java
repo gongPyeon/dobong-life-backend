@@ -1,8 +1,7 @@
 package dobong.life.controller;
 
-import dobong.life.dto.StoreListResponseDto;
+import dobong.life.dto.MyPageResponseDto;
 import dobong.life.service.MyPageService;
-import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
 import dobong.life.util.response.BaseResponseService;
@@ -26,35 +25,35 @@ public class MyPageController {
     @GetMapping
     public BaseResponse<Object> viewMyPage(@AuthenticationPrincipal UserPrincipal userPrincipal){
         String email = userPrincipal.getEmail();
-        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse();
+        MyPageResponseDto myPageResponseDto = myPageService.getMyPage(email);
+        return baseResponseService.getSuccessResponse(myPageResponseDto);
     }
 
-    @GetMapping("/review")
-    public BaseResponse<Object> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        String email = userPrincipal.getEmail();
-        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse();
-    }
-
-    @PostMapping("/review")
-    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        String email = userPrincipal.getEmail();
-        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse();
-    }
-
-    @GetMapping("/review/like")
-    public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        String email = userPrincipal.getEmail();
-        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse();
-    }
-
-    @PostMapping("/{categoryId}/like")
-    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
-        String email = userPrincipal.getEmail();
-        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse();
-    }
+//    @GetMapping("/review")
+//    public BaseResponse<Object> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
+//        String email = userPrincipal.getEmail();
+//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
+//        return baseResponseService.getSuccessResponse();
+//    }
+//
+//    @PostMapping("/review")
+//    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
+//        String email = userPrincipal.getEmail();
+//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
+//        return baseResponseService.getSuccessResponse();
+//    }
+//
+//    @GetMapping("/review/like")
+//    public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
+//        String email = userPrincipal.getEmail();
+//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
+//        return baseResponseService.getSuccessResponse();
+//    }
+//
+//    @PostMapping("/{categoryId}/like")
+//    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
+//        String email = userPrincipal.getEmail();
+//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
+//        return baseResponseService.getSuccessResponse();
+//    }
 }

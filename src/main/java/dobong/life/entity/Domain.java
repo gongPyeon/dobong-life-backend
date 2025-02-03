@@ -16,13 +16,14 @@ public class Domain {
 
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
     private String imageUrl;
     private String mapUrl;
     private String addressDetail;
     private String addressDong;
     private String itemName;
+
+    @ManyToOne
+    @JoinColumn(name = "domain_id")
+    private Category category;
 
 }
