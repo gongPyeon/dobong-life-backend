@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MyPageReviewInfo {
     private long storeId;
+    private String name;
     private List<String> selectedKeywords;
     private String reviewContent;
 }

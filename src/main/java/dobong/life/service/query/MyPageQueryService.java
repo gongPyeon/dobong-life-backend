@@ -3,6 +3,7 @@ package dobong.life.service.query;
 import dobong.life.dto.info.CountDetails;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.entity.Review;
+import dobong.life.entity.ReviewLike;
 import dobong.life.entity.User;
 import dobong.life.repository.DomainRepository;
 import dobong.life.repository.MiddleTagRepository;
@@ -63,6 +64,29 @@ public class MyPageQueryService {
 
         return MyPageReviewInfo.builder()
                 .storeId(storeId)
+                .name("")
+                .reviewContent(reviewContent)
+                .selectedKeywords(selectedKeywords)
+                .build();
+    }
+
+    public List<MyPageReviewInfo> getMyPageReviewLikeInfoList(User user) {
+        return reviewLikeRepository.findByUser(user).stream()
+                .map(this::getMyPageReviewLikeInfo)
+                .collect(Collectors.toList());
+    }
+
+    private MyPageReviewInfo getMyPageReviewLikeInfo(ReviewLike reviewLike) {
+        Review review = reviewLike.getReview();
+        long storeId = review.getId();
+        String name = review.getUser().getName();
+        String reviewContent = review.getContent();
+        List<String> selectedKeywords = middleTagRepository.findByReview(review).stream()
+                .map(r -> r.getReviewTag().getName()).collect(Collectors.toList());
+
+        return MyPageReviewInfo.builder()
+                .storeId(storeId)
+                .name(name)
                 .reviewContent(reviewContent)
                 .selectedKeywords(selectedKeywords)
                 .build();

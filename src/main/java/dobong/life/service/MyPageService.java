@@ -43,4 +43,13 @@ public class MyPageService {
                 .results(results)
                 .build();
     }
+
+    public MyPageReviewResponseDto getMyReviewLike(String email) {
+        User user = storeQueryService.getUserByEmail(email);
+        List<MyPageReviewInfo> results  = myPageQueryService.getMyPageReviewLikeInfoList(user);
+
+        return MyPageReviewResponseDto.builder()
+                .results(results)
+                .build();
+    }
 }

@@ -44,12 +44,12 @@ public class MyPageController {
 //        return baseResponseService.getSuccessResponse();
 //    }
 //
-//    @GetMapping("/review/like")
-//    public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
-//        String email = userPrincipal.getEmail();
-//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-//        return baseResponseService.getSuccessResponse();
-//    }
+    @GetMapping("/review/like")
+    public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        String email = userPrincipal.getEmail();
+        MyPageReviewResponseDto myPageReviewResponseDto = myPageService.getMyReviewLike(email);
+        return baseResponseService.getSuccessResponse(myPageReviewResponseDto);
+    }
 //
 //    @PostMapping("/{categoryId}/like")
 //    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
