@@ -2,6 +2,8 @@ package dobong.life.controller;
 
 import dobong.life.dto.MyPageResponseDto;
 import dobong.life.dto.MyPageReviewResponseDto;
+import dobong.life.dto.StoreItemListResponseDto;
+import dobong.life.dto.StoreItemResponseDto;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
@@ -50,11 +52,11 @@ public class MyPageController {
         MyPageReviewResponseDto myPageReviewResponseDto = myPageService.getMyReviewLike(email);
         return baseResponseService.getSuccessResponse(myPageReviewResponseDto);
     }
-//
-//    @PostMapping("/{categoryId}/like")
-//    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
-//        String email = userPrincipal.getEmail();
-//        //StoreListResponseDto storeListResponseDto = myPageService.getStoreList(categoryId, email);
-//        return baseResponseService.getSuccessResponse();
-//    }
+
+    @GetMapping("/{categoryId}/like")
+    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
+        String email = userPrincipal.getEmail();
+        StoreItemListResponseDto storeItemListResponseDto = myPageService.getMyLike(categoryId, email);
+        return baseResponseService.getSuccessResponse(storeItemListResponseDto);
+    }
 }

@@ -55,4 +55,18 @@ public class StoreQueryService {
         return middleCategoryRepository.findByDomain(domain).get(0).getSubCategory().getSubCategoryName();
         // TODO: get(0)이 아니라 다른 방식 ?
     }
+
+    public List<Domain> getStoreLike(Category category, User user) {
+        List<Domain> domains = domainLikeRepository.findByUser(user).stream()
+                .map(d -> d.getDomain())
+                .filter(domain -> domain.getCategory() == category)
+                .collect(Collectors.toList());
+
+        if (domains.isEmpty()) {
+            throw new NotFoundException("가게를 찾을 수 없습니다.");
+        }
+
+        return domains;
+    }
+
 }
