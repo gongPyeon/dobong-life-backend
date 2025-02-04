@@ -15,6 +15,6 @@ public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 
     List<ReviewLike> findByUser(User user);
 
-    @Query("SELECT r FROM ReviewLike r " + "WHERE r.review.domain.category = :categoryId")
+    @Query("SELECT r FROM ReviewLike r " + "WHERE r.review.domain.category.id = :categoryId")
     List<ReviewLike> findByUserAndId(User user, long categoryId);
 }

@@ -13,14 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@ResponseBody
 @RequiredArgsConstructor
-@RequestMapping("/my")
+@RequestMapping("dobong/my")
 @Slf4j
 public class MyPageController {
     private final BaseResponseService baseResponseService;
@@ -41,7 +39,7 @@ public class MyPageController {
     }
 
     @PostMapping("/review")
-    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, MyPageReviewInfo myPageReviewInfo){
+    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody MyPageReviewInfo myPageReviewInfo){
         String email = userPrincipal.getEmail();
         myPageService.saveReview(myPageReviewInfo, email);
         return baseResponseService.getSuccessResponse();

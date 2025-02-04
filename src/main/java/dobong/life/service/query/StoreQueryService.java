@@ -63,7 +63,7 @@ public class StoreQueryService {
                 .collect(Collectors.toList());
 
         if (domains.isEmpty()) {
-            throw new NotFoundException("가게를 찾을 수 없습니다.");
+            throw new NotFoundException("가게를 찾을 수 없습니다."); // 다른 예외처리
         }
 
         return domains;

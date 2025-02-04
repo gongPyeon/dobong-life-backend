@@ -23,7 +23,7 @@ public class Domain {
     private String itemName;
 
     @ManyToOne
-    @JoinColumn(name = "domain_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
 }

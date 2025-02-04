@@ -69,4 +69,13 @@ public class ReviewQueryService {
     public ReviewTag getReviewTag(String name) {
         return reviewTagRepository.findByName(name);
     }
+
+    public void saveReview(Review review) {
+        reviewRepository.save(review);
+    }
+
+
+    public void saveMiddleTag(List<MiddleTag> collect) {
+        collect.stream().forEach(middleTagRepository::save);
+    }
 }

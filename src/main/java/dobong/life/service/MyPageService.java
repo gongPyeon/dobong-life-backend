@@ -12,9 +12,11 @@ import dobong.life.service.mapper.StoreMapper;
 import dobong.life.service.query.MyPageQueryService;
 import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,19 +49,19 @@ public class MyPageService {
 
     public MyPageReviewResponseDto getMyReview(String email) {
         User user = storeQueryService.getUserByEmail(email);
-        List<MyPageReviewInfo> results  = myPageQueryService.getMyPageReviewInfoList(user);
+        List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewInfoList(user);
 
         return MyPageReviewResponseDto.builder()
-                .results(results)
+                .reviews(reviews)
                 .build();
     }
 
     public MyPageReviewResponseDto getMyReviewLike(String email) {
         User user = storeQueryService.getUserByEmail(email);
-        List<MyPageReviewInfo> results  = myPageQueryService.getMyPageReviewLikeInfoList(user);
+        List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewLikeInfoList(user);
 
         return MyPageReviewResponseDto.builder()
-                .results(results)
+                .reviews(reviews)
                 .build();
     }
 
@@ -82,13 +84,16 @@ public class MyPageService {
         return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, "", items, keywords);
     }
 
+    @Transactional
     public void saveReview(MyPageReviewInfo r, String email) {
         User user = storeQueryService.getUserByEmail(email);
         Domain domain = storeQueryService.getStore(r.getStoreId());
         Review review = new Review(r.getReviewContent(), 0, LocalDateTime.now(),0.0, user, domain);
+        reviewQueryService.saveReview(review);
 
         List<String> selectedKeywords = r.getSelectedKeywords();
-        selectedKeywords.stream()
-                .map(s -> new MiddleTag(review, reviewQueryService.getReviewTag(s)));
+        List<MiddleTag> collect = selectedKeywords.stream()
+                .map(s -> new MiddleTag(review, reviewQueryService.getReviewTag(s))).collect(Collectors.toList());
+        reviewQueryService.saveMiddleTag(collect);
     }
 }

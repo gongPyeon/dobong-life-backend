@@ -26,7 +26,6 @@ public class MyPageQueryService {
     private final static long FOOD_ID = 1;
     private final static long PLACE_ID = 2;
     private final static long BUSINESS_ID = 3;
-    private final DomainRepository domainRepository;
 
     public CountDetails getCountDetails(User user) {
 
@@ -40,14 +39,14 @@ public class MyPageQueryService {
     }
 
     private int getMyCategoryLikeCount(User user, long categoryId) {
-        return (int) reviewLikeRepository.findByUserAndId(user, categoryId).stream().count();
+        return reviewLikeRepository.findByUserAndId(user, categoryId).size();
     }
     private int getReviewLikeCount(User user) {
-        return (int) reviewLikeRepository.findByUser(user).stream().count();
+        return reviewLikeRepository.findByUser(user).size();
     }
 
     private int getReviewCount(User user) {
-        return (int) reviewRepository.findByUser(user).stream().count();
+        return reviewRepository.findByUser(user).size();
     }
 
     public List<MyPageReviewInfo> getMyPageReviewInfoList(User user) {

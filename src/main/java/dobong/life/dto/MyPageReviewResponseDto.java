@@ -11,5 +11,5 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class MyPageReviewResponseDto {
-    private List<MyPageReviewInfo> results;
+    private List<MyPageReviewInfo> reviews;
 }
