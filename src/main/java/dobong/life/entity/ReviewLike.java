@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewLike {
     @Id
@@ -22,4 +21,9 @@ public class ReviewLike {
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public ReviewLike(User user, Review review) {
+        this.user = user;
+        this.review = review;
+    }
 }

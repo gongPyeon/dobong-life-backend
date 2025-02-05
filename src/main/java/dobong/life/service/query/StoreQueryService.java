@@ -1,8 +1,6 @@
 package dobong.life.service.query;
 
-import dobong.life.entity.Category;
-import dobong.life.entity.Domain;
-import dobong.life.entity.User;
+import dobong.life.entity.*;
 import dobong.life.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.NotFoundException;
@@ -19,6 +17,7 @@ public class StoreQueryService {
     private final DomainLikeRepository domainLikeRepository;
     private final DomainRepository domainRepository;
     private final MiddleCategoryRepository middleCategoryRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
 
     public boolean isUserFavorite(Domain domain, User user){
         return domainLikeRepository.findByDomainAndUser(domain, user).isPresent();
@@ -46,4 +45,13 @@ public class StoreQueryService {
                 .orElseThrow(() -> new NoSuchElementException("No subcategory found for the given domain"));  // 없으면 예외 던짐
     }
 
+    public void updateStoreLike(User user, Domain domain) {
+        DomainLike domainLike = new DomainLike(user, domain);
+        domainLikeRepository.save(domainLike);
+    }
+
+    public void updateReviewLike(User user, Review review) {
+        ReviewLike reviewLike = new ReviewLike(user, review);
+        reviewLikeRepository.save(reviewLike);
+    }
 }

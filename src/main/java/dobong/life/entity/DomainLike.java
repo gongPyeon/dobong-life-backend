@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DomainLike {
     @Id
@@ -22,4 +21,9 @@ public class DomainLike {
     @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
+
+    public DomainLike(User user, Domain domain) {
+        this.user = user;
+        this.domain = domain;
+    }
 }

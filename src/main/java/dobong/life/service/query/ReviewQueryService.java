@@ -80,4 +80,8 @@ public class ReviewQueryService {
     public void saveMiddleTag(List<MiddleTag> collect) {
         collect.stream().forEach(middleTagRepository::save);
     }
+
+    public Review getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId).get();
+    }
 }
