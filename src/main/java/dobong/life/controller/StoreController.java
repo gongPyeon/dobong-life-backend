@@ -40,7 +40,7 @@ public class StoreController {
         return baseResponseService.getSuccessResponse(storesResDto);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/filter") // id는 param으로 넘겨야하는데, 어떻게 하는게 좋을까
     public BaseResponse<Object> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId,
                                                 @RequestParam List<String> categoryName, @RequestParam List<Long> subTagId){
@@ -49,17 +49,17 @@ public class StoreController {
         return baseResponseService.getSuccessResponse(storesFilterResDto);
     }
 
-    @GetMapping("/more")
+    @GetMapping("/more/{tagId}/{subTagId}")
     public BaseResponse<Object> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long tagId, @RequestParam Long subTagId){
+                                                @PathVariable("categoryId") Long categoryId, @PathVariable Long tagId, @PathVariable Long subTagId){
         Long userId = userPrincipal.getId();
         StoresResDto storesResDto = storeService.getStoreListAll(categoryId, userId, tagId, subTagId);
         return baseResponseService.getSuccessResponse(storesResDto);
     }
 
-    @GetMapping("/item")
+    @GetMapping("/item/{storeId}")
     public BaseResponse<Object> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId) {
+                                                @PathVariable("categoryId") Long categoryId, @PathVariable Long storeId) {
         Long userId = userPrincipal.getId();
         StoreItemResDto storeItemResDto = storeService.getStore(categoryId, userId, storeId);
         return baseResponseService.getSuccessResponse(storeItemResDto);

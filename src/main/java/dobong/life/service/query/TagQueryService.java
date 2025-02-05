@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +37,7 @@ public class TagQueryService {
         return tagRepository.findByCategory(category).stream()
                 .map(tag -> getStoreInfosByTag(tag, user))
                 .flatMap(List::stream)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -43,6 +45,7 @@ public class TagQueryService {
     private List<ItemInfo> getStoreInfosByTag(Tag tag, User user) {  // ItemInfo -> List<ItemInfo>
         return subTagRepository.findByTag(tag).stream()
                 .map(subTag -> getStoreInfoWithLimit(tag, subTag, user, MAX_DOMAINS_PER_SUBTAG))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());  // collect 추가
     }
 
@@ -50,6 +53,7 @@ public class TagQueryService {
         List<StoreBasicInfo> stores = domainRepository.findBySubTag(subTag).stream()
                 .map(domain -> mapToStoreInfo(domain, user))
                 .limit(max)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return storeMapper.buildItemInfo(tag, subTag, stores);
@@ -65,13 +69,15 @@ public class TagQueryService {
         return tagRepository.findByCategory(category).stream()
                 .map(tag -> getStoreInfosByTagByQuery(tag, user, query))
                 .flatMap(List::stream)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
 
-    private List<ItemInfo> getStoreInfosByTagByQuery(Tag tag, User user, String query) {  // ItemInfo -> List<ItemInfo>
+    private List<ItemInfo> getStoreInfosByTagByQuery(Tag tag, User user, String query) {
         return subTagRepository.findByTag(tag).stream()
                 .map(subTag -> getStoreInfoWithLimitByQuery(tag, subTag, user, query, MAX_DOMAINS_PER_SUBTAG))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());  // collect 추가
     }
 
@@ -79,6 +85,7 @@ public class TagQueryService {
         List<StoreBasicInfo> stores = domainRepository.findBySubTagAndQuery(subTag, query).stream()
                 .map(domain -> mapToStoreInfo(domain, user))
                 .limit(max)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return storeMapper.buildItemInfo(tag, subTag, stores);

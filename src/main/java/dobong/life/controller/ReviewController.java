@@ -27,9 +27,9 @@ public class ReviewController {
         return baseResponseService.getSuccessResponse();
     }
 
-    @GetMapping("/more/review")
+    @GetMapping("/reviews/{categoryId}/{storeId}")
     public BaseResponse<Object> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
+                                                @PathVariable("categoryId") Long categoryId, @PathVariable Long storeId){
         Long userId = userPrincipal.getId();
         ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, userId, storeId);
         return baseResponseService.getSuccessResponse(reviewResDto);

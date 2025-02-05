@@ -16,6 +16,7 @@ import java.util.List;
 public class StoreMapper {
 
     public ItemInfo buildItemInfo(Tag tag, SubTag subTag, List<StoreBasicInfo> stores) {
+        if(stores.isEmpty()) return null;
         return new ItemInfo(tag.getId(), tag.getParentTagName(), subTag.getId(), subTag.getSubTagName(), stores);
     }
 
