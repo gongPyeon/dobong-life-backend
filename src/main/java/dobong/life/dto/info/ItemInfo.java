@@ -1,15 +1,16 @@
 package dobong.life.dto.info;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
-@Builder
-public class StoreGroup {
-    private TagInfo tag;
+public class ItemInfo {
+    private Long tagId;
+    private String parentTagName;
+    private Long subTagId;
+    private String subTagName;
     private List<StoreBasicInfo> stores;
 }

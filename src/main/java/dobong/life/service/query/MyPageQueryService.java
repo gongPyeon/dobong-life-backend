@@ -1,14 +1,14 @@
 package dobong.life.service.query;
 
-import dobong.life.dto.info.CountDetails;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.entity.Review;
 import dobong.life.entity.ReviewLike;
 import dobong.life.entity.User;
-import dobong.life.repository.DomainRepository;
 import dobong.life.repository.MiddleTagRepository;
 import dobong.life.repository.ReviewLikeRepository;
 import dobong.life.repository.ReviewRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,71 +23,45 @@ public class MyPageQueryService {
     private final ReviewLikeRepository reviewLikeRepository;
     private final MiddleTagRepository middleTagRepository;
 
-    private final static long FOOD_ID = 1;
-    private final static long PLACE_ID = 2;
-    private final static long BUSINESS_ID = 3;
-
-    public CountDetails getCountDetails(User user) {
-
-        return CountDetails.builder()
-                .myReviewCount(getReviewCount(user))
-                .myReviewLikeCount(getReviewLikeCount(user))
-                .myFoodLike(getMyCategoryLikeCount(user, FOOD_ID))
-                .myPlaceLike(getMyCategoryLikeCount(user, PLACE_ID))
-                .myBusinessLike(getMyCategoryLikeCount(user, BUSINESS_ID))
-                .build();
-    }
-
-    private int getMyCategoryLikeCount(User user, long categoryId) {
-        return reviewLikeRepository.findByUserAndId(user, categoryId).size();
-    }
-    private int getReviewLikeCount(User user) {
-        return reviewLikeRepository.findByUser(user).size();
-    }
-
-    private int getReviewCount(User user) {
-        return reviewRepository.findByUser(user).size();
-    }
-
     public List<MyPageReviewInfo> getMyPageReviewInfoList(User user) {
         return reviewRepository.findByUser(user).stream()
-                .map(this::getMyPageReviewInfo)
+                .map(this::convertToMyPageReviewInfo)
                 .collect(Collectors.toList());
-    }
-
-    private MyPageReviewInfo getMyPageReviewInfo(Review review) {
-        long storeId = review.getDomain().getId();
-        String reviewContent = review.getContent();
-        List<String> selectedKeywords = middleTagRepository.findByReview(review).stream()
-                .map(r -> r.getReviewTag().getName()).collect(Collectors.toList());
-
-        return MyPageReviewInfo.builder()
-                .storeId(storeId)
-                .name("")
-                .reviewContent(reviewContent)
-                .selectedKeywords(selectedKeywords)
-                .build();
     }
 
     public List<MyPageReviewInfo> getMyPageReviewLikeInfoList(User user) {
         return reviewLikeRepository.findByUser(user).stream()
-                .map(this::getMyPageReviewLikeInfo)
+                .map(ReviewLike::getReview)
+                .map(this::convertToMyPageReviewInfo)
                 .collect(Collectors.toList());
     }
 
-    private MyPageReviewInfo getMyPageReviewLikeInfo(ReviewLike reviewLike) {
-        Review review = reviewLike.getReview();
-        long storeId = review.getId();
-        String name = review.getUser().getName();
+    private MyPageReviewInfo convertToMyPageReviewInfo(Review review) {
+        Long storeId = getDomainOrReviewId(review);
+        String name = getReviewerName(review);
+        List<String> selectedKeywords = getSelectedKeywords(review);
         String reviewContent = review.getContent();
-        List<String> selectedKeywords = middleTagRepository.findByReview(review).stream()
-                .map(r -> r.getReviewTag().getName()).collect(Collectors.toList());
 
-        return MyPageReviewInfo.builder()
-                .storeId(storeId)
-                .name(name)
-                .reviewContent(reviewContent)
-                .selectedKeywords(selectedKeywords)
-                .build();
+        return new MyPageReviewInfo(storeId, name, selectedKeywords, reviewContent);
+    }
+
+    private long getDomainOrReviewId(Review review) {
+        if (review.getDomain() != null) {
+            return review.getDomain().getId();
+        }
+        return review.getId();
+    }
+
+    private String getReviewerName(Review review) {
+        if(review.getUser() != null){
+            return review.getUser().getName();
+        }
+        return null;
+    }
+
+    private List<String> getSelectedKeywords(Review review) {
+        return middleTagRepository.findByReview(review).stream()
+                .map(r -> r.getReviewTag().getName())
+                .collect(Collectors.toList());
     }
 }

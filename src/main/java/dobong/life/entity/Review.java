@@ -27,12 +27,16 @@ public class Review {
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
-    public Review(String content, int likeCount, LocalDateTime date, Double score, User user, Domain domain) {
+    public Review(String content, LocalDateTime date, User user, Domain domain) {
         this.content = content;
-        this.likeCount = likeCount;
+        this.likeCount = 0;
         this.date = date;
-        this.score = score;
+        this.score = 0.0;
         this.user = user;
         this.domain = domain;
+    }
+
+    public void updateLikeCount(){
+        this.likeCount++;
     }
 }

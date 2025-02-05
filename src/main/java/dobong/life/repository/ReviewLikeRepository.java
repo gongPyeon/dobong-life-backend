@@ -1,5 +1,6 @@
 package dobong.life.repository;
 
+import dobong.life.entity.Category;
 import dobong.life.entity.Review;
 import dobong.life.entity.ReviewLike;
 import dobong.life.entity.User;
@@ -16,5 +17,5 @@ public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
     List<ReviewLike> findByUser(User user);
 
     @Query("SELECT r FROM ReviewLike r " + "WHERE r.review.domain.category.id = :categoryId")
-    List<ReviewLike> findByUserAndId(User user, long categoryId);
+    List<ReviewLike> findByUserAndCategoryId(User user, long categoryId);
 }

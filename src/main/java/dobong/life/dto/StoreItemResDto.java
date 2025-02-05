@@ -1,16 +1,14 @@
 package dobong.life.dto;
 
 import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.dto.info.StoreDetailInfo;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
-@Builder
-public class StoreItemListResponseDto {
+public class StoreItemResDto {
     private Long categoryId;
-    private List<StoreBasicInfo> result;
+    private StoreBasicInfo storeBasicInfo;
+    private StoreDetailInfo storeDetailInfo;
 }

@@ -15,8 +15,8 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
 
     @Query("SELECT DISTINCT d.domain FROM MiddleCategory d " +
             "WHERE (:categoryNames IS NULL OR d.subCategory.subCategoryName IN :categoryNames) " +
-            "AND (:subTagNames IS NULL OR d.subTag.subTagName IN :subTagNames)")
-    List<Domain> findByFilters(List<String> categoryNames, List<String> subTagNames);
+            "AND (:subTagNames IS NULL OR d.subTag.id IN :subTagIds)")
+    List<Domain> findByFilters(List<String> categoryNames, List<Long> subTagIds);
 
     /**
      * query DSL

@@ -1,22 +1,21 @@
 package dobong.life.service;
 
-import dobong.life.dto.StoreItemResponseDto;
-import dobong.life.dto.StoreListFilterResponseDto;
-import dobong.life.dto.StoreListResponseDto;
-import dobong.life.dto.StoreReviewResponseDto;
-import dobong.life.dto.info.*;
+import dobong.life.dto.StoreItemResDto;
+import dobong.life.dto.StoresFilterResDto;
+import dobong.life.dto.StoresResDto;
+import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.dto.info.ItemInfo;
+import dobong.life.dto.info.StoreDetailInfo;
 import dobong.life.entity.*;
-import dobong.life.service.mapper.StoreMapper;
-import dobong.life.service.query.ReviewQueryService;
+import dobong.life.service.query.CategoryQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.TagQueryService;
+import dobong.life.service.query.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,119 +23,59 @@ import java.util.stream.Collectors;
 public class StoreService {
 
     private final StoreQueryService storeQueryService;
+    private final CategoryQueryService categoryQueryService;
+    private final UserQueryService userQueryService;
     private final TagQueryService tagQueryService;
-    private final ReviewQueryService reviewQueryService;
-    private final StoreMapper storeMapper;
 
-    public StoreListResponseDto getStoreList(Long categoryId, String email){
-        Category category = storeQueryService.getCategory(categoryId);
-        User user = storeQueryService.getUserByEmail(email);
-        List<TagGroup> tagGroups = tagQueryService.getTagGroups(category);
+    public StoresResDto getStoreList(Long categoryId, Long userId){
+        Category category = categoryQueryService.getCategory(categoryId);
+        User user = userQueryService.getUserById(userId);
+        List<ItemInfo> items = tagQueryService.getItemInfos(category, user);
 
-        return StoreListResponseDto.builder()
-                .categoryId(categoryId)
-                .results(createStoreGroups(tagGroups, user))
-                .build();
+        return new StoresResDto(categoryId, items);
     }
 
-    private List<StoreGroup> createStoreGroups(List<TagGroup> tagGroups, User user) {
-        return tagGroups.stream()
-                .flatMap(tagGroup -> createStoreGroupsForTagGroup(tagGroup, user).stream())
-                .filter(group -> !group.getStores().isEmpty())
-                .collect(Collectors.toList());
+    public StoresResDto getStoreListByQuery(Long categoryId, Long userId, String query) {
+        Category category =  categoryQueryService.getCategory(categoryId);
+        User user = userQueryService.getUserById(userId);
+        List<ItemInfo> items = tagQueryService.getItemInfosByQuery(category, user, query);
+
+        return new StoresResDto(categoryId, items);
     }
 
-    private List<StoreGroup> createStoreGroupsForTagGroup(TagGroup tagGroup, User user) {
-        return tagGroup.getSubTagDomains().stream()
-                .map(subTagDomain -> StoreGroup.builder()
-                        .tag(storeMapper.toTagInfo(tagGroup.getTag(), subTagDomain.getSubTag()))
-                        .stores(createStoreList(subTagDomain.getDomains(), user))
-                        .build())
-                .collect(Collectors.toList());
+    public StoresFilterResDto getStoreListByFilter(Long categoryId, Long userId, List<String> categoryNames, List<Long> subTagIds) {
+        User user = userQueryService.getUserById(userId);
+        List<StoreBasicInfo> items = tagQueryService.mapToStoreInfosByFilter(user, categoryNames, subTagIds);
+        List<String> subTagNames = tagQueryService.getSubTagNames(subTagIds);
+
+        return new StoresFilterResDto(categoryId, categoryNames, subTagNames, items);
     }
 
-    private List<StoreBasicInfo> createStoreList(List<Domain> domains, User user) {
-        return domains.stream()
-                .map(domain -> createStoreInfo(domain, user))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public StoresResDto getStoreListAll(Long categoryId, Long userId, Long tagId, Long subTagId) {
+        Category category = categoryQueryService.getCategory(categoryId);
+        User user = userQueryService.getUserById(userId);
+        List<ItemInfo> items = tagQueryService.getItemInfosMore(category, user, tagId, subTagId);
+
+        return new StoresResDto(categoryId, items);
     }
 
-    private StoreBasicInfo createStoreInfo(Domain domain, User user) {
-        boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
-        return storeMapper.toStoreBasicInfo(domain, isFavorite);
-    }
-
-    public StoreListResponseDto getStoreList(Long categoryId, String email, String query) {
-        Category category = storeQueryService.getCategory(categoryId);
-        User user = storeQueryService.getUserByEmail(email);
-        List<TagGroup> tagGroups = tagQueryService.getTagGroupsByQuery(category, query);
-
-        return StoreListResponseDto.builder()
-                .categoryId(categoryId)
-                .results(createStoreGroups(tagGroups, user))
-                .build();
-    }
-
-    //TODO: filter도 응답형식을 맞춰야할까?
-    public StoreListFilterResponseDto getStoreList(Long categoryId, String email, List<String> categoryNames, List<String> subTagNames) {
-        User user = storeQueryService.getUserByEmail(email);
-        List<Domain> domains = tagQueryService.getTagGroupsFilter(categoryNames, subTagNames);
-
-        return StoreListFilterResponseDto.builder()
-                .categoryId(categoryId)
-                .categoryNames(categoryNames)
-                .subTagNames(subTagNames)
-                .results(createStoreList(domains, user))
-                .build();
-    }
-
-    public StoreListResponseDto getStoreList(Long categoryId, String email, Long tagId, String subTagName) {
-        Category category = storeQueryService.getCategory(categoryId);
-        User user = storeQueryService.getUserByEmail(email);
-        List<TagGroup> tagGroups = tagQueryService.getTagGroupsMore(category, tagId, subTagName);
-
-        return StoreListResponseDto.builder()
-                .categoryId(categoryId)
-                .results(createStoreGroups(tagGroups, user))
-                .build();
-    }
-
-    public StoreItemResponseDto getStore(Long categoryId, String email, Long storeId) {
-        User user = storeQueryService.getUserByEmail(email);
+    public StoreItemResDto getStore(Long categoryId, Long userId, Long storeId) {
+        User user = userQueryService.getUserById(userId);
         Domain domain = storeQueryService.getStore(storeId);
-        String subCategory = storeQueryService.getSubCategory(domain);
+        StoreBasicInfo storeBasicInfo = buildStoreBasicInfo(domain, user);
+        StoreDetailInfo storeDetailInfo = buildStoreDetailInfo(domain);
 
-        return StoreItemResponseDto.builder()
-                .categoryId(categoryId)
-                .result(createStoreInfoDetail(domain, user, subCategory))
-                .build();
+        return new StoreItemResDto(categoryId, storeBasicInfo, storeDetailInfo);
     }
 
-    private StoreBasicInfo createStoreInfoDetail(Domain domain, User user, String subCategory) {
-        boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
-        List<String> items = storeQueryService.getItems(domain);
+    private StoreBasicInfo buildStoreBasicInfo(Domain domain, User user) {
+        return tagQueryService.mapToStoreInfo(domain, user);
+    }
+
+    private StoreDetailInfo buildStoreDetailInfo(Domain domain) {
+        String subCategoryName = storeQueryService.getSubCategory(domain);
+        List<String> menus = storeQueryService.getMenus(domain);
         List<String> keywords = storeQueryService.getHashTags(domain);
-        return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, subCategory, items, keywords);
+        return tagQueryService.mapToStoreDetailInfo(subCategoryName, domain.getAddressDetail(), menus, keywords);
     }
-
-
-    // TODO: Review Service ?
-    public StoreReviewResponseDto getStoreReview(Long categoryId, String email, Long storeId) {
-        User user = storeQueryService.getUserByEmail(email);
-        Domain domain  = storeQueryService.getStore(storeId);
-
-        double averageRating = reviewQueryService.getAverageRating(domain);
-        int ratingCount = reviewQueryService.getRatingCount(domain);
-        List<RatingDetails> ratingDetails = reviewQueryService.getRatingDetails(domain);
-        List<ReviewDetails> reviewDetails = reviewQueryService.getReviewDetails(domain, user);
-
-        return StoreReviewResponseDto.builder().
-                categoryId(categoryId)
-                .storeId(storeId)
-                .result(storeMapper.createReviewInfo(averageRating, ratingCount, ratingDetails, reviewDetails))
-                .build();
-    }
-
-
 }

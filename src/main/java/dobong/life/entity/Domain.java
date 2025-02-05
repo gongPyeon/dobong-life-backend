@@ -25,5 +25,4 @@ public class Domain {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
 }

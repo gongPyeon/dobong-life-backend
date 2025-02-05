@@ -1,15 +1,12 @@
 package dobong.life.controller;
 
-import dobong.life.dto.StoreItemResponseDto;
-import dobong.life.dto.StoreListFilterResponseDto;
-import dobong.life.dto.StoreListResponseDto;
-import dobong.life.dto.StoreReviewResponseDto;
-import dobong.life.jwt.JwtService;
+import dobong.life.dto.StoreItemResDto;
+import dobong.life.dto.StoresFilterResDto;
+import dobong.life.dto.StoresResDto;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
 import dobong.life.util.response.BaseResponseService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,50 +27,42 @@ public class StoreController {
 
     @GetMapping
     public BaseResponse<Object> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
-        String email = userPrincipal.getEmail();
-        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email);
-        return baseResponseService.getSuccessResponse(storeListResponseDto);
+        Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreList(categoryId, userId);
+        return baseResponseService.getSuccessResponse(storesResDto);
     }
 
     @GetMapping("/search")
     public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @RequestParam String query){
-        String email = userPrincipal.getEmail();
-        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, query);
-        return baseResponseService.getSuccessResponse(storeListResponseDto);
+        Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreListByQuery(categoryId, userId, query);
+        return baseResponseService.getSuccessResponse(storesResDto);
     }
 
     @GetMapping("/filter")
     public BaseResponse<Object> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId,
-                                                @RequestParam List<String> categoryName, @RequestParam List<String> subTagName){
-        String email = userPrincipal.getEmail();
-        StoreListFilterResponseDto storeListFilterResponseDto = storeService.getStoreList(categoryId, email, categoryName, subTagName);
-        return baseResponseService.getSuccessResponse(storeListFilterResponseDto);
+                                                @RequestParam List<String> categoryName, @RequestParam List<Long> subTagId){
+        Long userId = userPrincipal.getId();
+        StoresFilterResDto storesFilterResDto = storeService.getStoreListByFilter(categoryId, userId, categoryName, subTagId);
+        return baseResponseService.getSuccessResponse(storesFilterResDto);
     }
 
     @GetMapping("/more")
     public BaseResponse<Object> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long tagId, @RequestParam String subTagName){
-        String email = userPrincipal.getEmail();
-        StoreListResponseDto storeListResponseDto = storeService.getStoreList(categoryId, email, tagId, subTagName);
-        return baseResponseService.getSuccessResponse(storeListResponseDto);
+                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long tagId, @RequestParam Long subTagId){
+        Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreListAll(categoryId, userId, tagId, subTagId);
+        return baseResponseService.getSuccessResponse(storesResDto);
     }
 
     @GetMapping("/item")
     public BaseResponse<Object> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
-        String email = userPrincipal.getEmail();
-        StoreItemResponseDto storeItemResponseDto = storeService.getStore(categoryId, email, storeId);
-        return baseResponseService.getSuccessResponse(storeItemResponseDto);
-    }
-
-    @GetMapping("/more/review")
-    public BaseResponse<Object> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId){
-        String email = userPrincipal.getEmail();
-        StoreReviewResponseDto storeReviewResponseDto = storeService.getStoreReview(categoryId, email, storeId);
-        return baseResponseService.getSuccessResponse(storeReviewResponseDto);
+                                                @PathVariable("categoryId") Long categoryId, @RequestParam Long storeId) {
+        Long userId = userPrincipal.getId();
+        StoreItemResDto storeItemResDto = storeService.getStore(categoryId, userId, storeId);
+        return baseResponseService.getSuccessResponse(storeItemResDto);
     }
 
 }

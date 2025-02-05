@@ -1,24 +1,18 @@
 package dobong.life.service;
 
-import dobong.life.dto.MyPageResponseDto;
-import dobong.life.dto.MyPageReviewResponseDto;
-import dobong.life.dto.StoreItemListResponseDto;
-import dobong.life.dto.StoreItemResponseDto;
-import dobong.life.dto.info.CountDetails;
+import dobong.life.dto.MyPageResDto;
+import dobong.life.dto.MyPageReviewResDto;
+import dobong.life.dto.StoresResDto;
+import dobong.life.dto.info.LikeCount;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.entity.*;
-import dobong.life.service.mapper.StoreMapper;
-import dobong.life.service.query.MyPageQueryService;
-import dobong.life.service.query.ReviewQueryService;
-import dobong.life.service.query.StoreQueryService;
-import jakarta.transaction.Transactional;
+import dobong.life.service.query.*;
+import dobong.life.util.DEFINE;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,73 +21,49 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MyPageService {
 
-    private final StoreQueryService storeQueryService;
+    private final TagQueryService tagQueryService;
     private final MyPageQueryService myPageQueryService;
     private final ReviewQueryService reviewQueryService;
-    private final StoreMapper storeMapper;
+    private final UserQueryService userQueryService;
+    private final ReviewLikeQueryService reviewLikeQueryService;
+    private final CategoryQueryService categoryQueryService;
 
-    public MyPageResponseDto getMyPage(String email) {
-        User user = storeQueryService.getUserByEmail(email);
-        CountDetails countDetails = myPageQueryService.getCountDetails(user);
+    public MyPageResDto getMyPage(Long userId) {
+        User user = userQueryService.getUserById(userId);
+        int reviewCount = reviewQueryService.getReviewCount(user);
+        int reviewLikeCount = reviewLikeQueryService.getReviewLikeCount(user);
+        LikeCount likeCount= getLikeCount(user);
 
-        return MyPageResponseDto.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .myReviewCount(countDetails.getMyReviewCount())
-                .myReviewLikeCount(countDetails.getMyReviewLikeCount())
-                .myFoodLike(countDetails.getMyFoodLike())
-                .myPlaceLike(countDetails.getMyPlaceLike())
-                .myBusinessLike(countDetails.getMyBusinessLike())
-                .build();
+        return new MyPageResDto(user, reviewCount, reviewLikeCount, likeCount);
     }
 
-    public MyPageReviewResponseDto getMyReview(String email) {
-        User user = storeQueryService.getUserByEmail(email);
+    private LikeCount getLikeCount(User user) {
+        int foodLikeCount = reviewLikeQueryService.getMyCategoryLikeCount(user, DEFINE.FOOD_ID);
+        int placeLikeCount = reviewLikeQueryService.getMyCategoryLikeCount(user, DEFINE.PLACE_ID);
+        int businessLikeCount = reviewLikeQueryService.getMyCategoryLikeCount(user, DEFINE.BUSINESS_ID);
+
+        return new LikeCount(foodLikeCount, placeLikeCount, businessLikeCount);
+    }
+
+    public MyPageReviewResDto getMyReview(Long userId) {
+        User user = userQueryService.getUserById(userId);
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewInfoList(user);
 
-        return MyPageReviewResponseDto.builder()
-                .reviews(reviews)
-                .build();
+        return new MyPageReviewResDto(reviews);
     }
 
-    public MyPageReviewResponseDto getMyReviewLike(String email) {
-        User user = storeQueryService.getUserByEmail(email);
+    public MyPageReviewResDto getMyReviewLike(Long userId) {
+        User user = userQueryService.getUserById(userId);
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewLikeInfoList(user);
 
-        return MyPageReviewResponseDto.builder()
-                .reviews(reviews)
-                .build();
+        return new MyPageReviewResDto(reviews);
     }
 
-    public StoreItemListResponseDto getMyLike(Long categoryId, String email) {
-        Category category = storeQueryService.getCategory(categoryId);
-        User user = storeQueryService.getUserByEmail(email);
-        List<StoreBasicInfo> results = storeQueryService.getStoreLike(category, user).stream()
-                .map(d -> createStoreInfoDetail(d, user)).collect(Collectors.toList());
+    public List<StoreBasicInfo> getMyLike(Long categoryId, Long userId) {
+        Category category = categoryQueryService.getCategory(categoryId);
+        User user = userQueryService.getUserById(userId);
+        List<StoreBasicInfo> items = tagQueryService.getStoreInfoWithLimitLike(category, user);
 
-        return StoreItemListResponseDto.builder()
-                .categoryId(categoryId)
-                .result(results)
-                .build();
-    }
-
-    private StoreBasicInfo createStoreInfoDetail(Domain domain, User user) {
-        boolean isFavorite = storeQueryService.isUserFavorite(domain, user);
-        List<String> items = storeQueryService.getItems(domain);
-        List<String> keywords = storeQueryService.getHashTags(domain);
-        return storeMapper.toStoreBasicInfoDetail(domain, isFavorite, "", items, keywords);
-    }
-
-    @Transactional
-    public void saveReview(MyPageReviewInfo r, String email) {
-        User user = storeQueryService.getUserByEmail(email);
-        Domain domain = storeQueryService.getStore(r.getStoreId());
-        Review review = new Review(r.getReviewContent(), 0, LocalDateTime.now(),0.0, user, domain);
-        reviewQueryService.saveReview(review);
-
-        List<String> selectedKeywords = r.getSelectedKeywords();
-        List<MiddleTag> collect = selectedKeywords.stream()
-                .map(s -> new MiddleTag(review, reviewQueryService.getReviewTag(s))).collect(Collectors.toList());
-        reviewQueryService.saveMiddleTag(collect);
+        return items;
     }
 }

@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class CountDetails {
-    private int myReviewCount;
-    private int myReviewLikeCount;
-    private int myFoodLike;
-    private int myPlaceLike;
-    private int myBusinessLike;
+public class RatingDetailInfo{
+    private String reviewTag;
+    private int ratingTag;
 }

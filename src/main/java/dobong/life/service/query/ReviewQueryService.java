@@ -1,8 +1,7 @@
 package dobong.life.service.query;
 
-import dobong.life.dto.info.MyPageReviewInfo;
-import dobong.life.dto.info.RatingDetails;
-import dobong.life.dto.info.ReviewDetails;
+import dobong.life.dto.info.RatingDetailInfo;
+import dobong.life.dto.info.ReviewDetailInfo;
 import dobong.life.entity.*;
 import dobong.life.repository.MiddleTagRepository;
 import dobong.life.repository.ReviewLikeRepository;
@@ -32,29 +31,29 @@ public class ReviewQueryService {
         return (int) reviewRepository.findByDomain(domain).stream().count();
     }
 
-    public List<RatingDetails> getRatingDetails(Domain domain) {
+    public List<RatingDetailInfo> getRatingDetails(Domain domain) {
         return reviewTagRepository.findAll().stream()
                 .map(r -> createRatingDetail(r, domain))
                 .collect(Collectors.toList());
     }
 
-    private RatingDetails createRatingDetail(ReviewTag reviewTag, Domain domain) {
+    private RatingDetailInfo createRatingDetail(ReviewTag reviewTag, Domain domain) {
         int ratingTag = reviewRepository.findByDomain(domain).stream()
                 .mapToInt(r -> createRatingTag(r, reviewTag)).sum();
-        return new RatingDetails(reviewTag.getName(), ratingTag);
+        return new RatingDetailInfo(reviewTag.getName(), ratingTag);
     }
 
     private int createRatingTag(Review review, ReviewTag reviewTag) {
         return (int) middleTagRepository.findByReviewTagAndReview(reviewTag, review).stream().count();
     }
 
-    public List<ReviewDetails> getReviewDetails(Domain domain, User user) {
+    public List<ReviewDetailInfo> getReviewDetails(Domain domain, User user) {
         return reviewRepository.findByDomain(domain).stream()
                 .map(r -> createReviewDetails(r, domain, user))
                 .collect(Collectors.toList());
     }
 
-    private ReviewDetails createReviewDetails(Review review, Domain domain, User user) {
+    private ReviewDetailInfo createReviewDetails(Review review, Domain domain, User user) {
         User usr = review.getUser();
         int userReviewCount = (int) reviewRepository.findByUser(usr).stream().count();
         List<String> selectedKeywords = middleTagRepository.findByReview(review).stream()
@@ -62,7 +61,7 @@ public class ReviewQueryService {
 
         boolean likeByUser = reviewLikeRepository.findByUserAndReview(user, review).isPresent();
 
-        return new ReviewDetails(user.getName(), userReviewCount, review.getDate(),
+        return new ReviewDetailInfo(user.getName(), userReviewCount, review.getDate(),
                 review.getContent(), selectedKeywords, likeByUser, review.getLikeCount());
     }
 
@@ -74,6 +73,9 @@ public class ReviewQueryService {
         reviewRepository.save(review);
     }
 
+    public int getReviewCount(User user) {
+        return reviewRepository.findByUser(user).size();
+    }
 
     public void saveMiddleTag(List<MiddleTag> collect) {
         collect.stream().forEach(middleTagRepository::save);

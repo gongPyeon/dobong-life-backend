@@ -1,12 +1,10 @@
 package dobong.life.handler;
 
 import dobong.life.dto.UserResponseDto;
-import dobong.life.entity.RefreshToken;
 import dobong.life.jwt.JwtService;
 import dobong.life.lib.CookieUtils;
 import dobong.life.repository.CookieAuthorizationRequestRepository;
 import dobong.life.repository.RefreshTokenRepository;
-import dobong.life.service.principal.UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -14,6 +14,6 @@ import java.util.List;
 public class ReviewInfo{
     private double averageRating;
     private int ratingCount;
-    private List<RatingDetails> ratingDetails;
-    private List<ReviewDetails> reviewDetails;
+    private List<RatingDetailInfo> ratingDetails;
+    private List<ReviewDetailInfo> reviewDetails;
 }
