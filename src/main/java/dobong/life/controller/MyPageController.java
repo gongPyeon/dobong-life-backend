@@ -5,6 +5,7 @@ import dobong.life.dto.MyPageReviewResDto;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
+import dobong.life.util.ValidParameter;
 import dobong.life.util.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,8 @@ public class MyPageController {
     }
 
     @GetMapping("/{categoryId}/like")
-    public BaseResponse<List<StoreBasicInfo>> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
+    public BaseResponse<List<StoreBasicInfo>> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                              @ValidParameter @PathVariable Long categoryId){
         Long userId = userPrincipal.getId();
         List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userId);
         return new BaseResponse<>(storesResDto);

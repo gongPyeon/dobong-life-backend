@@ -5,6 +5,7 @@ import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.service.ReviewService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.DEFINE;
+import dobong.life.util.ValidParameter;
 import dobong.life.util.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
     private final ReviewService reviewService;
     @PostMapping("/review")
-    public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @Valid @RequestBody MyPageReviewInfo myPageReviewInfo){
+    public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                               @Valid @RequestBody MyPageReviewInfo myPageReviewInfo){
         Long userId = userPrincipal.getId();
         reviewService.saveReview(myPageReviewInfo, userId);
         return new BaseResponse<>(DEFINE.REVIEW_OK);
@@ -29,7 +31,8 @@ public class ReviewController {
 
     @GetMapping("/reviews/{categoryId}/{storeId}")
     public BaseResponse<ReviewResDto> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                @PathVariable("categoryId") Long categoryId, @PathVariable Long storeId){
+                                                      @ValidParameter @PathVariable Long categoryId,
+                                                      @ValidParameter @PathVariable Long storeId){
         Long userId = userPrincipal.getId();
         ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, userId, storeId);
         return new BaseResponse<>(reviewResDto);
