@@ -9,6 +9,7 @@ import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.entity.*;
 import dobong.life.service.query.*;
 import dobong.life.util.DEFINE;
+import dobong.life.util.ValidValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class MyPageService {
         return new LikeCount(foodLikeCount, placeLikeCount, businessLikeCount);
     }
 
-    public MyPageReviewResDto getMyReview(Long userId) {
+    public MyPageReviewResDto getMyReview(@ValidValue Long userId) {
         User user = userQueryService.getUserById(userId);
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewInfoList(user);
 

@@ -3,7 +3,7 @@ package dobong.life.util;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ParameterValidator implements ConstraintValidator<ValidParameter, Object> {
+public class ParameterValidator implements ConstraintValidator<ValidValue, Object> {
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {

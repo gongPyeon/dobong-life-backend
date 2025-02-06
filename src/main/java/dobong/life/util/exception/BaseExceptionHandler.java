@@ -24,7 +24,12 @@ public class BaseExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseErrorResponse> handle_DtoValidException(MethodArgumentNotValidException e){
         log.error("DtoValidExceptionHandler.handle_DtoValidException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseErrorResponse> handleException(Exception e) {
+        log.error("ExceptionHandler.handle_Exception <{}> {}", e.getMessage(), e);
         return BaseErrorResponse.of(BaseErrorCode.BAD_REQUEST);
     }
 }

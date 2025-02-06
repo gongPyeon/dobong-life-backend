@@ -5,7 +5,6 @@ import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.service.ReviewService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.DEFINE;
-import dobong.life.util.ValidParameter;
 import dobong.life.util.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,7 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews/{categoryId}/{storeId}")
-    public BaseResponse<ReviewResDto> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                      @ValidParameter @PathVariable Long categoryId,
-                                                      @ValidParameter @PathVariable Long storeId){
+    public BaseResponse<ReviewResDto> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId, @PathVariable Long storeId){
         Long userId = userPrincipal.getId();
         ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, userId, storeId);
         return new BaseResponse<>(reviewResDto);
