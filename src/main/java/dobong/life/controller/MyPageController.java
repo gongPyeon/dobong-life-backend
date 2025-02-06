@@ -6,7 +6,6 @@ import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
-import dobong.life.util.response.BaseResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,35 +20,33 @@ import java.util.List;
 @RequestMapping("dobong/my")
 @Slf4j
 public class MyPageController {
-
-    private final BaseResponseService baseResponseService;
     private final MyPageService myPageService;
 
     @GetMapping
-    public BaseResponse<Object> viewMyPage(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public BaseResponse<MyPageResDto> viewMyPage(@AuthenticationPrincipal UserPrincipal userPrincipal){
         Long userId = userPrincipal.getId();
         MyPageResDto myPageResDto = myPageService.getMyPage(userId);
-        return baseResponseService.getSuccessResponse(myPageResDto);
+        return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/review")
-    public BaseResponse<Object> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public BaseResponse<MyPageReviewResDto> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
         Long userId = userPrincipal.getId();
         MyPageReviewResDto myPageResDto = myPageService.getMyReview(userId);
-        return baseResponseService.getSuccessResponse(myPageResDto);
+        return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/review/like")
-    public BaseResponse<Object> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public BaseResponse<MyPageReviewResDto> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
         Long userId = userPrincipal.getId();
         MyPageReviewResDto myPageResDto = myPageService.getMyReviewLike(userId);
-        return baseResponseService.getSuccessResponse(myPageResDto);
+        return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/{categoryId}/like")
-    public BaseResponse<Object> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
+    public BaseResponse<List<StoreBasicInfo>> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
         Long userId = userPrincipal.getId();
         List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userId);
-        return baseResponseService.getSuccessResponse(storesResDto);
+        return new BaseResponse<>(storesResDto);
     }
 }

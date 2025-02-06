@@ -6,7 +6,6 @@ import dobong.life.dto.StoresResDto;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
-import dobong.life.util.response.BaseResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,47 +21,46 @@ import java.util.List;
 @Slf4j
 public class StoreController {
 
-    private final BaseResponseService baseResponseService;
     private final StoreService storeService;
 
     @GetMapping
-    public BaseResponse<Object> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
+    public BaseResponse<StoresResDto> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId){
         Long userId = userPrincipal.getId();
         StoresResDto storesResDto = storeService.getStoreList(categoryId, userId);
-        return baseResponseService.getSuccessResponse(storesResDto);
+        return new BaseResponse<>(storesResDto);
     }
 
     @GetMapping("/search")
-    public BaseResponse<Object> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<StoresResDto> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @RequestParam String query){
         Long userId = userPrincipal.getId();
         StoresResDto storesResDto = storeService.getStoreListByQuery(categoryId, userId, query);
-        return baseResponseService.getSuccessResponse(storesResDto);
+        return new BaseResponse<>(storesResDto);
     }
 
     @GetMapping("/filter") // id는 param으로 넘겨야하는데, 어떻게 하는게 좋을까
-    public BaseResponse<Object> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<StoresFilterResDto> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId,
                                                 @RequestParam List<String> categoryName, @RequestParam List<Long> subTagId){
         Long userId = userPrincipal.getId();
         StoresFilterResDto storesFilterResDto = storeService.getStoreListByFilter(categoryId, userId, categoryName, subTagId);
-        return baseResponseService.getSuccessResponse(storesFilterResDto);
+        return new BaseResponse<>(storesFilterResDto);
     }
 
     @GetMapping("/more/{tagId}/{subTagId}")
-    public BaseResponse<Object> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<StoresResDto> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @PathVariable Long tagId, @PathVariable Long subTagId){
         Long userId = userPrincipal.getId();
         StoresResDto storesResDto = storeService.getStoreListAll(categoryId, userId, tagId, subTagId);
-        return baseResponseService.getSuccessResponse(storesResDto);
+        return new BaseResponse<>(storesResDto);
     }
 
     @GetMapping("/item/{storeId}")
-    public BaseResponse<Object> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public BaseResponse<StoreItemResDto> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                 @PathVariable("categoryId") Long categoryId, @PathVariable Long storeId) {
         Long userId = userPrincipal.getId();
         StoreItemResDto storeItemResDto = storeService.getStore(categoryId, userId, storeId);
-        return baseResponseService.getSuccessResponse(storeItemResDto);
+        return new BaseResponse<>(storeItemResDto);
     }
 
 }

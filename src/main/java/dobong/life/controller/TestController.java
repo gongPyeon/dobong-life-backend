@@ -37,4 +37,10 @@ public class TestController {
     public String sshInfo() {
         return "ssh"; //ec2 테스트용
     }
+
+    @GetMapping("/jwt-test")
+    @ResponseBody
+    public String jwtTest() {
+        return "jwtTest 요청 성공";
+    }
 }

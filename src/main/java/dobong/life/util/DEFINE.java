@@ -7,4 +7,5 @@ public class DEFINE {
 
     public final static String REVIEW_OK = "리뷰 등록이 완료되었습니다!";
     public final static String LIKE_OK = "좋아요 적용이 완료되었습니다!";
+    public final static String SIGN_UP_OK = "회원가입에 성공했습니다!";
 }

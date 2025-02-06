@@ -1,7 +1,6 @@
 package dobong.life.util.exception;
 
 import dobong.life.util.response.BaseResponse;
-import dobong.life.util.response.BaseResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
