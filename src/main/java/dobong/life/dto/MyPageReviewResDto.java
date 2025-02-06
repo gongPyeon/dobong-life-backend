@@ -1,6 +1,7 @@
 package dobong.life.dto;
 
 import dobong.life.dto.info.MyPageReviewInfo;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -5,12 +5,12 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ParameterValidator.class)
+@Constraint(validatedBy = PasswordValidator.class)
 @Documented
-public @interface ValidValue{
-    String message() default "값이 유효하지 않습니다";
+public @interface Password{
+    String message() default "[ERROR] 비밀번호는 대문자, 소문자, 특수문자, 숫자를 각각 1개 이상 포함해야 합니다";
 
     Class<?>[] groups() default { };
 

@@ -2,6 +2,8 @@ package dobong.life.service.query;
 
 import dobong.life.entity.User;
 import dobong.life.repository.UserRepository;
+import dobong.life.util.ValidValue;
+import dobong.life.util.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Service;
 public class UserQueryService {
 
     private final UserRepository userRepository;
-    public User getUserById(long userId) {
-        return userRepository.findById(userId).get();
+
+    public User getUserById(long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
+
 }

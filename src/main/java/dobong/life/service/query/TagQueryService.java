@@ -9,6 +9,7 @@ import dobong.life.repository.DomainRepository;
 import dobong.life.repository.SubTagRepository;
 import dobong.life.repository.TagRepository;
 import dobong.life.service.StoreMapper;
+import dobong.life.util.exception.SubTagIdNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.Store;
@@ -95,6 +96,7 @@ public class TagQueryService {
     public List<StoreBasicInfo> mapToStoreInfosByFilter(User user, List<String> categoryNames, List<Long> subTagIds) {
         return domainRepository.findByFilters(categoryNames, subTagIds).stream()
                 .map(domain -> mapToStoreInfo(domain, user))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -103,12 +105,14 @@ public class TagQueryService {
         return tagRepository.findByCategoryAndId(category, tagId).stream()
                 .map(tag -> getStoreInfosMoreByTag(tag, user, subTagId))
                 .flatMap(List::stream)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     private List<ItemInfo> getStoreInfosMoreByTag(Tag tag, User user, Long subTagId) {
         return subTagRepository.findById(subTagId).stream()
                 .map(sub -> getStoreInfoWithLimit(tag, sub, user, MAX_DOMAINS_MORE))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -116,7 +120,7 @@ public class TagQueryService {
         return subTagIds.stream()
                 .map(subTagId -> subTagRepository.findById(subTagId)
                         .map(subTag -> subTag.getSubTagName())
-                        .orElseThrow(() -> new NoSuchElementException("SubTag not found for id: " + subTagId)))
+                        .orElseThrow(() -> new SubTagIdNotFoundException(subTagId)))
                 .collect(Collectors.toList());
     }
 
@@ -129,6 +133,7 @@ public class TagQueryService {
     public List<StoreBasicInfo> getStoreInfoWithLimitLike(Category category, User user) {
         List<StoreBasicInfo> stores = domainLikeRepository.findByUserJoinCategory(user, category).stream()
                 .map(domainLike -> mapToStoreInfo(domainLike.getDomain(), user))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return stores;

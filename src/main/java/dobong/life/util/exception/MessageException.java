@@ -5,7 +5,7 @@ import dobong.life.util.response.status.BaseErrorCode;
 
 public class MessageException extends BaseException {
     public MessageException(BaseErrorCode statusCode) {
-        super(statusCode);
+        super(statusCode, statusCode.getMessage());
     }
 }
 

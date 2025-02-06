@@ -4,6 +4,7 @@ import dobong.life.dto.UserSignUpDto;
 import dobong.life.entity.User;
 import dobong.life.enums.Role;
 import dobong.life.repository.UserRepository;
+import dobong.life.util.exception.DuplicateException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class UserService {
 
     public void signUp(UserSignUpDto userSignUpDto){
         if(userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()){
-            // 이미 존재하는 이메일 입니다
+            throw new DuplicateException();
         }
 
         User user = User.builder()

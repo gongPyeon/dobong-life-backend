@@ -61,7 +61,7 @@ public class StoreService {
 
     public StoreItemResDto getStore(Long categoryId, Long userId, Long storeId) {
         User user = userQueryService.getUserById(userId);
-        Domain domain = storeQueryService.getStore(storeId);
+        Domain domain = storeQueryService.getDomain(storeId);
         StoreBasicInfo storeBasicInfo = buildStoreBasicInfo(domain, user);
         StoreDetailInfo storeDetailInfo = buildStoreDetailInfo(domain);
 

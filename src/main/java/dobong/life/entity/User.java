@@ -3,6 +3,7 @@ package dobong.life.entity;
 import dobong.life.enums.Role;
 import dobong.life.enums.SocialType;
 import dobong.life.userInfo.OAuth2UserInfo;
+import dobong.life.util.Password;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,7 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Password
     private String password;
 
     @Column(nullable = true)
@@ -49,5 +51,7 @@ public class User{
     public void passwordEncode(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(this.password);
     }
+
+
 
 }

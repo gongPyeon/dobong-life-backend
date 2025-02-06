@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,14 +26,19 @@ public class MyPageQueryService {
 
     public List<MyPageReviewInfo> getMyPageReviewInfoList(User user) {
         return reviewRepository.findByUser(user).stream()
+                .filter(Objects::nonNull)
                 .map(this::convertToMyPageReviewInfo)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     public List<MyPageReviewInfo> getMyPageReviewLikeInfoList(User user) {
         return reviewLikeRepository.findByUser(user).stream()
+                .filter(Objects::nonNull)
                 .map(ReviewLike::getReview)
+                .filter(Objects::nonNull)
                 .map(this::convertToMyPageReviewInfo)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +67,9 @@ public class MyPageQueryService {
 
     private List<String> getSelectedKeywords(Review review) {
         return middleTagRepository.findByReview(review).stream()
+                .filter(Objects::nonNull)
                 .map(r -> r.getReviewTag().getName())
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 }

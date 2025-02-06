@@ -2,6 +2,7 @@ package dobong.life.service.query;
 
 import dobong.life.entity.Category;
 import dobong.life.repository.CategoryRepository;
+import dobong.life.util.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class CategoryQueryService {
     private final CategoryRepository categoryRepository;
 
     public Category getCategory(Long categoryId){
-        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다."));
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
     }
 }

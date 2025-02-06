@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,7 @@ public class ReviewService {
     @Transactional
     public void saveReview(MyPageReviewInfo reviewInfo, Long userId) {
         User user = userQueryService.getUserById(userId);
-        Domain domain = storeQueryService.getStore(reviewInfo.getStoreId());
+        Domain domain = storeQueryService.getDomain(reviewInfo.getStoreId());
 
         Review review = createReview(reviewInfo, user, domain);
         reviewQueryService.saveReview(review);
@@ -40,7 +41,7 @@ public class ReviewService {
 
     public ReviewResDto getStoreReview(Long categoryId, Long storeId, Long userId) {
         User user = userQueryService.getUserById(userId);
-        Domain domain = storeQueryService.getStore(storeId);
+        Domain domain = storeQueryService.getDomain(storeId);
 
         ReviewInfo reviewInfo = buildReviewInfo(domain, user);
         return new ReviewResDto(categoryId, storeId, reviewInfo);
@@ -58,6 +59,7 @@ public class ReviewService {
     private List<MiddleTag> createMiddleTags(List<String> keywords, Review review) {
         return keywords.stream()
                 .map(keyword -> new MiddleTag(review, reviewQueryService.getReviewTag(keyword)))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

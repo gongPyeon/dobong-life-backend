@@ -6,6 +6,7 @@ import dobong.life.entity.User;
 import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.UserQueryService;
+import dobong.life.util.ValidValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class LikeService {
 
     public void updateStoreLikeByUser(Long userId, Long storeId) {
         User user = userQueryService.getUserById(userId);
-        Domain domain = storeQueryService.getStore(storeId);
+        Domain domain = storeQueryService.getDomain(storeId);
 
         storeQueryService.updateStoreLike(user, domain);
     }
