@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class ReviewDetailInfo {
+    private Long reviewId;
     private String userName;
     private int userReviewCount;
     private LocalDateTime reviewDate;

@@ -46,11 +46,13 @@ public class StoreQueryService {
     }
 
     public void updateStoreLike(User user, Domain domain) {
+        // 이미 좋아요를 눌렀으면 패스한다
         DomainLike domainLike = new DomainLike(user, domain);
         domainLikeRepository.save(domainLike);
     }
 
     public void updateReviewLike(User user, Review review) {
+        // 이미 좋아요를 눌렀으면 패스한다
         ReviewLike reviewLike = new ReviewLike(user, review);
         reviewLikeRepository.save(reviewLike);
     }

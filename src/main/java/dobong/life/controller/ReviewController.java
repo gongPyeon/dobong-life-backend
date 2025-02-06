@@ -6,10 +6,12 @@ import dobong.life.service.ReviewService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.util.response.BaseResponse;
 import dobong.life.util.response.BaseResponseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -21,7 +23,7 @@ public class ReviewController {
     private final BaseResponseService baseResponseService;
     private final ReviewService reviewService;
     @PostMapping("/review")
-    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody MyPageReviewInfo myPageReviewInfo){
+    public BaseResponse<Object> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @Valid @RequestBody MyPageReviewInfo myPageReviewInfo){
         Long userId = userPrincipal.getId();
         reviewService.saveReview(myPageReviewInfo, userId);
         return baseResponseService.getSuccessResponse();
