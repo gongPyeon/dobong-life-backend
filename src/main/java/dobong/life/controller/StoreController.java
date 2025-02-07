@@ -47,8 +47,8 @@ public class StoreController {
 
     @GetMapping("/more/{tagId}/{subTagId}")
     public BaseResponse<StoresResDto> viewStoreListMore(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId, @PathVariable Long tagId, @PathVariable Long subTagId){
-        Long userId = userPrincipal.getId();
-        StoresResDto storesResDto = storeService.getStoreListAll(categoryId, userId, tagId, subTagId);
+        //Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreListAll(categoryId, userPrincipal, tagId, subTagId);
         return new BaseResponse<>(storesResDto);
     }
 

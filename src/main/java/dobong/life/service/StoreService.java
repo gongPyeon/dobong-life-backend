@@ -52,9 +52,9 @@ public class StoreService {
         return new StoresFilterResDto(categoryId, categoryNames, subTagNames, items);
     }
 
-    public StoresResDto getStoreListAll(Long categoryId, Long userId, Long tagId, Long subTagId) {
+    public StoresResDto getStoreListAll(Long categoryId, UserPrincipal userPrincipal, Long tagId, Long subTagId) {
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userId);
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<ItemInfo> items = tagQueryService.getItemInfosMore(category, user, tagId, subTagId);
 
         return new StoresResDto(categoryId, items);
