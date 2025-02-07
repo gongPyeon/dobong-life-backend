@@ -1,38 +1,25 @@
 package dobong.life.controller;
 
 import dobong.life.config.SecurityConfig;
-import dobong.life.config.TestSecurityConfig;
-import dobong.life.config.TestSetUpConfig;
 import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
-import dobong.life.dto.info.ItemInfo;
-import dobong.life.entity.*;
-import dobong.life.enums.ParentCategoryType;
-import dobong.life.enums.Role;
-import dobong.life.enums.SocialType;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
 
 import static dobong.life.controller.ResponseDto.*;
 import static dobong.life.controller.TestResponse.*;

@@ -6,7 +6,6 @@ import dobong.life.dto.StoresResDto;
 import dobong.life.dto.info.ItemInfo;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.dto.info.StoreDetailInfo;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
