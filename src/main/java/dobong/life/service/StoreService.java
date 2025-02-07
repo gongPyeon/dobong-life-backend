@@ -7,6 +7,7 @@ import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.dto.info.ItemInfo;
 import dobong.life.dto.info.StoreDetailInfo;
 import dobong.life.entity.*;
+import dobong.life.service.principal.UserPrincipal;
 import dobong.life.service.query.CategoryQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.TagQueryService;
@@ -27,9 +28,9 @@ public class StoreService {
     private final UserQueryService userQueryService;
     private final TagQueryService tagQueryService;
 
-    public StoresResDto getStoreList(Long categoryId, Long userId){
+    public StoresResDto getStoreList(Long categoryId, UserPrincipal userPrincipal){
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userId);
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<ItemInfo> items = tagQueryService.getItemInfos(category, user);
 
         return new StoresResDto(categoryId, items);

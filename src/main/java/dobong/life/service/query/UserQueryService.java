@@ -2,7 +2,6 @@ package dobong.life.service.query;
 
 import dobong.life.entity.User;
 import dobong.life.repository.UserRepository;
-import dobong.life.util.ValidValue;
 import dobong.life.util.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

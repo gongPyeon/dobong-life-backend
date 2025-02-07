@@ -25,8 +25,8 @@ public class StoreController {
 
     @GetMapping
     public BaseResponse<StoresResDto> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId){
-        Long userId = userPrincipal.getId();
-        StoresResDto storesResDto = storeService.getStoreList(categoryId, userId);
+        //Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreList(categoryId, userPrincipal);
         return new BaseResponse<>(storesResDto);
     }
 

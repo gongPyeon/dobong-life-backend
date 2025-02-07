@@ -6,7 +6,6 @@ import dobong.life.entity.User;
 import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.UserQueryService;
-import dobong.life.util.ValidValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

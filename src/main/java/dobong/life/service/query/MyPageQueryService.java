@@ -26,7 +26,6 @@ public class MyPageQueryService {
 
     public List<MyPageReviewInfo> getMyPageReviewInfoList(User user) {
         return reviewRepository.findByUser(user).stream()
-                .filter(Objects::nonNull)
                 .map(this::convertToMyPageReviewInfo)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -34,7 +33,6 @@ public class MyPageQueryService {
 
     public List<MyPageReviewInfo> getMyPageReviewLikeInfoList(User user) {
         return reviewLikeRepository.findByUser(user).stream()
-                .filter(Objects::nonNull)
                 .map(ReviewLike::getReview)
                 .filter(Objects::nonNull)
                 .map(this::convertToMyPageReviewInfo)
@@ -42,6 +40,7 @@ public class MyPageQueryService {
                 .collect(Collectors.toList());
     }
 
+    //TODO: N+1
     private MyPageReviewInfo convertToMyPageReviewInfo(Review review) {
         Long storeId = getDomainOrReviewId(review);
         String name = getReviewerName(review);
@@ -67,7 +66,6 @@ public class MyPageQueryService {
 
     private List<String> getSelectedKeywords(Review review) {
         return middleTagRepository.findByReview(review).stream()
-                .filter(Objects::nonNull)
                 .map(r -> r.getReviewTag().getName())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
