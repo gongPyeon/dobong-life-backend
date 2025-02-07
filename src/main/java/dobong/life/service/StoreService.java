@@ -44,8 +44,8 @@ public class StoreService {
         return new StoresResDto(categoryId, items);
     }
 
-    public StoresFilterResDto getStoreListByFilter(Long categoryId, Long userId, List<String> categoryNames, List<Long> subTagIds) {
-        User user = userQueryService.getUserById(userId);
+    public StoresFilterResDto getStoreListByFilter(Long categoryId, UserPrincipal userPrincipal, List<String> categoryNames, List<Long> subTagIds) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<StoreBasicInfo> items = tagQueryService.mapToStoreInfosByFilter(user, categoryNames, subTagIds);
         List<String> subTagNames = tagQueryService.getSubTagNames(subTagIds);
 

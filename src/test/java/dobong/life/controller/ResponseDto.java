@@ -51,4 +51,26 @@ public class ResponseDto {
             MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].storeLike").value(true).match(result);
         };
     }
+
+    public static ResultMatcher expectedGetStoresFilterResDto(){
+        return result -> {
+            MockMvcResultMatchers.jsonPath("$.result.categoryId").value(1L).match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.categoryNames[0]").value("분식").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.subTagNames[0]").value("맛집").match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.items[0].storeId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].storeName").value("순대1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].storeLocation").value("위치1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].imgUrl").value("이미지1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].storeLike").value(false).match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.items[1].storeId").value(2L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[1].storeName").value("순대2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[1].storeLocation").value("위치2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[1].imgUrl").value("이미지2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[1].storeLike").value(true).match(result);
+
+        };
+    }
 }

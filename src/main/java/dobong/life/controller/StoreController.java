@@ -40,8 +40,8 @@ public class StoreController {
     @GetMapping("/filter") // id는 param으로 넘겨야하는데, 어떻게 하는게 좋을까
     public BaseResponse<StoresFilterResDto> filterStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId,
                                                 @RequestParam List<String> categoryName, @RequestParam List<Long> subTagId){
-        Long userId = userPrincipal.getId();
-        StoresFilterResDto storesFilterResDto = storeService.getStoreListByFilter(categoryId, userId, categoryName, subTagId);
+        //Long userId = userPrincipal.getId();
+        StoresFilterResDto storesFilterResDto = storeService.getStoreListByFilter(categoryId, userPrincipal, categoryName, subTagId);
         return new BaseResponse<>(storesFilterResDto);
     }
 

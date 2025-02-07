@@ -3,6 +3,7 @@ package dobong.life.controller;
 import dobong.life.config.SecurityConfig;
 import dobong.life.config.TestSecurityConfig;
 import dobong.life.config.TestSetUpConfig;
+import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
 import dobong.life.dto.info.ItemInfo;
 import dobong.life.entity.*;
@@ -30,8 +31,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static dobong.life.controller.ResponseDto.expectedGetStoresResDto;
-import static dobong.life.controller.ResponseDto.expectedGetStoresResDtoByQuery;
+import java.util.List;
+
+import static dobong.life.controller.ResponseDto.*;
+import static dobong.life.controller.TestResponse.makeTestGetStoresFilterResDto;
 import static dobong.life.controller.TestResponse.makeTestGetStoresResDto;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -81,7 +84,7 @@ class StoreControllerTest {
     }
 
     @Test
-    void 검색에_따른_도메인_정보를_반환한다() throws Exception {
+    void 검색어에_따른_도메인_정보를_반환한다() throws Exception {
 
         // given
         Long[] storeIds = {1L, 2L};
@@ -104,6 +107,33 @@ class StoreControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(expectedGetStoresResDtoByQuery());
+    }
+
+    @Test
+    void 필터에_따른_도메인_정보를_반환한다() throws Exception {
+
+        // given
+        Long[] storeIds = {1L, 2L};
+        String[] storeNames = {"순대1", "순대2"};
+        String[] storeLocations = {"위치1", "위치2"};
+        String[] categoryNames = {"분식"};
+        String[] subTagNames = {"맛집"};
+        String[] imgUrls = {"이미지1", "이미지2"};
+        boolean[] storeLikes = {false, true};
+
+        StoresFilterResDto Dto = makeTestGetStoresFilterResDto(1L, categoryNames, subTagNames, storeIds, storeNames, storeLocations, imgUrls, storeLikes);
+
+        given(storeService.getStoreListByFilter(eq(1L), any(UserPrincipal.class), eq(List.of("분식")), eq(List.of(1L)))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/1/filter?categoryName=분식&subTagId=1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetStoresFilterResDto());
     }
 
 }
