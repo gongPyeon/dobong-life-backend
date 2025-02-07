@@ -32,8 +32,8 @@ public class StoreController {
 
     @GetMapping("/search")
     public BaseResponse<StoresResDto> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId, @RequestParam String query){
-        Long userId = userPrincipal.getId();
-        StoresResDto storesResDto = storeService.getStoreListByQuery(categoryId, userId, query);
+        //Long userId = userPrincipal.getId();
+        StoresResDto storesResDto = storeService.getStoreListByQuery(categoryId, userPrincipal, query);
         return new BaseResponse<>(storesResDto);
     }
 

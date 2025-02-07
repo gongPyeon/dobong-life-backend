@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static dobong.life.controller.ResponseDto.expectedGetStoresResDto;
+import static dobong.life.controller.ResponseDto.expectedGetStoresResDtoByQuery;
 import static dobong.life.controller.TestResponse.makeTestGetStoresResDto;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -54,7 +55,7 @@ class StoreControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void 홈화면_음식점_리스트정보를_반환한다() throws Exception { // 서브태그_기준_최대_4개의_음식점_리스트정보를_반환한다() -- 서비스 처리
+    void 홈화면_도메인_리스트정보를_반환한다() throws Exception {
 
         // given
         Long[] storeIds = {1L, 2L, 3L, 4L};
@@ -79,6 +80,32 @@ class StoreControllerTest {
                 .andExpect(expectedGetStoresResDto());
     }
 
+    @Test
+    void 검색에_따른_도메인_정보를_반환한다() throws Exception {
+
+        // given
+        Long[] storeIds = {1L, 2L};
+        String[] storeNames = {"순대1", "순대2"};
+        String[] storeLocations = {"위치1", "위치2"};
+        String[] imgUrls = {"이미지1", "이미지2"};
+        boolean[] storeLikes = {false, true};
+
+        StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
+                "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
+
+        given(storeService.getStoreListByQuery(eq(1L), any(UserPrincipal.class), eq("순대"))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/1/search?query=순대")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetStoresResDtoByQuery());
+    }
+
 }
 
 /**
@@ -92,7 +119,7 @@ class StoreControllerTest {
  */
 
 //@Test
-//void 서브태그_기준_5개_이상의_음식점_리스트정보를_반환하면_예외가_발생한다() throws Exception {
+//void 서브태그_기준_5개_이상의_음식점_리스트정보를_반환하면_예외가_발생한다() throws Exception {// 서브태그_기준_최대_4개의_음식점_리스트정보를_반환한다() -- 서비스 처리
 //
 //    // given
 //    Long[] storeIds = {1L, 2L, 3L, 4L, 5L};
@@ -118,4 +145,10 @@ class StoreControllerTest {
 //
 //        Assertions.assertThat(expectedSize).isNotEqualTo(actualSize); // 사이즈가 달라야 성공
 //    });
+
+//Long[] storeIds = {1L, 2L, 3L, 4L, 5L};
+//String[] storeNames = {"가게1", "순대2", "가게3", "가게4", "순대5"};
+//String[] storeLocations = {"위치1", "위치2", "위치3", "위치4", "위치5"};
+//String[] imgUrls = {"이미지1", "이미지2", "이미지3", "이미지4", "이미지5"};
+//boolean[] storeLikes = {false, false, false, false, false, true};
 //}

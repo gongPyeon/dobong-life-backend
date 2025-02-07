@@ -26,4 +26,29 @@ public class ResponseDto {
             MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].storeLike").value(false).match(result);
         };
     }
+
+    public static ResultMatcher expectedGetStoresResDtoByQuery() { // 첫번째 요소
+        return result -> {
+            MockMvcResultMatchers.jsonPath("$.result.categoryId").value(1L).match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.items[0].tagId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].parentTagName").value("행복").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].subTagId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].subTagName").value("달콤한").match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores.length()").value(2).match(result); // 가게가 2개인지 확인
+
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].storeId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].storeName").value("순대1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].storeLocation").value("위치1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].imgUrl").value("이미지1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[0].storeLike").value(false).match(result);
+
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].storeId").value(2L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].storeName").value("순대2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].storeLocation").value("위치2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].imgUrl").value("이미지2").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.items[0].stores[1].storeLike").value(true).match(result);
+        };
+    }
 }

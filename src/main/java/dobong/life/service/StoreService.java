@@ -36,9 +36,9 @@ public class StoreService {
         return new StoresResDto(categoryId, items);
     }
 
-    public StoresResDto getStoreListByQuery(Long categoryId, Long userId, String query) {
+    public StoresResDto getStoreListByQuery(Long categoryId, UserPrincipal userPrincipal, String query) {
         Category category =  categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userId);
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<ItemInfo> items = tagQueryService.getItemInfosByQuery(category, user, query);
 
         return new StoresResDto(categoryId, items);
