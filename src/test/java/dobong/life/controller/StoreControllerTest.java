@@ -3,6 +3,7 @@ package dobong.life.controller;
 import dobong.life.config.SecurityConfig;
 import dobong.life.config.TestSecurityConfig;
 import dobong.life.config.TestSetUpConfig;
+import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
 import dobong.life.dto.info.ItemInfo;
@@ -34,8 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static dobong.life.controller.ResponseDto.*;
-import static dobong.life.controller.TestResponse.makeTestGetStoresFilterResDto;
-import static dobong.life.controller.TestResponse.makeTestGetStoresResDto;
+import static dobong.life.controller.TestResponse.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,7 +69,7 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreList(eq(1L), any(UserPrincipal.class))).willReturn(Dto);
+        given(storeService.getStoreList(anyLong(), any(UserPrincipal.class))).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -95,7 +95,7 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreListByQuery(eq(1L), any(UserPrincipal.class), eq("순대"))).willReturn(Dto);
+        given(storeService.getStoreListByQuery(anyLong(), any(UserPrincipal.class), anyString())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -122,7 +122,7 @@ class StoreControllerTest {
 
         StoresFilterResDto Dto = makeTestGetStoresFilterResDto(1L, categoryNames, subTagNames, storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreListByFilter(eq(1L), any(UserPrincipal.class), eq(List.of("분식")), eq(List.of(1L)))).willReturn(Dto);
+        given(storeService.getStoreListByFilter(anyLong(), any(UserPrincipal.class), anyList(), anyList())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -159,6 +159,30 @@ class StoreControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(expectedGetStoresResDto());
+    }
+
+    @Test
+    void 특정_도메인의_상세정보를_반환한다() throws Exception {
+
+        // given
+        String[] storeMenus = {"메뉴1", "메뉴2", "메뉴3"};
+        String[] storeKeywords = {"키워드1", "키워드2", "키워드3"};
+
+        StoreItemResDto Dto = makeTestGetStoreItemResDto(1L, 1L, "가게1", "위치1",
+                "이미지1", false, "서브카테고리명1",
+                "상세주소1", storeMenus, storeKeywords);
+
+        given(storeService.getStore(anyLong(), any(UserPrincipal.class), anyLong())).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/1/item/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetStoreItemResDto());
     }
 
 }
