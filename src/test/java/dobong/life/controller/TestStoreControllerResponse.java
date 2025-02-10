@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestResponse {
+public class TestStoreControllerResponse {
 
     public static StoresResDto makeTestGetStoresResDto(Long categoryId, Long tagId, String parentTagName, Long subTagId,
                                                        String subTagName, Long[] storeIds, String[] storeNames,

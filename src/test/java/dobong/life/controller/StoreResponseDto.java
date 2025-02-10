@@ -4,7 +4,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
-public class ResponseDto {
+public class StoreResponseDto {
     public static ResultMatcher expectedGetStoresResDto() { // 첫번째 요소
         return result -> {
             MockMvcResultMatchers.jsonPath("$.result.categoryId").value(1L).match(result);

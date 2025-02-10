@@ -28,9 +28,9 @@ public class StoreService {
     private final UserQueryService userQueryService;
     private final TagQueryService tagQueryService;
 
-    public StoresResDto getStoreList(Long categoryId, UserPrincipal userPrincipal){
+    public StoresResDto getStoreList(Long categoryId, Long userId){
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userPrincipal.getId());
+        User user = userQueryService.getUserById(userId);
         List<ItemInfo> items = tagQueryService.getItemInfos(category, user);
 
         return new StoresResDto(categoryId, items);

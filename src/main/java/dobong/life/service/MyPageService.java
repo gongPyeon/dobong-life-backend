@@ -6,6 +6,7 @@ import dobong.life.dto.info.LikeCount;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.entity.*;
+import dobong.life.service.principal.UserPrincipal;
 import dobong.life.service.query.*;
 import dobong.life.util.DEFINE;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ public class MyPageService {
     private final ReviewLikeQueryService reviewLikeQueryService;
     private final CategoryQueryService categoryQueryService;
 
-    public MyPageResDto getMyPage(Long userId) {
-        User user = userQueryService.getUserById(userId);
+    public MyPageResDto getMyPage(UserPrincipal userPrincipal) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         int reviewCount = reviewQueryService.getReviewCount(user);
         int reviewLikeCount = reviewLikeQueryService.getReviewLikeCount(user);
         LikeCount likeCount= getLikeCount(user);

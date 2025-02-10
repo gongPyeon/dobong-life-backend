@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor //(access = AccessLevel.PROTECTED)
 public class User{
 
     @Id
@@ -52,6 +52,7 @@ public class User{
         this.password = passwordEncoder.encode(this.password);
     }
 
-
-
+    public User(Long id) {
+        this.id = id;
+    }
 }

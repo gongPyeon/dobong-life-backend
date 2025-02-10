@@ -4,10 +4,13 @@ import dobong.life.config.SecurityConfig;
 import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
+import dobong.life.entity.User;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
+import dobong.life.service.query.UserQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -15,16 +18,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
-import static dobong.life.controller.ResponseDto.*;
-import static dobong.life.controller.TestResponse.*;
+import java.util.ArrayDeque;
+
+import static dobong.life.controller.StoreResponseDto.*;
+import static dobong.life.controller.TestStoreControllerResponse.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
@@ -39,6 +50,10 @@ class StoreControllerTest {
 
     @MockitoBean
     private StoreService storeService;
+
+//    @MockitoBean
+    @Mock
+    private UserQueryService userQueryService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,13 +71,23 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreList(anyLong(), any(UserPrincipal.class))).willReturn(Dto);
+        User user = new User(1L); //
+        //given(userQueryService.getUserById(anyLong())).willReturn(user);
 
+
+
+//        // Authentication 객체 생성
+        UserPrincipal userPrincipal = new UserPrincipal(1L, "test@email", "1234", new ArrayDeque<>());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipal, "", userPrincipal.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication); // 현재 인증된 사용자 설정
+
+        given(storeService.getStoreList(anyLong(), anyLong())).willReturn(Dto);
         //when
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mockMvc.perform( // 여기서 id를 설정해야해
                 MockMvcRequestBuilders.get("/dobong/1")
+                        .with(user(userPrincipal))
                         .contentType(MediaType.APPLICATION_JSON)
-        );
+        ).andDo(print());
 
         //then
         resultActions.andExpect(status().isOk())
@@ -88,7 +113,7 @@ class StoreControllerTest {
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/1/search?query=순대")
                         .contentType(MediaType.APPLICATION_JSON)
-        );
+        ).andDo(print());
 
         //then
         resultActions.andExpect(status().isOk())

@@ -24,8 +24,8 @@ public class MyPageController {
 
     @GetMapping
     public BaseResponse<MyPageResDto> viewMyPage(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        Long userId = userPrincipal.getId();
-        MyPageResDto myPageResDto = myPageService.getMyPage(userId);
+        // Long userId = userPrincipal.getId();
+        MyPageResDto myPageResDto = myPageService.getMyPage(userPrincipal);
         return new BaseResponse<>(myPageResDto);
     }
 
