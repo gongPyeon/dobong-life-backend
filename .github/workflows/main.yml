@@ -73,8 +73,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws deploy create-deployment \
-            --application-name dobong-codedeploy \
-            --deployment-group-name dobong-codedeploy-group \
+            --application-name dobong \
+            --deployment-group-name dobong-group \
             --file-exists-behavior OVERWRITE \
-            --s3-location bucket=dobong-life-s3,bundleType=zip,key=dobong.zip \
+            --s3-location bucket=dobong-s3,bundleType=zip,key=dobong.zip \
             --region ap-northeast-2
