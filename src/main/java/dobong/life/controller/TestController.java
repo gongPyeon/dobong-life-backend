@@ -29,7 +29,7 @@ public class TestController {
     @GetMapping("/ec2")
     @ResponseBody
     public String ec2Info() {
-        return "ec2-cicd"; //ec2 테스트용
+        return "ec2-cicd!"; //ec2 테스트용
     }
 
     @GetMapping("/ssh")
