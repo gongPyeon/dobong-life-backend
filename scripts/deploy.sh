@@ -2,6 +2,9 @@
 
 REPOSITORY=/home/ubuntu/app
 
+echo "> 이전 배포 파일 정리"
+find /home/ubuntu/app -name "*SNAPSHOT.jar" | sort -r | tail -n +3 | xargs -r rm
+
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
 PORT=8080
 CURRENT_PID=$(sudo lsof -t -i:$PORT)
