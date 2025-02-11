@@ -44,22 +44,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
         //이미 가입된 경우
-        if (user != null) {
-            if (!user.getSocialType().equals(socialType)) {
-                throw new RuntimeException("Email already signed up.");
-            }
-            user = updateUser(user, oAuth2UserInfo);
-        }
-        //가입되지 않은 경우
-        else {
-            user = registerUser(socialType, oAuth2UserInfo);
-        }
+//        if (user != null) {
+//            if (!user.getSocialType().equals(socialType)) {
+//                throw new RuntimeException("Email already signed up.");
+//            }
+//            user = updateUser(user, oAuth2UserInfo);
+//        }
+//        //가입되지 않은 경우
+//        else {
+//            user = registerUser(socialType, oAuth2UserInfo);
+//        }
+        user = registerUser(socialType, oAuth2UserInfo);
         return UserPrincipal.create(user, oAuth2UserInfo.getAttributes());
     }
 
     private User registerUser(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
         User user = User.builder()
                 .email(oAuth2UserInfo.getEmail())
+                .password("Oauth2!")
                 .name(oAuth2UserInfo.getName())
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .socialType(socialType)
