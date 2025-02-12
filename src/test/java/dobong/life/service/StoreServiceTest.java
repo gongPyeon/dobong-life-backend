@@ -27,8 +27,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -108,6 +107,65 @@ class StoreServiceTest {
         @Test
         @DisplayName("사용자가 존재하지 않을 경우 실패")
         void getStoreList_userNotFound() {
+            // given
+            Long categoryId = 1L;
+            Long userId = 999L;
+
+            given(categoryQueryService.getCategory(any())).willReturn(testCategory);
+            given(userQueryService.getUserById(userId)).willThrow(new UserNotFoundException(userId));
+
+            // when & then
+            assertThrows(UserNotFoundException.class,
+                    () -> storeService.getStoreList(categoryId, userId));
+        }
+    }
+
+    @Nested
+    @DisplayName("검색어로 상점 목록 조회 Service 실행 시")
+    class GetStoreListByQueryTest {
+
+        @Test
+        @DisplayName("성공")
+        void getStoreListByQuery_success() {
+            // given
+            Long categoryId = 1L;
+            Long userId = 1L;
+            String query = "순대";
+
+            given(categoryQueryService.getCategory(anyLong())).willReturn(testCategory);
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(tagQueryService.getItemInfosByQuery(any(), any(), anyString())).willReturn(testItems);
+
+            // when
+            StoresResDto result = storeService.getStoreListByQuery(categoryId, userId, query);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getCategoryId()).isEqualTo(categoryId);
+            Assertions.assertThat(result.getItems()).hasSize(1);
+
+            then(categoryQueryService).should().getCategory(categoryId);
+            then(userQueryService).should().getUserById(userId);
+            then(tagQueryService).should().getItemInfosByQuery(testCategory, testUser, query);
+        }
+
+        @Test
+        @DisplayName("카테고리가 존재하지 않을 경우 실패")
+        void getStoreListByQuery_categoryNotFound() {
+            // given
+            Long categoryId = 999L;
+            Long userId = 1L;
+
+            given(categoryQueryService.getCategory(categoryId)).willThrow(new CategoryNotFoundException(categoryId));
+
+            // when & then
+            assertThrows(CategoryNotFoundException.class,
+                    () -> storeService.getStoreList(categoryId, userId));
+        }
+
+        @Test
+        @DisplayName("사용자가 존재하지 않을 경우 실패")
+        void getStoreListByQuery_userNotFound() {
             // given
             Long categoryId = 1L;
             Long userId = 999L;
