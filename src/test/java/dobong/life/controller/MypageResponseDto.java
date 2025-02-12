@@ -25,4 +25,14 @@ public class MypageResponseDto {
             MockMvcResultMatchers.jsonPath("$.result.reviews[0].selectedKeywords[1]").value("test2").match(result);
         };
     }
+
+    public static ResultMatcher expectedGetStoreBasicInfoListDto(){
+        return result -> {
+            MockMvcResultMatchers.jsonPath("$.result[0].storeId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result[0].storeName").value("test").match(result);
+            MockMvcResultMatchers.jsonPath("$.result[0].storeLocation").value("location").match(result);
+            MockMvcResultMatchers.jsonPath("$.result[0].imgUrl").value("img").match(result);
+            MockMvcResultMatchers.jsonPath("$.result[0].storeLike").value(true).match(result);
+        };
+    }
 }

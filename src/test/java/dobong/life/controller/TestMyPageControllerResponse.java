@@ -24,4 +24,14 @@ public class TestMyPageControllerResponse {
 
         return new MyPageReviewResDto(reviews);
     }
+
+    public static List<StoreBasicInfo> makeTestGetStoreBasicInfoListDto(Long storeId, String storeName, String storeLocation,
+                                                                        String imagUrl, boolean storeLike){
+
+        List<StoreBasicInfo> storeBasicInfos = new ArrayList<>();
+        StoreBasicInfo storeBasicInfo = new StoreBasicInfo(storeId, storeName, storeLocation, imagUrl, storeLike);
+        storeBasicInfos.add(storeBasicInfo);
+
+        return storeBasicInfos;
+    }
 }

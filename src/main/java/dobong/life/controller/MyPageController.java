@@ -38,15 +38,15 @@ public class MyPageController {
 
     @GetMapping("/review/like")
     public BaseResponse<MyPageReviewResDto> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        Long userId = userPrincipal.getId();
-        MyPageReviewResDto myPageResDto = myPageService.getMyReviewLike(userId);
+        // Long userId = userPrincipal.getId();
+        MyPageReviewResDto myPageResDto = myPageService.getMyReviewLike(userPrincipal);
         return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/{categoryId}/like")
     public BaseResponse<List<StoreBasicInfo>> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId){
-        Long userId = userPrincipal.getId();
-        List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userId);
+        //Long userId = userPrincipal.getId();
+        List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userPrincipal);
         return new BaseResponse<>(storesResDto);
     }
 }

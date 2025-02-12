@@ -51,16 +51,16 @@ public class MyPageService {
         return new MyPageReviewResDto(reviews);
     }
 
-    public MyPageReviewResDto getMyReviewLike(Long userId) {
-        User user = userQueryService.getUserById(userId);
+    public MyPageReviewResDto getMyReviewLike(UserPrincipal userPrincipal) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewLikeInfoList(user);
 
         return new MyPageReviewResDto(reviews);
     }
 
-    public List<StoreBasicInfo> getMyLike(Long categoryId, Long userId) {
+    public List<StoreBasicInfo> getMyLike(Long categoryId, UserPrincipal userPrincipal) {
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userId);
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<StoreBasicInfo> items = tagQueryService.getStoreInfoWithLimitLike(category, user);
 
         return items;

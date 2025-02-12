@@ -3,6 +3,7 @@ package dobong.life.controller;
 import dobong.life.config.SecurityConfig;
 import dobong.life.dto.MyPageResDto;
 import dobong.life.dto.MyPageReviewResDto;
+import dobong.life.dto.info.StoreBasicInfo;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import org.junit.jupiter.api.Test;
@@ -20,11 +21,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static dobong.life.controller.MypageResponseDto.expectedGetMyPageResDto;
-import static dobong.life.controller.MypageResponseDto.expectedGetMyPageReviewResDto;
-import static dobong.life.controller.TestMyPageControllerResponse.makeTestGetMyPageResDto;
-import static dobong.life.controller.TestMyPageControllerResponse.makeTestGetMyPageReviewResDto;
+import static dobong.life.controller.MypageResponseDto.*;
+import static dobong.life.controller.TestMyPageControllerResponse.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,6 +76,42 @@ class MyPageControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(expectedGetMyPageReviewResDto());
+    }
+
+    @Test
+    void 사용자가_좋아요한_리뷰를_반환한다() throws Exception {
+        // given
+        MyPageReviewResDto Dto = makeTestGetMyPageReviewResDto(1L, "test", List.of("test1", "test2"), "good");
+
+        given(myPageService.getMyReviewLike(any(UserPrincipal.class))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/my/review/like")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetMyPageReviewResDto());
+    }
+
+    @Test
+    void 사용자가_좋아요한_도메인을_반환한다() throws Exception {
+        // given
+        List<StoreBasicInfo> Dto = makeTestGetStoreBasicInfoListDto(1L, "test", "location", "img", true);
+
+        given(myPageService.getMyLike(anyLong(), any(UserPrincipal.class))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/my/1/like")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetStoreBasicInfoListDto());
     }
 
 }
