@@ -31,8 +31,8 @@ public class MyPageController {
 
     @GetMapping("/review")
     public BaseResponse<MyPageReviewResDto> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        Long userId = userPrincipal.getId();
-        MyPageReviewResDto myPageResDto = myPageService.getMyReview(userId);
+        // Long userId = userPrincipal.getId();
+        MyPageReviewResDto myPageResDto = myPageService.getMyReview(userPrincipal);
         return new BaseResponse<>(myPageResDto);
     }
 

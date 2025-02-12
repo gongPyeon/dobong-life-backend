@@ -2,7 +2,7 @@ package dobong.life.controller;
 
 import dobong.life.config.SecurityConfig;
 import dobong.life.dto.MyPageResDto;
-import dobong.life.dto.StoresResDto;
+import dobong.life.dto.MyPageReviewResDto;
 import dobong.life.service.MyPageService;
 import dobong.life.service.principal.UserPrincipal;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static dobong.life.controller.MypageResponseDto.expectedGetMyPageResDto;
-import static dobong.life.controller.StoreResponseDto.expectedGetStoresResDto;
+import static dobong.life.controller.MypageResponseDto.expectedGetMyPageReviewResDto;
 import static dobong.life.controller.TestMyPageControllerResponse.makeTestGetMyPageResDto;
-import static dobong.life.controller.TestStoreControllerResponse.makeTestGetStoresResDto;
-import static org.junit.jupiter.api.Assertions.*;
+import static dobong.life.controller.TestMyPageControllerResponse.makeTestGetMyPageReviewResDto;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,6 +58,24 @@ class MyPageControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(expectedGetMyPageResDto());
+    }
+
+    @Test
+    void 사용자가_작성한_리뷰를_반환한다() throws Exception {
+        // given
+        MyPageReviewResDto Dto = makeTestGetMyPageReviewResDto(1L, "test", List.of("test1", "test2"), "good");
+
+        given(myPageService.getMyReview(any(UserPrincipal.class))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/my/review")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetMyPageReviewResDto());
     }
 
 }

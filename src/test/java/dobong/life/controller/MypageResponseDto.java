@@ -15,4 +15,14 @@ public class MypageResponseDto {
             MockMvcResultMatchers.jsonPath("$.result.myBusinessLike").value(0).match(result);
         };
     }
+
+    public static ResultMatcher expectedGetMyPageReviewResDto(){
+        return result -> {
+            MockMvcResultMatchers.jsonPath("$.result.reviews[0].storeId").value(1L).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.reviews[0].name").value("test").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.reviews[0].reviewContent").value("good").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.reviews[0].selectedKeywords[0]").value("test1").match(result);
+            MockMvcResultMatchers.jsonPath("$.result.reviews[0].selectedKeywords[1]").value("test2").match(result);
+        };
+    }
 }

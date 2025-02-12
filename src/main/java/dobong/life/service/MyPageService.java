@@ -44,8 +44,8 @@ public class MyPageService {
         return new LikeCount(foodLikeCount, placeLikeCount, businessLikeCount);
     }
 
-    public MyPageReviewResDto getMyReview(Long userId) {
-        User user = userQueryService.getUserById(userId);
+    public MyPageReviewResDto getMyReview(UserPrincipal userPrincipal) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewInfoList(user);
 
         return new MyPageReviewResDto(reviews);
