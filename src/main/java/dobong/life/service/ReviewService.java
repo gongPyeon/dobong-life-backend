@@ -7,7 +7,9 @@ import dobong.life.entity.Domain;
 import dobong.life.entity.MiddleTag;
 import dobong.life.entity.Review;
 import dobong.life.entity.User;
+import dobong.life.service.principal.UserPrincipal;
 import dobong.life.service.query.*;
+import dobong.life.util.DEFINE;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +30,8 @@ public class ReviewService {
     private final ReviewQueryService reviewQueryService;
 
     @Transactional
-    public void saveReview(MyPageReviewInfo reviewInfo, Long userId) {
-        User user = userQueryService.getUserById(userId);
+    public String saveReview(MyPageReviewInfo reviewInfo, UserPrincipal userPrincipal) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         Domain domain = storeQueryService.getDomain(reviewInfo.getStoreId());
 
         Review review = createReview(reviewInfo, user, domain);
@@ -37,6 +39,8 @@ public class ReviewService {
 
         List<MiddleTag> middleTags = createMiddleTags(reviewInfo.getSelectedKeywords(), review);
         reviewQueryService.saveMiddleTag(middleTags);
+
+        return DEFINE.REVIEW_OK;
     }
 
     public ReviewResDto getStoreReview(Long categoryId, Long storeId, Long userId) {

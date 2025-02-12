@@ -23,9 +23,9 @@ public class ReviewController {
     @PostMapping("/review")
     public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                @Valid @RequestBody MyPageReviewInfo myPageReviewInfo){
-        Long userId = userPrincipal.getId();
-        reviewService.saveReview(myPageReviewInfo, userId);
-        return new BaseResponse<>(DEFINE.REVIEW_OK);
+        // Long userId = userPrincipal.getId();
+        String message = reviewService.saveReview(myPageReviewInfo, userPrincipal);
+        return new BaseResponse<>(message);
     }
 
     @GetMapping("/reviews/{categoryId}/{storeId}")
