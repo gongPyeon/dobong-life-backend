@@ -47,7 +47,7 @@ class ReviewControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    void 리뷰정보를_저장한다() throws Exception {
+    void 리뷰저장의_성공응답을_반환한다() throws Exception {
         // given
         MyPageReviewInfo reviewInfo = new MyPageReviewInfo(1L, "test", List.of("good", "best"), "테스트 용으로 좋아요");
         String content = objectMapper.writeValueAsString(reviewInfo);
