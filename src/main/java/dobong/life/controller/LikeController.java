@@ -21,15 +21,15 @@ public class LikeController {
 
     @PostMapping("/{storeId}")
     public BaseResponse<String> updateStoreLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long storeId){
-        // Long userId = userPrincipal.getId();
-        String message = likeService.updateStoreLikeByUser(userPrincipal, storeId);
+        Long userId = userPrincipal.getId();
+        String message = likeService.updateStoreLikeByUser(userId, storeId);
         return new BaseResponse<>(message);
     }
 
     @PostMapping("/review/{reviewId}")
     public BaseResponse<String> updateReviewLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId){
-        // Long userId = userPrincipal.getId();
-        String message = likeService.updateReviewLikeByUser(userPrincipal, reviewId);
+        Long userId = userPrincipal.getId();
+        String message = likeService.updateReviewLikeByUser(userId, reviewId);
         return new BaseResponse<>(message);
     }
 }

@@ -27,8 +27,8 @@ public class MyPageService {
     private final ReviewLikeQueryService reviewLikeQueryService;
     private final CategoryQueryService categoryQueryService;
 
-    public MyPageResDto getMyPage(UserPrincipal userPrincipal) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public MyPageResDto getMyPage(Long userId) {
+        User user = userQueryService.getUserById(userId);
         int reviewCount = reviewQueryService.getReviewCount(user);
         int reviewLikeCount = reviewLikeQueryService.getReviewLikeCount(user);
         LikeCount likeCount= getLikeCount(user);
@@ -44,23 +44,23 @@ public class MyPageService {
         return new LikeCount(foodLikeCount, placeLikeCount, businessLikeCount);
     }
 
-    public MyPageReviewResDto getMyReview(UserPrincipal userPrincipal) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public MyPageReviewResDto getMyReview(Long userId) {
+        User user = userQueryService.getUserById(userId);
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewInfoList(user);
 
         return new MyPageReviewResDto(reviews);
     }
 
-    public MyPageReviewResDto getMyReviewLike(UserPrincipal userPrincipal) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public MyPageReviewResDto getMyReviewLike(Long userId) {
+        User user = userQueryService.getUserById(userId);
         List<MyPageReviewInfo> reviews  = myPageQueryService.getMyPageReviewLikeInfoList(user);
 
         return new MyPageReviewResDto(reviews);
     }
 
-    public List<StoreBasicInfo> getMyLike(Long categoryId, UserPrincipal userPrincipal) {
+    public List<StoreBasicInfo> getMyLike(Long categoryId, Long userId) {
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userPrincipal.getId());
+        User user = userQueryService.getUserById(userId);
         List<StoreBasicInfo> items = tagQueryService.getStoreInfoWithLimitLike(category, user);
 
         return items;

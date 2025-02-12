@@ -24,29 +24,29 @@ public class MyPageController {
 
     @GetMapping
     public BaseResponse<MyPageResDto> viewMyPage(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        // Long userId = userPrincipal.getId();
-        MyPageResDto myPageResDto = myPageService.getMyPage(userPrincipal);
+        Long userId = userPrincipal.getId();
+        MyPageResDto myPageResDto = myPageService.getMyPage(userId);
         return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/review")
     public BaseResponse<MyPageReviewResDto> viewMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        // Long userId = userPrincipal.getId();
-        MyPageReviewResDto myPageResDto = myPageService.getMyReview(userPrincipal);
+        Long userId = userPrincipal.getId();
+        MyPageReviewResDto myPageResDto = myPageService.getMyReview(userId);
         return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/review/like")
     public BaseResponse<MyPageReviewResDto> viewReviewInLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        // Long userId = userPrincipal.getId();
-        MyPageReviewResDto myPageResDto = myPageService.getMyReviewLike(userPrincipal);
+        Long userId = userPrincipal.getId();
+        MyPageReviewResDto myPageResDto = myPageService.getMyReviewLike(userId);
         return new BaseResponse<>(myPageResDto);
     }
 
     @GetMapping("/{categoryId}/like")
     public BaseResponse<List<StoreBasicInfo>> viewStoreInLike(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId){
-        //Long userId = userPrincipal.getId();
-        List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userPrincipal);
+        Long userId = userPrincipal.getId();
+        List<StoreBasicInfo> storesResDto = myPageService.getMyLike(categoryId, userId);
         return new BaseResponse<>(storesResDto);
     }
 }

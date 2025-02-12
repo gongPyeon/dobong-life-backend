@@ -8,8 +8,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-
 @Builder
 @Entity
 @Getter
@@ -52,7 +50,15 @@ public class User{
         this.password = passwordEncoder.encode(this.password);
     }
 
-    public User(Long id) {
-        this.id = id;
+    public static User create(Long id) { // test용
+        return User.builder()
+                .id(id)
+                .email("test@naver.com")
+                .name("test")
+                .oauth2Id("oauth2Id")
+                .password("Oauth2!")
+                .socialType(null)
+                .reviewCount(0)
+                .role(Role.ROLE_USER).build();
     }
 }

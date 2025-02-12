@@ -26,14 +26,11 @@ import static dobong.life.controller.dto.TestMyPageControllerResponse.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = MyPageController.class,
-        excludeAutoConfiguration = { SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class },
-        excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
-)
-class MyPageControllerTest {
+@WebMvcTest(controllers = MyPageController.class)
+class MyPageControllerTest extends BaseControllerTest{
 
     @MockitoBean
     private MyPageService myPageService;
@@ -47,11 +44,12 @@ class MyPageControllerTest {
         MyPageResDto Dto = makeTestGetMyPageResDto("test@naver.com", "test", 0, 0,
                 0,0,0);
 
-        given(myPageService.getMyPage(any(UserPrincipal.class))).willReturn(Dto);
+        given(myPageService.getMyPage(anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/my")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -65,11 +63,12 @@ class MyPageControllerTest {
         // given
         MyPageReviewResDto Dto = makeTestGetMyPageReviewResDto(1L, "test", List.of("test1", "test2"), "good");
 
-        given(myPageService.getMyReview(any(UserPrincipal.class))).willReturn(Dto);
+        given(myPageService.getMyReview(anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/my/review")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -83,11 +82,12 @@ class MyPageControllerTest {
         // given
         MyPageReviewResDto Dto = makeTestGetMyPageReviewResDto(1L, "test", List.of("test1", "test2"), "good");
 
-        given(myPageService.getMyReviewLike(any(UserPrincipal.class))).willReturn(Dto);
+        given(myPageService.getMyReviewLike(anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/my/review/like")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -101,11 +101,12 @@ class MyPageControllerTest {
         // given
         List<StoreBasicInfo> Dto = makeTestGetStoreBasicInfoListDto(1L, "test", "location", "img", true);
 
-        given(myPageService.getMyLike(anyLong(), any(UserPrincipal.class))).willReturn(Dto);
+        given(myPageService.getMyLike(anyLong(), anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/my/1/like")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

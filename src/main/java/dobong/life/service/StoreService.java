@@ -36,32 +36,32 @@ public class StoreService {
         return new StoresResDto(categoryId, items);
     }
 
-    public StoresResDto getStoreListByQuery(Long categoryId, UserPrincipal userPrincipal, String query) {
+    public StoresResDto getStoreListByQuery(Long categoryId, Long userId, String query) {
         Category category =  categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userPrincipal.getId());
+        User user = userQueryService.getUserById(userId);
         List<ItemInfo> items = tagQueryService.getItemInfosByQuery(category, user, query);
 
         return new StoresResDto(categoryId, items);
     }
 
-    public StoresFilterResDto getStoreListByFilter(Long categoryId, UserPrincipal userPrincipal, List<String> categoryNames, List<Long> subTagIds) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public StoresFilterResDto getStoreListByFilter(Long categoryId, Long userId, List<String> categoryNames, List<Long> subTagIds) {
+        User user = userQueryService.getUserById(userId);
         List<StoreBasicInfo> items = tagQueryService.mapToStoreInfosByFilter(user, categoryNames, subTagIds);
         List<String> subTagNames = tagQueryService.getSubTagNames(subTagIds);
 
         return new StoresFilterResDto(categoryId, categoryNames, subTagNames, items);
     }
 
-    public StoresResDto getStoreListAll(Long categoryId, UserPrincipal userPrincipal, Long tagId, Long subTagId) {
+    public StoresResDto getStoreListAll(Long categoryId, Long userId, Long tagId, Long subTagId) {
         Category category = categoryQueryService.getCategory(categoryId);
-        User user = userQueryService.getUserById(userPrincipal.getId());
+        User user = userQueryService.getUserById(userId);
         List<ItemInfo> items = tagQueryService.getItemInfosMore(category, user, tagId, subTagId);
 
         return new StoresResDto(categoryId, items);
     }
 
-    public StoreItemResDto getStore(Long categoryId, UserPrincipal userPrincipal, Long storeId) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public StoreItemResDto getStore(Long categoryId, Long userId, Long storeId) {
+        User user = userQueryService.getUserById(userId);
         Domain domain = storeQueryService.getDomain(storeId);
         StoreBasicInfo storeBasicInfo = buildStoreBasicInfo(domain, user);
         StoreDetailInfo storeDetailInfo = buildStoreDetailInfo(domain);

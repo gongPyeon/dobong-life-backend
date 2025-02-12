@@ -30,8 +30,8 @@ public class ReviewService {
     private final ReviewQueryService reviewQueryService;
 
     @Transactional
-    public String saveReview(MyPageReviewInfo reviewInfo, UserPrincipal userPrincipal) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public String saveReview(MyPageReviewInfo reviewInfo, Long userId) {
+        User user = userQueryService.getUserById(userId);
         Domain domain = storeQueryService.getDomain(reviewInfo.getStoreId());
 
         Review review = createReview(reviewInfo, user, domain);
@@ -43,8 +43,8 @@ public class ReviewService {
         return DEFINE.REVIEW_OK;
     }
 
-    public ReviewResDto getStoreReview(Long categoryId, Long storeId, UserPrincipal userPrincipal) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public ReviewResDto getStoreReview(Long categoryId, Long storeId, Long userId) {
+        User user = userQueryService.getUserById(userId);
         Domain domain = storeQueryService.getDomain(storeId);
 
         ReviewInfo reviewInfo = buildReviewInfo(domain, user);

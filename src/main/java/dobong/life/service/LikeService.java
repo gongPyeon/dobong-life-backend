@@ -19,8 +19,8 @@ public class LikeService {
     private final StoreQueryService storeQueryService;
     private final ReviewQueryService reviewQueryService;
 
-    public String updateStoreLikeByUser(UserPrincipal userPrincipal, Long storeId) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public String updateStoreLikeByUser(Long userId, Long storeId) {
+        User user = userQueryService.getUserById(userId);
         Domain domain = storeQueryService.getDomain(storeId);
 
         storeQueryService.updateStoreLike(user, domain);
@@ -28,8 +28,8 @@ public class LikeService {
         return DEFINE.LIKE_OK;
     }
 
-    public String updateReviewLikeByUser(UserPrincipal userPrincipal, Long reviewId) {
-        User user = userQueryService.getUserById(userPrincipal.getId());
+    public String updateReviewLikeByUser(Long userId, Long reviewId) {
+        User user = userQueryService.getUserById(userId);
         Review review = reviewQueryService.getReviewById(reviewId);
 
         storeQueryService.updateReviewLike(user, review);

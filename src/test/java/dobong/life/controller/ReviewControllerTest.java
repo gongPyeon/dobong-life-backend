@@ -28,14 +28,12 @@ import static dobong.life.controller.expexted.dto.ReviewResponseDto.expectedPost
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = ReviewController.class,
-        excludeAutoConfiguration = { SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class },
-        excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
-)
-class ReviewControllerTest {
+@WebMvcTest(controllers = ReviewController.class)
+class ReviewControllerTest extends BaseControllerTest{
 
     @MockitoBean
     ReviewService reviewService;
@@ -53,13 +51,15 @@ class ReviewControllerTest {
         String content = objectMapper.writeValueAsString(reviewInfo);
 
         // doNothing().when(reviewService).saveReview(any(MyPageReviewInfo.class), any(UserPrincipal.class)); // void 메서드를 테스트할 경우
-        given(reviewService.saveReview(any(MyPageReviewInfo.class), any(UserPrincipal.class))).willReturn("리뷰 등록이 완료되었습니다!");
+        given(reviewService.saveReview(any(MyPageReviewInfo.class), anyLong())).willReturn("리뷰 등록이 완료되었습니다!");
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/dobong/review")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
+                        .with(authentication(auth))
+                        .with(csrf())
         );
 
         //then
@@ -73,11 +73,12 @@ class ReviewControllerTest {
 
         ReviewResDto Dto = makeTestGetReviewResDto(1L, 1L, 0.0, 0,1L,"test",
                 0,"테스트 용 리뷰 내용 저장", List.of("test1", "test2"), true, 1,"good", 3);
-        given(reviewService.getStoreReview(anyLong(),anyLong(), any(UserPrincipal.class))).willReturn(Dto);
+        given(reviewService.getStoreReview(anyLong(),anyLong(), anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/reviews/1/1")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

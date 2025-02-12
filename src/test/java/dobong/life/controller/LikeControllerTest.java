@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,14 +21,11 @@ import static dobong.life.controller.expexted.dto.LikeResponseDto.expectedPostLi
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = LikeController.class,
-        excludeAutoConfiguration = { SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class },
-        excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
-)
-class LikeControllerTest {
+@WebMvcTest(controllers = LikeController.class)
+class LikeControllerTest extends BaseControllerTest{
 
     @MockitoBean
     private LikeService likeService;
@@ -42,13 +40,15 @@ class LikeControllerTest {
     void 도메인_좋아요의_성공응답을_반환한다() throws Exception {
         // given
         String content = objectMapper.writeValueAsString("");
-        given(likeService.updateStoreLikeByUser(any(UserPrincipal.class), anyLong())).willReturn("좋아요 적용이 완료되었습니다!");
+        given(likeService.updateStoreLikeByUser(anyLong(), anyLong())).willReturn("좋아요 적용이 완료되었습니다!");
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/dobong/like/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
+                        .with(authentication(auth))
+                        .with(csrf()) // 왜 post는 csrf까지 해줘야하는거지?
         );
 
         //then
@@ -60,13 +60,15 @@ class LikeControllerTest {
     void 리뷰_좋아요의_성공응답을_반환한다() throws Exception {
         // given
         String content = objectMapper.writeValueAsString("");
-        given(likeService.updateReviewLikeByUser(any(UserPrincipal.class), anyLong())).willReturn("좋아요 적용이 완료되었습니다!");
+        given(likeService.updateReviewLikeByUser(anyLong(), anyLong())).willReturn("좋아요 적용이 완료되었습니다!");
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/dobong/like/review/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
+                        .with(authentication(auth))
+                        .with(csrf())
         );
 
         //then

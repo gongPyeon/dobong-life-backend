@@ -1,6 +1,7 @@
 package dobong.life.controller;
 
 import dobong.life.config.SecurityConfig;
+import dobong.life.config.TestSecurityConfig;
 import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
@@ -8,6 +9,7 @@ import dobong.life.entity.User;
 import dobong.life.service.StoreService;
 import dobong.life.service.principal.UserPrincipal;
 import dobong.life.service.query.UserQueryService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,42 +19,45 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 
 import static dobong.life.controller.expexted.dto.StoreResponseDto.*;
 import static dobong.life.controller.dto.TestStoreControllerResponse.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = StoreController.class,
-        excludeAutoConfiguration = { SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class },
-        excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
-
-)
+//@WebMvcTest(
+//        controllers = StoreController.class
+//        excludeAutoConfiguration = { SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class },
+//        excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
+//
+//)
+@WebMvcTest(controllers = StoreController.class)
 @DisplayName("StoreController를_테스트_한다")
-class StoreControllerTest {
+class StoreControllerTest extends BaseControllerTest{
     // 올바른 HTTP 응답 코드와 DTO가 반환되는지 확인
 
     @MockitoBean
     private StoreService storeService;
-
-//    @MockitoBean
-    @Mock
-    private UserQueryService userQueryService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,21 +75,12 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        User user = new User(1L); //
-        //given(userQueryService.getUserById(anyLong())).willReturn(user);
-
-
-
-//        // Authentication 객체 생성
-        UserPrincipal userPrincipal = new UserPrincipal(1L, "test@email", "1234", new ArrayDeque<>());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipal, "", userPrincipal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication); // 현재 인증된 사용자 설정
-
         given(storeService.getStoreList(anyLong(), anyLong())).willReturn(Dto);
+
         //when
         ResultActions resultActions = mockMvc.perform( // 여기서 id를 설정해야해
                 MockMvcRequestBuilders.get("/dobong/1")
-                        .with(user(userPrincipal))
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print());
 
@@ -106,11 +102,12 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreListByQuery(anyLong(), any(UserPrincipal.class), anyString())).willReturn(Dto);
+        given(storeService.getStoreListByQuery(anyLong(), anyLong(), anyString())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/1/search?query=순대")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print());
 
@@ -133,11 +130,12 @@ class StoreControllerTest {
 
         StoresFilterResDto Dto = makeTestGetStoresFilterResDto(1L, categoryNames, subTagNames, storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreListByFilter(anyLong(), any(UserPrincipal.class), anyList(), anyList())).willReturn(Dto);
+        given(storeService.getStoreListByFilter(anyLong(), anyLong(), anyList(), anyList())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/1/filter?categoryName=분식&subTagId=1")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -159,11 +157,12 @@ class StoreControllerTest {
         StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
                 "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
 
-        given(storeService.getStoreListAll(anyLong(), any(UserPrincipal.class), anyLong(), anyLong())).willReturn(Dto);
+        given(storeService.getStoreListAll(anyLong(), anyLong(), anyLong(), anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/1/more/1/1")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -183,11 +182,12 @@ class StoreControllerTest {
                 "이미지1", false, "서브카테고리명1",
                 "상세주소1", storeMenus, storeKeywords);
 
-        given(storeService.getStore(anyLong(), any(UserPrincipal.class), anyLong())).willReturn(Dto);
+        given(storeService.getStore(anyLong(), anyLong(), anyLong())).willReturn(Dto);
 
         //when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get("/dobong/1/item/1")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -197,48 +197,3 @@ class StoreControllerTest {
     }
 
 }
-
-/**
- *         Category category = new Category(1L, ParentCategoryType.명소);
- *         Domain domain = new Domain(1L, "domain test1", "image", "map", "detail",
- *                 "도봉구", "testItem1, testItem2", category);
- *         SubCategory subCategory = new SubCategory(1L, "한식", "국밥", category);
- *         Tag tag = new Tag(1L, "일상의 행복", category);
- *         SubTag subTag = new SubTag(1L, "소소한 기쁨", tag);
- *         MiddleCategory middleCategory = new MiddleCategory(1L, domain, subCategory, subTag);
- */
-
-//@Test
-//void 서브태그_기준_5개_이상의_음식점_리스트정보를_반환하면_예외가_발생한다() throws Exception {// 서브태그_기준_최대_4개의_음식점_리스트정보를_반환한다() -- 서비스 처리
-//
-//    // given
-//    Long[] storeIds = {1L, 2L, 3L, 4L, 5L};
-//    String[] storeNames = {"가게1", "가게2", "가게3", "가게4", "가게5"};
-//    String[] storeLocations = {"위치1", "위치2", "위치3", "위치4", "위치5"};
-//    String[] imgUrls = {"이미지1", "이미지2", "이미지3", "이미지4", "이미지5"};
-//    boolean[] storeLikes = {false, false, false, false, false};
-//
-//    StoresResDto Dto = makeTestGetStoresResDto(1L, 1L, "행복", 1L,
-//            "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
-//
-//    given(storeService.getStoreList(eq(1L), any(UserPrincipal.class))).willReturn(Dto);
-//
-//    //when
-//    ResultActions resultActions = mockMvc.perform(
-//            MockMvcRequestBuilders.get("/dobong/1")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//    );
-//
-//    resultActions.andExpect(result -> {
-//        int expectedSize = Dto.getItems().get(0).getStores().size();
-//        int actualSize = Integer.parseInt(MockMvcResultMatchers.jsonPath("$.result.items[0].stores.length()").toString());
-//
-//        Assertions.assertThat(expectedSize).isNotEqualTo(actualSize); // 사이즈가 달라야 성공
-//    });
-
-//Long[] storeIds = {1L, 2L, 3L, 4L, 5L};
-//String[] storeNames = {"가게1", "순대2", "가게3", "가게4", "순대5"};
-//String[] storeLocations = {"위치1", "위치2", "위치3", "위치4", "위치5"};
-//String[] imgUrls = {"이미지1", "이미지2", "이미지3", "이미지4", "이미지5"};
-//boolean[] storeLikes = {false, false, false, false, false, true};
-//}

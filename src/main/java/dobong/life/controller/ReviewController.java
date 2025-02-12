@@ -23,15 +23,15 @@ public class ReviewController {
     @PostMapping("/review")
     public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                @Valid @RequestBody MyPageReviewInfo myPageReviewInfo){
-        // Long userId = userPrincipal.getId();
-        String message = reviewService.saveReview(myPageReviewInfo, userPrincipal);
+        Long userId = userPrincipal.getId();
+        String message = reviewService.saveReview(myPageReviewInfo, userId);
         return new BaseResponse<>(message);
     }
 
     @GetMapping("/reviews/{categoryId}/{storeId}")
     public BaseResponse<ReviewResDto> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId, @PathVariable Long storeId){
         Long userId = userPrincipal.getId();
-        ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, storeId, userPrincipal);
+        ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, storeId, userId);
         return new BaseResponse<>(reviewResDto);
     }
 
