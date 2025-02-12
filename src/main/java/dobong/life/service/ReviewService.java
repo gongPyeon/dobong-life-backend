@@ -43,8 +43,8 @@ public class ReviewService {
         return DEFINE.REVIEW_OK;
     }
 
-    public ReviewResDto getStoreReview(Long categoryId, Long storeId, Long userId) {
-        User user = userQueryService.getUserById(userId);
+    public ReviewResDto getStoreReview(Long categoryId, Long storeId, UserPrincipal userPrincipal) {
+        User user = userQueryService.getUserById(userPrincipal.getId());
         Domain domain = storeQueryService.getDomain(storeId);
 
         ReviewInfo reviewInfo = buildReviewInfo(domain, user);

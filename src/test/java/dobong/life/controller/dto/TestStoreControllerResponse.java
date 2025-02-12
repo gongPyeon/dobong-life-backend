@@ -1,4 +1,4 @@
-package dobong.life.controller;
+package dobong.life.controller.dto;
 
 import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;

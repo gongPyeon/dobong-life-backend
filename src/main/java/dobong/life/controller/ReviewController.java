@@ -31,7 +31,7 @@ public class ReviewController {
     @GetMapping("/reviews/{categoryId}/{storeId}")
     public BaseResponse<ReviewResDto> viewStoreReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId, @PathVariable Long storeId){
         Long userId = userPrincipal.getId();
-        ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, userId, storeId);
+        ReviewResDto reviewResDto = reviewService.getStoreReview(categoryId, storeId, userPrincipal);
         return new BaseResponse<>(reviewResDto);
     }
 

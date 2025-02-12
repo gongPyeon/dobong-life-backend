@@ -2,12 +2,11 @@ package dobong.life.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dobong.life.config.SecurityConfig;
-import dobong.life.dto.MyPageResDto;
+import dobong.life.dto.ReviewResDto;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.service.ReviewService;
 import dobong.life.service.principal.UserPrincipal;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -22,12 +21,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static dobong.life.controller.ReviewResponseDto.expectedPostReviewResDto;
-import static org.junit.jupiter.api.Assertions.*;
+import static dobong.life.controller.dto.TestMyPageControllerResponse.makeTestGetMyPageResDto;
+import static dobong.life.controller.dto.TestReviewControllerResponse.makeTestGetReviewResDto;
+import static dobong.life.controller.expexted.dto.ReviewResponseDto.expectedGetReviewResDto;
+import static dobong.life.controller.expexted.dto.ReviewResponseDto.expectedPostReviewResDto;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
@@ -65,6 +65,26 @@ class ReviewControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(expectedPostReviewResDto());
+    }
+
+    @Test
+    void 특정_도메인의_리뷰들을_반환한다() throws Exception{
+        // given
+
+        ReviewResDto Dto = makeTestGetReviewResDto(1L, 1L, 0.0, 0,1L,"test",
+                0,"테스트 용 리뷰 내용 저장", List.of("test1", "test2"), true, 1,"good", 3);
+        given(reviewService.getStoreReview(anyLong(),anyLong(), any(UserPrincipal.class))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/reviews/1/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetReviewResDto());
+
     }
 
 }

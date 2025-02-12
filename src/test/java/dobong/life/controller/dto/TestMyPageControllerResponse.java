@@ -1,4 +1,4 @@
-package dobong.life.controller;
+package dobong.life.controller.dto;
 
 import dobong.life.dto.MyPageResDto;
 import dobong.life.dto.MyPageReviewResDto;

@@ -1,4 +1,4 @@
-package dobong.life.controller;
+package dobong.life.controller.expexted.dto;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
