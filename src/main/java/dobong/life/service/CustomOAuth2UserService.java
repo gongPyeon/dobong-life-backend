@@ -58,6 +58,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return UserPrincipal.create(user, oAuth2UserInfo.getAttributes());
     }
 
+    //TODO: 패스워드 어떻게 할지, 중복해서 저장되는 로그인 어떻게 할지
     private User registerUser(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
         User user = User.builder()
                 .email(oAuth2UserInfo.getEmail())

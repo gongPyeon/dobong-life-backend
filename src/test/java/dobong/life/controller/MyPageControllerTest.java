@@ -18,7 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static dobong.life.controller.MypageResponseDto.expectedGetMyPageResDto;
 import static dobong.life.controller.StoreResponseDto.expectedGetStoresResDto;
+import static dobong.life.controller.TestMyPageControllerResponse.makeTestGetMyPageResDto;
 import static dobong.life.controller.TestStoreControllerResponse.makeTestGetStoresResDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,30 +41,23 @@ class MyPageControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-//    @Test
-//    void 마이페이지_정보를_반환한다(){
-//        // given
-//        Long[] storeIds = {1L, 2L, 3L, 4L};
-//        String[] storeNames = {"가게1", "가게2", "가게3", "가게4"};
-//        String[] storeLocations = {"위치1", "위치2", "위치3", "위치4"};
-//        String[] imgUrls = {"이미지1", "이미지2", "이미지3", "이미지4"};
-//        boolean[] storeLikes = {false, false, false, false, false};
-//
-//        MyPageResDto Dto = makeTestGetMyPageResDto(1L, 1L, "행복", 1L,
-//                "달콤한", storeIds, storeNames, storeLocations, imgUrls, storeLikes);
-//
-//        given(myPageService.getMyPage(any(UserPrincipal.class)).willReturn(Dto);
-//
-//        //when
-//        ResultActions resultActions = mockMvc.perform(
-//                MockMvcRequestBuilders.get("/dobong/1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        //then
-//        resultActions.andExpect(status().isOk())
-//                .andExpect(expectedGetMyPageResDto());
-//
-//    }
+    @Test
+    void 마이페이지_정보를_반환한다() throws Exception {
+        // given
+        MyPageResDto Dto = makeTestGetMyPageResDto("test@naver.com", "test", 0, 0,
+                0,0,0);
+
+        given(myPageService.getMyPage(any(UserPrincipal.class))).willReturn(Dto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get("/dobong/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(expectedGetMyPageResDto());
+    }
 
 }
