@@ -188,4 +188,35 @@ class StoreServiceTest {
             then(tagQueryService).should().getSubTagNames(subTagIds);
         }
     }
+
+    @Nested
+    @DisplayName("모든 상점 목록 조회 Service 실행 시")
+    class GetStoreListAllTest {
+
+        @Test
+        @DisplayName("성공")
+        void getStoreListAll_success() {
+            // given
+            Long categoryId = 1L;
+            Long userId = 1L;
+            Long tagId = 1L;
+            Long subTagId = 1L;
+
+            given(categoryQueryService.getCategory(anyLong())).willReturn(testCategory);
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(tagQueryService.getItemInfosMore(any(), any(), anyLong(), anyLong())).willReturn(testItems);
+
+            // when
+            StoresResDto result = storeService.getStoreListAll(categoryId, userId, tagId, subTagId);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getCategoryId()).isEqualTo(categoryId);
+            Assertions.assertThat(result.getItems()).hasSize(1);
+
+            then(categoryQueryService).should().getCategory(categoryId);
+            then(userQueryService).should().getUserById(userId);
+            then(tagQueryService).should().getItemInfosMore(testCategory, testUser, tagId, subTagId);
+        }
+    }
 }
