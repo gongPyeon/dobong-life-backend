@@ -1,10 +1,13 @@
 package dobong.life.service;
 
+import dobong.life.dto.StoreItemResDto;
 import dobong.life.dto.StoresFilterResDto;
 import dobong.life.dto.StoresResDto;
 import dobong.life.dto.info.ItemInfo;
 import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.dto.info.StoreDetailInfo;
 import dobong.life.entity.Category;
+import dobong.life.entity.Domain;
 import dobong.life.entity.User;
 import dobong.life.enums.ParentCategoryType;
 import dobong.life.service.query.CategoryQueryService;
@@ -12,6 +15,7 @@ import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.TagQueryService;
 import dobong.life.service.query.UserQueryService;
 import dobong.life.util.exception.CategoryNotFoundException;
+import dobong.life.util.exception.DomainNotFoundException;
 import dobong.life.util.exception.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
@@ -34,7 +38,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName(("StoreService를_테스트_한다"))
+@DisplayName("StoreService를_테스트_한다")
 class StoreServiceTest {
 
     @InjectMocks
@@ -52,8 +56,12 @@ class StoreServiceTest {
     @Mock
     private TagQueryService tagQueryService;
 
-     Category testCategory;
+    Category testCategory;
     User testUser;
+
+    Domain testDomain;
+    StoreBasicInfo testStoreBasicInfo;
+    StoreDetailInfo testStoreDetailInfo;
     List<ItemInfo> testItems;
     List<StoreBasicInfo> testFilterItems;
     List<String> testSubTagNames;
@@ -67,7 +75,12 @@ class StoreServiceTest {
         );
         testSubTagNames = List.of("분식");
         testFilterItems = List.of(StoreBasicInfo.create(1L));
+
+        testDomain = Domain.create(1L);
+        testStoreBasicInfo = StoreBasicInfo.create(1L);
+        testStoreDetailInfo = StoreDetailInfo.create();
     }
+
     @Nested
     @DisplayName("상점 목록 조회 Service 실행 시")
     class GetStoreListTest {
@@ -217,6 +230,73 @@ class StoreServiceTest {
             then(categoryQueryService).should().getCategory(categoryId);
             then(userQueryService).should().getUserById(userId);
             then(tagQueryService).should().getItemInfosMore(testCategory, testUser, tagId, subTagId);
+        }
+    }
+
+    @Nested
+    @DisplayName("특정 상점 목록 조회 Service 실행 시")
+    class GetStoreTest {
+
+        // TODO: 수정이 가능하면 좀 더 깔끔하게 리팩토링
+        @Test
+        @DisplayName("성공")
+        void getStore_success() {
+            // given
+            Long categoryId = 1L;
+            Long userId = 1L;
+            Long storeId = 1L;
+
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(storeQueryService.getDomain(anyLong())).willReturn(testDomain);
+//            given(storeService).buildStoreBasicInfo(any(), any()).willReturn(testStoreBasicInfo);
+//            given(storeService).buildStoreDetailInfo(any()).willReturn(testStoreDetailInfo);
+            // private 메소드들이 호출하는 함수들을 직접 모킹해야한다
+            given(tagQueryService.mapToStoreInfo(testDomain, testUser)).willReturn(testStoreBasicInfo);
+            given(storeQueryService.getSubCategory(testDomain)).willReturn("분식");
+            given(storeQueryService.getMenus(testDomain)).willReturn(List.of("순대1", "순대2"));
+            given(storeQueryService.getHashTags(testDomain)).willReturn(List.of("행복1", "행복2"));
+            given(tagQueryService.mapToStoreDetailInfo(
+                    "분식",
+                    testDomain.getAddressDetail(),
+                    List.of("순대1", "순대2"),
+                    List.of("행복1", "행복2")
+            )).willReturn(testStoreDetailInfo);
+
+            // when
+            StoreItemResDto result = storeService.getStore(categoryId, userId, storeId);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getCategoryId()).isEqualTo(categoryId);
+            assertThat(result.getStoreBasicInfo()).isEqualTo(testStoreBasicInfo);
+            assertThat(result.getStoreDetailInfo()).isEqualTo(testStoreDetailInfo);
+
+            then(userQueryService).should().getUserById(userId);
+            then(storeQueryService).should().getDomain(storeId);
+            then(tagQueryService).should().mapToStoreInfo(testDomain, testUser);
+            then(storeQueryService).should().getSubCategory(testDomain);
+            then(storeQueryService).should().getMenus(testDomain);
+            then(storeQueryService).should().getHashTags(testDomain);
+            then(tagQueryService).should().mapToStoreDetailInfo(
+                    "분식",
+                    testDomain.getAddressDetail(),
+                    List.of("순대1", "순대2"),
+                    List.of("행복1", "행복2")
+            );
+            // buildStoreBasicInfo(dobong.life.entity.Domain, dobong.life.entity.User)' has private access in 'dobong.life.service.StoreService'
+        }
+
+        @Test
+        @DisplayName("상점이 존재하지 않을 경우 실패")
+        void getStore_storeNotFound() {
+            // given
+            Long storeId = 2L;
+
+            given(storeQueryService.getDomain(storeId)).willThrow(new DomainNotFoundException(storeId));
+
+            // when & then
+            assertThrows(DomainNotFoundException.class,
+                    () -> storeQueryService.getDomain(storeId));
         }
     }
 }

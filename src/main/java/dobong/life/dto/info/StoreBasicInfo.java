@@ -14,12 +14,13 @@ public class StoreBasicInfo {
     private String imgUrl;
     private boolean storeLike;
 
+
     public static StoreBasicInfo create(Long storeId) {
         return StoreBasicInfo.builder()
                 .storeId(storeId)
                 .storeName("순대집")
-                .storeLocation("location")
-                .imgUrl("img")
+                .storeLocation("도봉동")
+                .imgUrl("이미지")
                 .storeLike(true)
                 .build();
     }
