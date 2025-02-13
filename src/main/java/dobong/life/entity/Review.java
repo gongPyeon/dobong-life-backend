@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
@@ -38,5 +39,17 @@ public class Review {
 
     public void updateLikeCount(){
         this.likeCount++;
+    }
+
+    public static Review create(Long id, User user, Domain domain){
+        return Review.builder()
+                .id(id)
+                .content("내용")
+                .domain(domain)
+                .date(LocalDateTime.now())
+                .likeCount(0)
+                .score(0.0)
+                .user(user)
+                .build();
     }
 }
