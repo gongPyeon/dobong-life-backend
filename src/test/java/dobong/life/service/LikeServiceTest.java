@@ -77,6 +77,32 @@ class LikeServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("특정 리뷰에 대한 좋아요 Service 실행 시")
+    class UpdateReviewLikeByUser{
+        @Test
+        @DisplayName("성공")
+        void updateReviewLikeByUser_success(){
 
+            // given
+            Long userId = 1L;
+            Long reviewId = 1L;
+
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(reviewQueryService.getReviewById(anyLong())).willReturn(testReview);
+            willDoNothing().given(storeQueryService).updateStoreLike(any(), any());
+
+            // when
+            String result = likeService.updateReviewLikeByUser(userId, reviewId);
+
+            // then
+            assertThat(result).isEqualTo(DEFINE.LIKE_OK);
+
+            then(userQueryService).should().getUserById(userId);
+            then(reviewQueryService).should().getReviewById(reviewId);
+            then(storeQueryService).should().updateReviewLike(testUser, testReview);
+
+        }
+    }
 
 }
