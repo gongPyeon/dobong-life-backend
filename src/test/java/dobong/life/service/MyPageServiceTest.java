@@ -3,6 +3,8 @@ package dobong.life.service;
 import dobong.life.dto.MyPageResDto;
 import dobong.life.dto.MyPageReviewResDto;
 import dobong.life.dto.info.MyPageReviewInfo;
+import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.entity.Category;
 import dobong.life.entity.User;
 import dobong.life.service.query.*;
 import org.assertj.core.api.Assertions;
@@ -150,6 +152,39 @@ class MyPageServiceTest {
 
             then(userQueryService).should().getUserById(userId);
             then(myPageQueryService).should().getMyPageReviewLikeInfoList(testUser);
+        }
+    }
+
+    @Nested
+    @DisplayName("마이페이지 좋아요한 상점 조회 Service 실행 시")
+    class GetMyStoreLike{
+        @Test
+        @DisplayName("성공")
+        void getMyStoreLike_success(){
+
+            // given
+            Category testCategory = Category.create(1L);
+            Long categoryId = 1L;
+            Long userId = 1L;
+            Long storeId = 1L;
+            List<StoreBasicInfo> testItems = Collections.singletonList(
+                    StoreBasicInfo.create(1L)
+            );
+
+            given(categoryQueryService.getCategory(anyLong())).willReturn(testCategory);
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(tagQueryService.getStoreInfoWithLimitLike(any(), any())).willReturn(testItems);
+
+            //when
+            List<StoreBasicInfo> result = myPageService.getMyLike(categoryId, userId);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.get(0).getStoreId()).isEqualTo(storeId);
+
+            then(categoryQueryService).should().getCategory(categoryId);
+            then(userQueryService).should().getUserById(userId);
+            then(tagQueryService).should().getStoreInfoWithLimitLike(testCategory, testUser);
         }
     }
 
