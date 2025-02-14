@@ -62,7 +62,7 @@ class LikeServiceTest {
 
             given(userQueryService.getUserById(anyLong())).willReturn(testUser);
             given(storeQueryService.getDomain(anyLong())).willReturn(testDomain);
-            willDoNothing().given(storeQueryService).updateStoreLike(any(), any());
+            willDoNothing().given(storeQueryService).updateStoreLike(testUser, testDomain);
 
             // when
             String result = likeService.updateStoreLikeByUser(userId, storeId);
