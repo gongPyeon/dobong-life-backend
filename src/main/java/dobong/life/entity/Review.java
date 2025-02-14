@@ -44,7 +44,7 @@ public class Review {
     public static Review create(Long id, User user, Domain domain){
         return Review.builder()
                 .id(id)
-                .content("내용")
+                .content("리뷰를 10자 이상 적는건 힘들어요")
                 .domain(domain)
                 .date(LocalDateTime.now())
                 .likeCount(0)

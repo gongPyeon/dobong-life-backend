@@ -29,7 +29,7 @@ public class MyPageReviewInfo {
     public static MyPageReviewInfo create(Long storeId){
         return MyPageReviewInfo.builder()
                 .storeId(storeId)
-                .name("홍길동")
+                .name("test")
                 .selectedKeywords(List.of("good", "bad"))
                 .reviewContent("리뷰를 10자 이상 적는건 힘들어요")
                 .build();

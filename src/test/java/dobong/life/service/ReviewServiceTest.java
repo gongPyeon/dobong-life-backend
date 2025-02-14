@@ -63,7 +63,7 @@ class ReviewServiceTest {
             given(storeQueryService.getDomain(anyLong())).willReturn(testDomain);
             willDoNothing().given(reviewQueryService).saveReview(testReview);
             // willDoNothing().given(reviewQueryService).saveMiddleTag(); middle tag 테스트 보완
-            //when
+            //when private method 때문에 문제가 발생하는 것 같다
             String result = reviewService.saveReview(reviewInfo, userId);
 
             //then
