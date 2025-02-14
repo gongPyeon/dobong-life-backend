@@ -1,5 +1,6 @@
 package dobong.life.service;
 
+import dobong.life.dto.ReviewResDto;
 import dobong.life.dto.info.MyPageReviewInfo;
 import dobong.life.entity.Domain;
 import dobong.life.entity.Review;
@@ -72,6 +73,32 @@ class ReviewServiceTest {
             then(userQueryService).should().getUserById(userId);
             then(storeQueryService).should().getDomain(storeId);
             then(reviewQueryService).should().saveReview(testReview);
+        }
+    }
+
+    @Nested
+    @DisplayName("상점의 모든 리뷰 조회 Service 실행 시")
+    class getStoreReview{
+
+        @Test
+        @DisplayName("성공")
+        void getStoreReview_success(){
+            //given
+            Long categoryId = 1L;
+            Long userId = 1L;
+            Long storeId = 1L;
+
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(storeQueryService.getDomain(anyLong())).willReturn(testDomain);
+
+            //when
+            ReviewResDto result = reviewService.getStoreReview(categoryId, userId, storeId);
+
+            //then
+            assertThat(result).isNotNull();
+
+            then(userQueryService).should().getUserById(userId);
+            then(storeQueryService).should().getDomain(storeId);
         }
     }
 
