@@ -125,4 +125,32 @@ class MyPageServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("마이페이지 좋아요한 리뷰 조회 Service 실행 시")
+    class GetMyReviewLike{
+        @Test
+        @DisplayName("성공")
+        void getMyReviewLike_success(){
+
+            // given
+            Long userId = 1L;
+            List<MyPageReviewInfo> testReviews = Collections.singletonList(
+                    MyPageReviewInfo.create(1L)
+            );
+
+            given(userQueryService.getUserById(anyLong())).willReturn(testUser);
+            given(myPageQueryService.getMyPageReviewLikeInfoList(any())).willReturn(testReviews);
+
+            //when
+            MyPageReviewResDto result = myPageService.getMyReviewLike(userId);
+
+            // then
+            assertThat(result).isNotNull();
+            Assertions.assertThat(result.getReviews()).hasSize(1);
+
+            then(userQueryService).should().getUserById(userId);
+            then(myPageQueryService).should().getMyPageReviewLikeInfoList(testUser);
+        }
+    }
+
 }
