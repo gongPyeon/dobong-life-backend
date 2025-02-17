@@ -8,7 +8,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class CorsConfig {
-    public final static String CLIENT_URL = "http://172.20.10.2:3000";
+    public final static String CLIENT_URL = "http://localhost:3000";
     @Bean
     public CorsConfigurationSource configurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();

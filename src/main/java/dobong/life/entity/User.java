@@ -1,5 +1,6 @@
 package dobong.life.entity;
 
+import dobong.life.dto.RegisterUserCommand;
 import dobong.life.enums.Role;
 import dobong.life.enums.SocialType;
 import dobong.life.userInfo.OAuth2UserInfo;
@@ -24,11 +25,11 @@ public class User{
     private String name;
 
     @Column(nullable = true)
-    private String oauth2Id;
+    private String providerId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "social_type", nullable = true)
-    private SocialType socialType;
+    private SocialType providerType;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -36,18 +37,22 @@ public class User{
     @Password
     private String password;
 
-    @Column(nullable = true)
-    private int reviewCount;
-
-    public User update(OAuth2UserInfo oAuth2UserInfo) {
-        this.name = oAuth2UserInfo.getName();
-        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
-
-        return this;
-    }
+//    @Column(nullable = true)
+//    private int reviewCount;
 
     public void passwordEncode(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(this.password);
+    }
+
+    public static User create(RegisterUserCommand registerUserCommand) {
+        return User.builder()
+                .email(registerUserCommand.email())
+                .name(registerUserCommand.name())
+                .password(null)
+                .providerId(registerUserCommand.providerId())
+                .providerType(registerUserCommand.providerType())
+                .role(registerUserCommand.role())
+                .build();
     }
 
     public static User create(Long id) { // test용
@@ -55,10 +60,9 @@ public class User{
                 .id(id)
                 .email("test@naver.com")
                 .name("test")
-                .oauth2Id("oauth2Id")
+                .providerId("oauth2Id")
                 .password("Oauth2!")
-                .socialType(null)
-                .reviewCount(0)
+                .providerType(null)
                 .role(Role.ROLE_USER).build();
     }
 }

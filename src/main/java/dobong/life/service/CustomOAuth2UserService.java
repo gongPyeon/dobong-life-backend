@@ -1,13 +1,18 @@
 package dobong.life.service;
 
+import dobong.life.dto.RegisterResponse;
+import dobong.life.dto.RegisterUserCommand;
 import dobong.life.entity.User;
 import dobong.life.enums.Role;
 import dobong.life.enums.SocialType;
 import dobong.life.repository.UserRepository;
-import dobong.life.service.principal.UserPrincipal;
+import dobong.life.service.principal.CustomUser;
 import dobong.life.userInfo.OAuth2UserInfo;
 import dobong.life.userInfo.OAuth2UserInfoFactory;
+import dobong.life.util.exception. InvalidProviderException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,63 +22,50 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
+    // OAuth2 로그인 시 사용자 정보를 가져와서 가공하는 서비스
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
-        log.info("loadUser 진입");
-        OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
 
-        return processOAuth2User(oAuth2UserRequest, oAuth2User);
-    }
+        OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        /**
+         * OAuth2 로그인 시 제공자로부터 받은 사용자 정보
+         * {
+         *     "sub": "123456789012345678901",
+         *     "name": "홍길동",
+         *     "given_name": "길동",
+         *     "family_name": "홍",
+         *     "picture": "https://lh3.googleusercontent.com/a-/AOh14Gj...",
+         *     "email": "hong@example.com",
+         *     "email_verified": true,
+         *     "locale": "ko"
+         * }
+         */
+        String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId(); // GOOGLE, NAVER
+        SocialType providerType = SocialType.valueOf(registrationId.toUpperCase()); // 대문자로 SocialType 가져오기
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, attributes);
 
-    protected OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        //OAuth2 로그인 플랫폼 구분
-        SocialType socialType = SocialType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(socialType, oAuth2User.getAttributes());
 
-        if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
-            throw new RuntimeException("Email not found from OAuth2 provider");
-        }
+        // 사용자를 등록하거나 조회한다
+        RegisterUserCommand registerUserCommand = RegisterUserCommand.of(
+                oAuth2UserInfo.getName(),
+                oAuth2UserInfo.getEmail(),
+                oAuth2UserInfo.getOAuth2Id(),
+                providerType,
+                Role.ROLE_USER
+        );
 
-        User user = userRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
-        //이미 가입된 경우
-//        if (user != null) {
-//            if (!user.getSocialType().equals(socialType)) {
-//                throw new RuntimeException("Email already signed up.");
-//            }
-//            user = updateUser(user, oAuth2UserInfo);
-//        }
-//        //가입되지 않은 경우
-//        else {
-//            user = registerUser(socialType, oAuth2UserInfo);
-//        }
-        user = registerUser(socialType, oAuth2UserInfo);
-        return UserPrincipal.create(user, oAuth2UserInfo.getAttributes());
-    }
-
-    //TODO: 패스워드 어떻게 할지, 중복해서 저장되는 로그인 어떻게 할지
-    private User registerUser(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
-        User user = User.builder()
-                .email(oAuth2UserInfo.getEmail())
-                .password("Oauth2!")
-                .name(oAuth2UserInfo.getName())
-                .oauth2Id(oAuth2UserInfo.getOAuth2Id())
-                .socialType(socialType)
-                .role(Role.ROLE_USER)
-                .build();
-
-        return userRepository.save(user);
-    }
-
-    private User updateUser(User user, OAuth2UserInfo oAuth2UserInfo) {
-
-        return userRepository.save(user.update(oAuth2UserInfo));
+        RegisterResponse registerResponse = userService.getOrRegisterUser(registerUserCommand);
+        return new CustomUser(registerResponse, attributes);
     }
 }

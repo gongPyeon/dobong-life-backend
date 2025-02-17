@@ -10,16 +10,16 @@ public class NaverOAuth2User extends OAuth2UserInfo{
 
     @Override
     public String getOAuth2Id() {
-        return (String) attributes.get("id");
+        return String.valueOf(attributes.get("id"));
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        return String.valueOf(attributes.get("email"));
     }
 
     @Override
     public String getName() {
-        return (String) attributes.get("name");
+        return String.valueOf(attributes.get("name"));
     }
 }

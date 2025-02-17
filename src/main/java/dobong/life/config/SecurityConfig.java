@@ -32,11 +32,10 @@ public class SecurityConfig {
 
     private final CorsConfig corsConfig;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
     private final LoginService loginService;
     private final ObjectMapper objectMapper;
-    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -49,7 +48,8 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .rememberMe(rememberMe -> rememberMe.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // 요청에 대한 권한 설정
         http
@@ -60,12 +60,12 @@ public class SecurityConfig {
         // oauth2 로그인
         http
                 .oauth2Login(oauth2 -> oauth2
-//                        .authorizationEndpoint(endpoint -> endpoint
-//                                .baseUri("/oauth2/authorize")
-//                                .authorizationRequestRepository(cookieAuthorizationRequestRepository) // 수정된 부분
-//                        )
-//                        .redirectionEndpoint(redirect -> redirect.baseUri("/oauth2/callback/*"))
-                        .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // 회원 정보 처리 (Oauth2User를 반환)
+                        .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // OAuth2 로그인 과정에서 사용자 정보를 가져오는 역할
+                        /**
+                         * userInfoEndpoint를 통해 해당 액세스 토큰을 사용하여 사용자 정보를 요청
+                         * Provider가 사용자 정보를 반환
+                         * 애플리케이션이 해당 정보를 사용하여 회원 가입 또는 로그인 처리
+                         */
                         .successHandler(authenticationSuccessHandler) // 성공 핸들러
                         .failureHandler(authenticationFailureHandler)); // 실패 핸들러
 
@@ -73,13 +73,13 @@ public class SecurityConfig {
         http
                 .logout(logout -> logout
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID") // jwt는 sessionles인데 어디서 설정되는거지?
                         .deleteCookies("accessToken")
-                        .logoutSuccessUrl("/logout-test")); // 기존 login과 차이점이 있어야하는지?
+                        .logoutSuccessUrl("/logout-test"));
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

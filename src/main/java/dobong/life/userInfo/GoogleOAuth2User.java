@@ -8,19 +8,18 @@ public class GoogleOAuth2User extends OAuth2UserInfo{
         super(attributes);
     }
 
-
     @Override
     public String getOAuth2Id() {
-        return (String) attributes.get("sub");
+        return String.valueOf(attributes.get("sub"));
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        return String.valueOf(attributes.get("email"));
     }
 
     @Override
     public String getName() {
-        return (String) attributes.get("name");
+        return String.valueOf(attributes.get("name"));
     }
 }
