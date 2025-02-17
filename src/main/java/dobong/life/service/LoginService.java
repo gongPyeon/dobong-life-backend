@@ -1,34 +1,26 @@
 package dobong.life.service;
 
-import dobong.life.entity.User;
-import dobong.life.repository.UserRepository;
-import dobong.life.service.principal.UserPrincipal;
+import dobong.life.dto.RegisterResponse;
+import dobong.life.service.principal.CustomUser;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+        RegisterResponse registerResponse = userService.getRegisterUser(email);
 
-//        return org.springframework.security.core.userdetails.User.builder()
-//                .username(user.getEmail())
-//                .password(user.getPassword()) // ROLE 설정
-//                .roles(user.getRole().getDescription())
-//                .build();
-
-        return UserPrincipal.create(user);
+        return new CustomUser(registerResponse);
     }
 }

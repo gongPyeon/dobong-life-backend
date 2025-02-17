@@ -11,8 +11,11 @@ import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.nio.channels.FileChannel;
 
 @Service
 @Transactional
@@ -48,6 +51,13 @@ public class UserService {
                     userRepository.save(user);
                     return user;
         });
+
+        return RegisterResponse.from(findUser);
+    }
+
+    public RegisterResponse getRegisterUser(String email) {
+        User findUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("[ERROR] 사용자를 찾을 수 없습니다: " + email));
 
         return RegisterResponse.from(findUser);
     }

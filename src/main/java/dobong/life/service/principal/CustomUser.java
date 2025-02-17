@@ -27,6 +27,7 @@ public class CustomUser implements OAuth2User, UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
 
+    // 소셜 로그인
     public CustomUser(RegisterResponse registerResponse, Map<String, Object> attributes) {
         this.registerResponse = registerResponse;
         this.attributes = attributes;
@@ -35,6 +36,16 @@ public class CustomUser implements OAuth2User, UserDetails {
         );
     }
 
+    // 일반 로그인
+    public CustomUser(RegisterResponse registerResponse) {
+        this.registerResponse = registerResponse;
+        this.attributes = null;
+        this.authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(registerResponse.role().getDescription())
+        );
+    }
+
+    // TODO: 각각 null 일 경우 예외처리를 해놓을지 고민
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
