@@ -68,18 +68,15 @@ public class SecurityConfig {
                          */
                         .successHandler(authenticationSuccessHandler) // 성공 핸들러
                         .failureHandler(authenticationFailureHandler)); // 실패 핸들러
-
         // 로그아웃
         http
                 .logout(logout -> logout
-                        .clearAuthentication(true)
                         .deleteCookies("accessToken")
                         .logoutSuccessUrl("/logout-test"));
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-        http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterAfter(new JwtAuthenticationFilter(jwtService, refreshTokenRepository), JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -105,13 +102,6 @@ public class SecurityConfig {
         customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         return customJsonUsernamePasswordLoginFilter;
-    }
-
-    // jwt filter 설정
-    @Bean
-    public Filter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, refreshTokenRepository);
-        return jwtAuthenticationFilter;
     }
 
 }
