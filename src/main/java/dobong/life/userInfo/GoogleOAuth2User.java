@@ -1,6 +1,9 @@
 package dobong.life.userInfo;
 
+import jakarta.validation.constraints.Null;
+
 import java.util.Map;
+import java.util.Optional;
 
 public class GoogleOAuth2User extends OAuth2UserInfo{
 
@@ -10,16 +13,22 @@ public class GoogleOAuth2User extends OAuth2UserInfo{
 
     @Override
     public String getOAuth2Id() {
-        return String.valueOf(attributes.get("sub"));
+        return Optional.ofNullable(attributes.get("sub"))
+                .map(String::valueOf)  // 값이 있으면 String 변환
+                .orElseThrow(() -> new NullPointerException("[ERROR] 구글 OAuth Id가 없습니다"));
     }
 
     @Override
     public String getEmail() {
-        return String.valueOf(attributes.get("email"));
+        return Optional.ofNullable(attributes.get("email"))
+                .map(String::valueOf)
+                .orElseThrow(()-> new NullPointerException("[ERROR] 구글 OAuth 이메일이 없습니다"));
     }
 
     @Override
     public String getName() {
-        return String.valueOf(attributes.get("name"));
+        return Optional.ofNullable(attributes.get("name"))
+                .map(String::valueOf)
+                .orElseThrow(()-> new NullPointerException("[ERROR] 구글 OAuth 이름이 없습니다"));
     }
 }

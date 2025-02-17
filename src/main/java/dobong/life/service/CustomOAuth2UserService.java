@@ -24,13 +24,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
-@RequiredArgsConstructor
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserService userService;
-    // OAuth2 로그인 시 사용자 정보를 가져와서 가공하는 서비스
 
     @Override
     @Transactional
@@ -38,25 +37,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        /**
-         * OAuth2 로그인 시 제공자로부터 받은 사용자 정보
-         * {
-         *     "sub": "123456789012345678901",
-         *     "name": "홍길동",
-         *     "given_name": "길동",
-         *     "family_name": "홍",
-         *     "picture": "https://lh3.googleusercontent.com/a-/AOh14Gj...",
-         *     "email": "hong@example.com",
-         *     "email_verified": true,
-         *     "locale": "ko"
-         * }
-         */
-        String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId(); // GOOGLE, NAVER
-        SocialType providerType = SocialType.valueOf(registrationId.toUpperCase()); // 대문자로 SocialType 가져오기
+
+        String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
+        SocialType providerType = SocialType.valueOf(registrationId.toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, attributes);
 
 
-        // 사용자를 등록하거나 조회한다
         RegisterUserCommand registerUserCommand = RegisterUserCommand.of(
                 oAuth2UserInfo.getName(),
                 oAuth2UserInfo.getEmail(),

@@ -1,6 +1,7 @@
 package dobong.life.userInfo;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class KakaoOAuth2User extends OAuth2UserInfo{
 
@@ -12,15 +13,23 @@ public class KakaoOAuth2User extends OAuth2UserInfo{
 
     @Override
     public String getOAuth2Id() {
-        return String.valueOf(attributes.get("id"));
+        return Optional.ofNullable(attributes.get("id"))
+                .map(String::valueOf)
+                .orElseThrow(() -> new NullPointerException("[ERROR] 카카오 OAuth 아이디가 없습니다"));
     }
 
     @Override
-    public String getEmail() { return String.valueOf(account.get("email")); }
+    public String getEmail() {
+        return Optional.ofNullable(attributes.get("email"))
+                .map(String::valueOf)
+                .orElseThrow(() -> new NullPointerException("[ERROR] 카카오 OAuth 이메일이 없습니다"));
+    }
 
     @Override
     public String getName() {
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-        return String.valueOf(profile.get("nickname"));
+        return Optional.ofNullable(attributes.get("nickname"))
+                .map(String::valueOf)
+                .orElseThrow(() -> new NullPointerException("[ERROR] 카카오 OAuth 이름이 없습니다"));
     }
 }
