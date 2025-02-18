@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 
 @Getter
 @Slf4j
-public class CustomUser implements OAuth2User, UserDetails {
+public class UserPrincipal implements OAuth2User, UserDetails {
 
     private final RegisterResponse registerResponse;
     private final Collection<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
 
     // 소셜 로그인
-    public CustomUser(RegisterResponse registerResponse, Map<String, Object> attributes) {
+    public UserPrincipal(RegisterResponse registerResponse, Map<String, Object> attributes) {
         this.registerResponse = registerResponse;
         this.attributes = attributes;
         this.authorities = Collections.singletonList(
@@ -37,7 +37,7 @@ public class CustomUser implements OAuth2User, UserDetails {
     }
 
     // 일반 로그인
-    public CustomUser(RegisterResponse registerResponse) {
+    public UserPrincipal(RegisterResponse registerResponse) {
         this.registerResponse = registerResponse;
         this.attributes = null;
         this.authorities = Collections.singletonList(
@@ -49,6 +49,10 @@ public class CustomUser implements OAuth2User, UserDetails {
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
+    }
+
+    public Long getId(){
+        return registerResponse.userId();
     }
 
     @Override

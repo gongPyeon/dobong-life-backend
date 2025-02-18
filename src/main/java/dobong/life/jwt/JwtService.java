@@ -60,7 +60,6 @@ public class JwtService {
     }
 
     public Authentication getAuthentication(String accessToken){
-
         Claims claims = validateToken(accessToken);
         UserDetails userDetails = loginService.loadUserByUsername(claims.getSubject());
 
