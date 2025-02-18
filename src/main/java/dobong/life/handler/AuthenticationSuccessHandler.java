@@ -15,9 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
+
 public class AuthenticationSuccessHandler
         extends SavedRequestAwareAuthenticationSuccessHandler {
     private static final String ACCESS_TOKEN = "accessToken";
@@ -34,15 +36,16 @@ public class AuthenticationSuccessHandler
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        //모든 로그인에 JWT 생성
+        // 모든 로그인에 JWT 생성
         Token token = jwtService.generateToken(authentication);
         CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
         clearAuthenticationAttributes(request, response);
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+        // 남아 있을 필요 없는 인증 정보를 깔끔하게 정리하는 역할
         super.clearAuthenticationAttributes(request);
         cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    } // 남아 있을 필요 없는 인증 정보를 깔끔하게 정리하는 역할
+    }
 
 }
