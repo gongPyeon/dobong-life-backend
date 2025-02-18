@@ -31,11 +31,14 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig {
 
     private final CorsConfig corsConfig;
+
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtService jwtService;
     private final LoginService loginService;
+
+    private final JwtService jwtService;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final ObjectMapper objectMapper;
+
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -54,18 +57,13 @@ public class SecurityConfig {
         // 요청에 대한 권한 설정
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/oauth2/**", "/", "/login", "/login-test", "/sign-up", "/ec2").permitAll()
+                        .requestMatchers("/test/**", "/sign-up", "/login").permitAll()
                         .anyRequest().authenticated());
 
         // oauth2 로그인
         http
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // OAuth2 로그인 과정에서 사용자 정보를 가져오는 역할
-                        /**
-                         * userInfoEndpoint를 통해 해당 액세스 토큰을 사용하여 사용자 정보를 요청
-                         * Provider가 사용자 정보를 반환
-                         * 애플리케이션이 해당 정보를 사용하여 회원 가입 또는 로그인 처리
-                         */
                         .successHandler(authenticationSuccessHandler) // 성공 핸들러
                         .failureHandler(authenticationFailureHandler)); // 실패 핸들러
         // 로그아웃

@@ -1,6 +1,6 @@
 package dobong.life.jwt;
 
-import dobong.life.dto.UserResponseDto;
+import dobong.life.dto.Token;
 import dobong.life.entity.RefreshToken;
 import dobong.life.service.LoginService;
 import io.jsonwebtoken.*;
@@ -45,14 +45,14 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public UserResponseDto.TokenInfo generateToken(Authentication authentication){
+    public Token generateToken(Authentication authentication){
         String name = authentication.getName();
         String authorities = getAuthorities(authentication.getAuthorities());
 
         String accessToken = createAccessToken(name, authorities);
         String refreshToken = createRefreshToken(name, authorities);
 
-        return UserResponseDto.TokenInfo.builder()
+        return Token.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
