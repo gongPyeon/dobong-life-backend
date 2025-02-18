@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class Token{
+public class TokenCommand{
     private String grantType;
     private String accessToken;
     private Long accessTokenExpirationTime;

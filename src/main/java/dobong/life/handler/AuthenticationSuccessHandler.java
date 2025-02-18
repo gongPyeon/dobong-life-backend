@@ -1,6 +1,6 @@
 package dobong.life.handler;
 
-import dobong.life.dto.Token;
+import dobong.life.dto.TokenCommand;
 import dobong.life.jwt.JwtService;
 import dobong.life.lib.CookieUtils;
 import dobong.life.repository.CookieAuthorizationRequestRepository;
@@ -37,7 +37,7 @@ public class AuthenticationSuccessHandler
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 모든 로그인에 JWT 생성
-        Token token = jwtService.generateToken(authentication);
+        TokenCommand token = jwtService.generateToken(authentication);
         CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
         clearAuthenticationAttributes(request, response);
     }

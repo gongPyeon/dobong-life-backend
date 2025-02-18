@@ -17,7 +17,8 @@ import static dobong.life.repository.CookieAuthorizationRequestRepository.REDIRE
 
 @Component
 @RequiredArgsConstructor
-public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class AuthenticationFailureHandler
+        extends SimpleUrlAuthenticationFailureHandler {
 
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 

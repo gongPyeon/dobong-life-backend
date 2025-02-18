@@ -1,12 +1,11 @@
 package dobong.life.jwt;
 
-import dobong.life.dto.Token;
-import dobong.life.entity.RefreshToken;
+import dobong.life.dto.TokenCommand;
 import dobong.life.service.LoginService;
+import dobong.life.util.exception.InvalidJwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Collection;
@@ -25,13 +23,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtService {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private final LoginService loginService;
+
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final String ACCESS_TYPE = "access";
     private static final String REFRESH_TYPE = "refresh";
-
-    private final LoginService loginService;
 
     @Value("${jwt.access.expiration}")
     private Long ACCESS_TOKEN_EXPIRE_TIME;
@@ -41,18 +38,19 @@ public class JwtService {
     private final Key key;
     public JwtService(@Value("${jwt.secretKey}") String secretKey, LoginService loginService){
         this.loginService = loginService;
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.key = Keys.hmacShaKeyFor(
+                Decoders.BASE64.decode(secretKey));
     }
 
-    public Token generateToken(Authentication authentication){
+    public TokenCommand generateToken(Authentication authentication){
         String name = authentication.getName();
         String authorities = getAuthorities(authentication.getAuthorities());
+        log.info("generateToken 함수의 name = {}, authorities = {}", name, authorities);
 
         String accessToken = createAccessToken(name, authorities);
         String refreshToken = createRefreshToken(name, authorities);
 
-        return Token.builder()
+        return TokenCommand.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
@@ -61,73 +59,32 @@ public class JwtService {
                 .build();
     }
 
-    public String generateTokenFromRefreshToken(RefreshToken refreshToken) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(refreshToken.getRefreshToken())
-                .getBody();
-
-        String username = claims.getSubject();
-        log.info("username = {}", username);
-        String authorities = claims.get(AUTHORITIES_KEY, String.class);
-
-        return createAccessToken(username, authorities);
-    }
-
     public Authentication getAuthentication(String accessToken){
-        Claims claims = parseClaims(accessToken);
 
-        if(claims.get(AUTHORITIES_KEY) == null){
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-//        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//
-//        //UserDetails 객체를 만들어서 Authentication 리턴
-//        UserDetails principal = new User(claims.getSubject(), "", authorities);
-//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        Claims claims = validateToken(accessToken);
         UserDetails userDetails = loginService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public boolean validateToken(String token){ // (예외처리)
-        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        return true;
-//        try{
-//            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-//            return true;
-//        }catch (SecurityException | MalformedJwtException e){
-//            log.info("Invalid JWT Token", e);
-//        }catch (ExpiredJwtException e){
-//            log.info("Expired JWT Token", e);
-//        }catch (UnsupportedJwtException e){
-//            log.info("Unsupported JWT Token", e);
-//        }catch (IllegalArgumentException e){
-//            log.info("JWT claims string is empty", e);
-//        }
-//
-//        return false;
-    }
-
-    //JWT 토큰을 요청 헤더에서 찾아서 반환
-    public String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE)){
-            return bearerToken.substring(7); // "Bearer "을 잘라내기
-        }
-        return null;
-    }
-
-    public Claims parseClaims(String accessToken) {
-        try{
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+    public Claims validateToken(String accessToken) throws InvalidJwtException {
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+            Claims claims = claimsJws.getBody();
+            return claims;
+        }catch (SecurityException | MalformedJwtException e){
+            log.info("[ERROR] 토큰의 서명이 유효하지 않습니다");
         }catch (ExpiredJwtException e){
-            return e.getClaims();
+            log.info("[ERROR] 토큰이 만료되었습니다");
+        }catch (UnsupportedJwtException e){
+            log.info("[ERROR] 지원되지 않는 JWT 토큰입니다");
+        }catch (IllegalArgumentException e){
+            log.info("[ERROR] JWT 클레임이 포함되어있지 않습니다");
+        }catch (Exception e) {
+            log.error("[ERROR] 유효하지 않은 액세스 토큰입니다", e);
         }
+
+        throw new InvalidJwtException("[ERROR] 유효하지 않은 액세스 토큰입니다.");
     }
 
     private String getAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -164,3 +121,18 @@ public class JwtService {
         return refreshToken;
     }
 }
+
+//public String generateTokenFromRefreshToken(RefreshToken refreshToken) {
+//    Claims claims = Jwts.parserBuilder()
+//            .setSigningKey(key)
+//            .build()
+//            .parseClaimsJws(refreshToken.getRefreshToken())
+//            .getBody();
+//
+//    String username = claims.getSubject();
+//    log.info("username = {}", username);
+//    String authorities = claims.get(AUTHORITIES_KEY, String.class);
+//
+//    return createAccessToken(username, authorities);
+//}
+//

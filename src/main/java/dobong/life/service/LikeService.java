@@ -3,7 +3,6 @@ package dobong.life.service;
 import dobong.life.entity.Domain;
 import dobong.life.entity.Review;
 import dobong.life.entity.User;
-import dobong.life.service.principal.UserPrincipal;
 import dobong.life.service.query.ReviewQueryService;
 import dobong.life.service.query.StoreQueryService;
 import dobong.life.service.query.UserQueryService;
