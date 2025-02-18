@@ -1,6 +1,7 @@
 package dobong.life.controller;
 
 import dobong.life.dto.UserSignUpDto;
+import dobong.life.service.AuthService;
 import dobong.life.service.UserService;
 import dobong.life.util.DEFINE;
 import dobong.life.util.response.BaseResponse;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public class UserController {
 
-    private  final UserService userService;
+    private  final AuthService authService;
 
     @PostMapping("/sign-up")
     public BaseResponse<String> signUp(@Valid @RequestBody UserSignUpDto userSignUpDto){
-        userService.signUp(userSignUpDto);
+        authService.signUp(userSignUpDto);
         return new BaseResponse<>(DEFINE.SIGN_UP_OK);
     }
 }

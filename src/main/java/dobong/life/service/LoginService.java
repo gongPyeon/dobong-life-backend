@@ -1,7 +1,7 @@
 package dobong.life.service;
 
 import dobong.life.dto.RegisterResponse;
-import dobong.life.service.principal.CustomUser;
+import dobong.life.service.principal.UserPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +21,6 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         RegisterResponse registerResponse = userService.getRegisterUser(email);
 
-        return new CustomUser(registerResponse);
+        return new UserPrincipal(registerResponse);
     }
 }

@@ -1,6 +1,7 @@
 package dobong.life.entity;
 
 import dobong.life.dto.RegisterUserCommand;
+import dobong.life.dto.UserSignUpDto;
 import dobong.life.enums.Role;
 import dobong.life.enums.SocialType;
 import dobong.life.userInfo.OAuth2UserInfo;
@@ -34,14 +35,18 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Password
     private String password;
 
-//    @Column(nullable = true)
-//    private int reviewCount;
+    public static User create(UserSignUpDto userSignUpDto, PasswordEncoder passwordEncoder){
+        String password = passwordEncoder
+                .encode(userSignUpDto.getPassword());
 
-    public void passwordEncode(PasswordEncoder passwordEncoder){
-        this.password = passwordEncoder.encode(this.password);
+        return User.builder()
+                .email(userSignUpDto.getEmail())
+                .password(password)
+                .name(userSignUpDto.getName())
+                .role(Role.ROLE_USER)
+                .build();
     }
 
     public static User create(RegisterUserCommand registerUserCommand) {

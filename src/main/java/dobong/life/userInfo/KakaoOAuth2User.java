@@ -20,7 +20,7 @@ public class KakaoOAuth2User extends OAuth2UserInfo{
 
     @Override
     public String getEmail() {
-        return Optional.ofNullable(attributes.get("email"))
+        return Optional.ofNullable(account.get("email"))
                 .map(String::valueOf)
                 .orElseThrow(() -> new NullPointerException("[ERROR] 카카오 OAuth 이메일이 없습니다"));
     }
@@ -28,7 +28,7 @@ public class KakaoOAuth2User extends OAuth2UserInfo{
     @Override
     public String getName() {
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-        return Optional.ofNullable(attributes.get("nickname"))
+        return Optional.ofNullable(profile.get("nickname"))
                 .map(String::valueOf)
                 .orElseThrow(() -> new NullPointerException("[ERROR] 카카오 OAuth 이름이 없습니다"));
     }

@@ -24,22 +24,6 @@ import java.nio.channels.FileChannel;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public void signUp(UserSignUpDto userSignUpDto){
-        if(userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()){
-            throw new DuplicateException();
-        }
-
-        User user = User.builder()
-                .email(userSignUpDto.getEmail())
-                .password(userSignUpDto.getPassword())
-                .name(userSignUpDto.getName())
-                .role(Role.ROLE_USER).build();
-
-        user.passwordEncode(passwordEncoder);
-        userRepository.save(user);
-    }
 
     @Transactional
     public RegisterResponse getOrRegisterUser(RegisterUserCommand registerUserCommand) {

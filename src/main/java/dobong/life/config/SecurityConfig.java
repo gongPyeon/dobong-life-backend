@@ -36,7 +36,6 @@ public class SecurityConfig {
     private final LoginService loginService;
 
     private final JwtService jwtService;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final ObjectMapper objectMapper;
 
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -73,8 +72,10 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/logout-test"));
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
+//        http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), JwtAuthenticationFilter.class);
+//        http.addFilterAfter(new JwtAuthenticationFilter(jwtService), LogoutFilter.class);
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-        http.addFilterAfter(new JwtAuthenticationFilter(jwtService, refreshTokenRepository), JwtAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtService), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

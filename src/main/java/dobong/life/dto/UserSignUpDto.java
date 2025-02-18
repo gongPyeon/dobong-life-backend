@@ -1,6 +1,7 @@
 package dobong.life.dto;
 
 import dobong.life.enums.Role;
+import dobong.life.util.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class UserSignUpDto {
     private String email;
 
     @NotBlank(message = "[ERROR] 비밀번호는 필수입니다")
+    @Password
     private String password;
 
     @NotBlank(message = "[ERROR] 이름은 필수입니다")

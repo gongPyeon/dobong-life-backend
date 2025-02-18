@@ -2,25 +2,19 @@ package dobong.life.service;
 
 import dobong.life.dto.RegisterResponse;
 import dobong.life.dto.RegisterUserCommand;
-import dobong.life.entity.User;
 import dobong.life.enums.Role;
 import dobong.life.enums.SocialType;
-import dobong.life.repository.UserRepository;
-import dobong.life.service.principal.CustomUser;
+import dobong.life.service.principal.UserPrincipal;
 import dobong.life.userInfo.OAuth2UserInfo;
 import dobong.life.userInfo.OAuth2UserInfoFactory;
-import dobong.life.util.exception. InvalidProviderException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -52,6 +46,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
 
         RegisterResponse registerResponse = userService.getOrRegisterUser(registerUserCommand);
-        return new CustomUser(registerResponse, attributes);
+        return new UserPrincipal(registerResponse, attributes);
     }
 }
