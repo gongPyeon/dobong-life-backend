@@ -6,11 +6,8 @@ import dobong.life.handler.AuthenticationFailureHandler;
 import dobong.life.handler.AuthenticationSuccessHandler;
 import dobong.life.jwt.JwtAuthenticationFilter;
 import dobong.life.jwt.JwtService;
-import dobong.life.repository.CookieAuthorizationRequestRepository;
-import dobong.life.repository.RefreshTokenRepository;
 import dobong.life.service.CustomOAuth2UserService;
 import dobong.life.service.LoginService;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,7 +66,7 @@ public class SecurityConfig {
         http
                 .logout(logout -> logout
                         .deleteCookies("accessToken")
-                        .logoutSuccessUrl("/logout-test"));
+                        .logoutSuccessUrl("/test/logout"));
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);

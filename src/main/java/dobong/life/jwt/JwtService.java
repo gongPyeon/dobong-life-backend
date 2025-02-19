@@ -49,6 +49,7 @@ public class JwtService {
 
         String accessToken = createAccessToken(name, authorities);
         String refreshToken = createRefreshToken(name, authorities);
+        log.info("generateToken 함수 실행, accessToken = {}, refreshToken = {}", accessToken, refreshToken);
 
         return TokenCommand.builder()
                 .grantType(BEARER_TYPE)

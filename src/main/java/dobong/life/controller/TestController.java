@@ -3,18 +3,20 @@ package dobong.life.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/test/")
 public class TestController {
-    @GetMapping("/login-test")
+    @GetMapping("/login")
     @ResponseBody
     public String loginInfo() {
         return "login";
     }
 
-    @GetMapping("/logout-test")
+    @GetMapping("/logout")
     @ResponseBody
     public String logoutInfo() {
         return "logout"; // login page로 변경
@@ -38,7 +40,7 @@ public class TestController {
         return "ssh"; //ec2 테스트용
     }
 
-    @GetMapping("/jwt-test")
+    @GetMapping("/jwt")
     @ResponseBody
     public String jwtTest() {
         return "jwtTest 요청 성공";

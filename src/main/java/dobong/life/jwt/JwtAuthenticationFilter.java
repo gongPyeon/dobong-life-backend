@@ -1,8 +1,5 @@
 package dobong.life.jwt;
 
-import dobong.life.entity.RefreshToken;
-import dobong.life.repository.RefreshTokenRepository;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +11,6 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Component
