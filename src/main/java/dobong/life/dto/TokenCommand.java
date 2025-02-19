@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TokenCommand{
+    private Long userId;
     private String grantType;
     private String accessToken;
     private Long accessTokenExpirationTime;

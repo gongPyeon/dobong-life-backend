@@ -72,8 +72,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/logout-test"));
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
-//        http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), JwtAuthenticationFilter.class);
-//        http.addFilterAfter(new JwtAuthenticationFilter(jwtService), LogoutFilter.class);
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(jwtService), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
