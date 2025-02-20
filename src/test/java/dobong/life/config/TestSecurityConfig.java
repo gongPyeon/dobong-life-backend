@@ -38,12 +38,13 @@ public class TestSecurityConfig {
         return new AuthenticationProvider() {
             @Override
             public Authentication authenticate(Authentication authentication) {
-                UserPrincipal testUserPrincipal = UserPrincipal.create(User.create(1L));
-                return new UsernamePasswordAuthenticationToken(
-                        testUserPrincipal,
-                        null,
-                        Collections.emptyList()
-                );
+//                UserPrincipal testUserPrincipal = UserPrincipal.create(User.create(1L));
+//                return new UsernamePasswordAuthenticationToken(
+//                        testUserPrincipal,
+//                        null,
+//                        Collections.emptyList()
+//                );
+                return null;
             }
 
             @Override
