@@ -1,25 +1,23 @@
 package dobong.life.service;
 
-import dobong.life.dto.StoreItemResDto;
-import dobong.life.dto.StoresFilterResDto;
-import dobong.life.dto.StoresResDto;
-import dobong.life.dto.info.ItemInfo;
-import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.dto.info.StoreDetailInfo;
-import dobong.life.entity.Category;
-import dobong.life.entity.Domain;
-import dobong.life.entity.User;
-import dobong.life.enums.ParentCategoryType;
-import dobong.life.service.query.CategoryQueryService;
-import dobong.life.service.query.StoreQueryService;
-import dobong.life.service.query.TagQueryService;
-import dobong.life.service.query.UserQueryService;
-import dobong.life.util.exception.CategoryNotFoundException;
-import dobong.life.util.exception.DomainNotFoundException;
-import dobong.life.util.exception.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import dobong.life.domain.store.controller.response.StoreItemResDto;
+import dobong.life.domain.store.controller.response.StoresFilterResDto;
+import dobong.life.domain.store.controller.response.StoresResDto;
+import dobong.life.domain.store.service.StoreService;
+import dobong.life.domain.store.dto.ItemInfo;
+import dobong.life.domain.store.dto.StoreBasicInfo;
+import dobong.life.domain.store.dto.StoreDetailInfo;
+import dobong.life.domain.store.Category;
+import dobong.life.domain.store.Domain;
+import dobong.life.domain.user.User;
+import dobong.life.domain.store.service.query.CategoryQueryService;
+import dobong.life.domain.store.service.query.StoreQueryService;
+import dobong.life.domain.store.service.query.TagQueryService;
+import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.domain.store.exception.CategoryNotFoundException;
+import dobong.life.domain.store.exception.DomainNotFoundException;
+import dobong.life.domain.user.exception.UserNotFoundException;
 import org.assertj.core.api.Assertions;
-import org.hibernate.dialect.function.ListaggFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -283,7 +281,7 @@ class StoreServiceTest {
                     List.of("순대1", "순대2"),
                     List.of("행복1", "행복2")
             );
-            // buildStoreBasicInfo(dobong.life.entity.Domain, dobong.life.entity.User)' has private access in 'dobong.life.service.StoreService'
+            // buildStoreBasicInfo(dobong.life.domain.store.Domain, dobong.life.domain.user.User)' has private access in 'dobong.life.domain.store.service.StoreService'
         }
 
         @Test

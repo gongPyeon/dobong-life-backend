@@ -1,40 +1,20 @@
 package dobong.life.controller;
 
-import dobong.life.config.SecurityConfig;
-import dobong.life.config.TestSecurityConfig;
-import dobong.life.dto.StoreItemResDto;
-import dobong.life.dto.StoresFilterResDto;
-import dobong.life.dto.StoresResDto;
-import dobong.life.entity.User;
-import dobong.life.service.StoreService;
-import dobong.life.service.principal.UserPrincipal;
-import dobong.life.service.query.UserQueryService;
-import org.junit.jupiter.api.BeforeEach;
+import dobong.life.domain.store.controller.StoreController;
+import dobong.life.domain.store.controller.response.StoreItemResDto;
+import dobong.life.domain.store.controller.response.StoresFilterResDto;
+import dobong.life.domain.store.controller.response.StoresResDto;
+import dobong.life.domain.store.service.StoreService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
-import java.util.ArrayDeque;
-import java.util.Collections;
 
 import static dobong.life.controller.expexted.dto.StoreResponseDto.*;
 import static dobong.life.controller.dto.TestStoreControllerResponse.*;

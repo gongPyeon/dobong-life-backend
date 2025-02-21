@@ -7,6 +7,8 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import dobong.life.domain.review.ReviewTag;
+import dobong.life.domain.review.ReviewTagType;
 
 
 /**
@@ -23,7 +25,7 @@ public class QReviewTag extends EntityPathBase<ReviewTag> {
 
     public final StringPath name = createString("name");
 
-    public final EnumPath<dobong.life.enums.ReviewTagType> reviewTagType = createEnum("reviewTagType", dobong.life.enums.ReviewTagType.class);
+    public final EnumPath<ReviewTagType> reviewTagType = createEnum("reviewTagType", ReviewTagType.class);
 
     public QReviewTag(String variable) {
         super(ReviewTag.class, forVariable(variable));

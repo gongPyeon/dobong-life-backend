@@ -1,9 +1,9 @@
 package dobong.life.controller.dto;
 
-import dobong.life.dto.ReviewResDto;
-import dobong.life.dto.info.RatingDetailInfo;
-import dobong.life.dto.info.ReviewDetailInfo;
-import dobong.life.dto.info.ReviewInfo;
+import dobong.life.domain.review.controller.response.ReviewResDto;
+import dobong.life.domain.review.dto.RatingDetailInfo;
+import dobong.life.domain.review.dto.ReviewDetailInfo;
+import dobong.life.domain.review.dto.ReviewInfo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

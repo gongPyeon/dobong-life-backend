@@ -1,0 +1,23 @@
+package dobong.life.domain.store;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SubTag {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String subTagName; // 소소한 한끼가 필요할 때
+
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
+}

@@ -1,11 +1,11 @@
 package dobong.life.controller.dto;
 
-import dobong.life.dto.StoreItemResDto;
-import dobong.life.dto.StoresFilterResDto;
-import dobong.life.dto.StoresResDto;
-import dobong.life.dto.info.ItemInfo;
-import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.dto.info.StoreDetailInfo;
+import dobong.life.domain.store.controller.response.StoreItemResDto;
+import dobong.life.domain.store.controller.response.StoresFilterResDto;
+import dobong.life.domain.store.controller.response.StoresResDto;
+import dobong.life.domain.store.dto.ItemInfo;
+import dobong.life.domain.store.dto.StoreBasicInfo;
+import dobong.life.domain.store.dto.StoreDetailInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;

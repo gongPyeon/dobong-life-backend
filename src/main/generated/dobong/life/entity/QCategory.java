@@ -7,6 +7,8 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import dobong.life.domain.store.Category;
+import dobong.life.domain.store.ParentCategoryType;
 
 
 /**
@@ -21,7 +23,7 @@ public class QCategory extends EntityPathBase<Category> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<dobong.life.enums.ParentCategoryType> parentCategoryType = createEnum("parentCategoryType", dobong.life.enums.ParentCategoryType.class);
+    public final EnumPath<ParentCategoryType> parentCategoryType = createEnum("parentCategoryType", ParentCategoryType.class);
 
     public QCategory(String variable) {
         super(Category.class, forVariable(variable));

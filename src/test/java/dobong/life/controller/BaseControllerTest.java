@@ -1,13 +1,6 @@
 package dobong.life.controller;
 
-import dobong.life.entity.User;
-import dobong.life.service.principal.UserPrincipal;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.Collections;
 
 public abstract class BaseControllerTest {
 

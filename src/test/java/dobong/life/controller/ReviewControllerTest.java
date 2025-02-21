@@ -1,18 +1,13 @@
 package dobong.life.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dobong.life.config.SecurityConfig;
-import dobong.life.dto.ReviewResDto;
-import dobong.life.dto.info.MyPageReviewInfo;
-import dobong.life.service.ReviewService;
-import dobong.life.service.principal.UserPrincipal;
+import dobong.life.domain.review.controller.ReviewController;
+import dobong.life.domain.review.controller.response.ReviewResDto;
+import dobong.life.domain.review.controller.request.MyPageReviewInfo;
+import dobong.life.domain.review.service.ReviewService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +16,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static dobong.life.controller.dto.TestMyPageControllerResponse.makeTestGetMyPageResDto;
 import static dobong.life.controller.dto.TestReviewControllerResponse.makeTestGetReviewResDto;
 import static dobong.life.controller.expexted.dto.ReviewResponseDto.expectedGetReviewResDto;
 import static dobong.life.controller.expexted.dto.ReviewResponseDto.expectedPostReviewResDto;

@@ -1,12 +1,7 @@
 package dobong.life.controller.expexted.dto;
 
-import dobong.life.dto.ReviewResDto;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.List;
-
-import static dobong.life.controller.dto.TestReviewControllerResponse.makeTestGetReviewResDto;
 
 public class ReviewResponseDto {
     public static ResultMatcher expectedPostReviewResDto(){

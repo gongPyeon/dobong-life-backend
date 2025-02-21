@@ -1,12 +1,13 @@
 package dobong.life.service;
 
-import dobong.life.entity.Domain;
-import dobong.life.entity.Review;
-import dobong.life.entity.User;
-import dobong.life.service.query.ReviewQueryService;
-import dobong.life.service.query.StoreQueryService;
-import dobong.life.service.query.UserQueryService;
-import dobong.life.util.DEFINE;
+import dobong.life.domain.like.service.LikeService;
+import dobong.life.domain.store.Domain;
+import dobong.life.domain.review.Review;
+import dobong.life.domain.user.User;
+import dobong.life.domain.review.service.query.ReviewQueryService;
+import dobong.life.domain.store.service.query.StoreQueryService;
+import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.global.util.constant.DEFINE;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
 

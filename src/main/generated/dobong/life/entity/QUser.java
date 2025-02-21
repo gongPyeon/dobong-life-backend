@@ -7,6 +7,9 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import dobong.life.domain.user.User;
+import dobong.life.global.auth.enums.Role;
+import dobong.life.global.auth.enums.SocialType;
 
 
 /**
@@ -29,9 +32,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath providerId = createString("providerId");
 
-    public final EnumPath<dobong.life.enums.SocialType> providerType = createEnum("providerType", dobong.life.enums.SocialType.class);
+    public final EnumPath<SocialType> providerType = createEnum("providerType", SocialType.class);
 
-    public final EnumPath<dobong.life.enums.Role> role = createEnum("role", dobong.life.enums.Role.class);
+    public final EnumPath<Role> role = createEnum("role", Role.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

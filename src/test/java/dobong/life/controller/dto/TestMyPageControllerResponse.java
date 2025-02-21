@@ -1,9 +1,9 @@
 package dobong.life.controller.dto;
 
-import dobong.life.dto.MyPageResDto;
-import dobong.life.dto.MyPageReviewResDto;
-import dobong.life.dto.info.MyPageReviewInfo;
-import dobong.life.dto.info.StoreBasicInfo;
+import dobong.life.domain.user.controller.response.MyPageResDto;
+import dobong.life.domain.user.controller.response.MyPageReviewResDto;
+import dobong.life.domain.review.controller.request.MyPageReviewInfo;
+import dobong.life.domain.store.dto.StoreBasicInfo;
 
 import java.util.ArrayList;
 import java.util.List;

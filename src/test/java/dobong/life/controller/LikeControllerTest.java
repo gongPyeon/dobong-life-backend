@@ -1,18 +1,12 @@
 package dobong.life.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dobong.life.config.SecurityConfig;
-import dobong.life.service.LikeService;
-import dobong.life.service.principal.UserPrincipal;
+import dobong.life.domain.like.controller.LikeController;
+import dobong.life.domain.like.service.LikeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;

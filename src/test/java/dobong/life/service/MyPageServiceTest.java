@@ -1,12 +1,18 @@
 package dobong.life.service;
 
-import dobong.life.dto.MyPageResDto;
-import dobong.life.dto.MyPageReviewResDto;
-import dobong.life.dto.info.MyPageReviewInfo;
-import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.entity.Category;
-import dobong.life.entity.User;
-import dobong.life.service.query.*;
+import dobong.life.domain.like.service.query.ReviewLikeQueryService;
+import dobong.life.domain.review.service.query.ReviewQueryService;
+import dobong.life.domain.store.service.query.CategoryQueryService;
+import dobong.life.domain.store.service.query.TagQueryService;
+import dobong.life.domain.user.controller.response.MyPageResDto;
+import dobong.life.domain.user.controller.response.MyPageReviewResDto;
+import dobong.life.domain.review.controller.request.MyPageReviewInfo;
+import dobong.life.domain.user.service.MyPageService;
+import dobong.life.domain.user.service.query.MyPageQueryService;
+import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.domain.store.dto.StoreBasicInfo;
+import dobong.life.domain.store.Category;
+import dobong.life.domain.user.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

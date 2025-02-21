@@ -1,18 +1,13 @@
 package dobong.life.controller;
 
-import dobong.life.config.SecurityConfig;
-import dobong.life.dto.MyPageResDto;
-import dobong.life.dto.MyPageReviewResDto;
-import dobong.life.dto.info.StoreBasicInfo;
-import dobong.life.service.MyPageService;
-import dobong.life.service.principal.UserPrincipal;
+import dobong.life.domain.user.controller.MyPageController;
+import dobong.life.domain.user.controller.response.MyPageResDto;
+import dobong.life.domain.user.controller.response.MyPageReviewResDto;
+import dobong.life.domain.store.dto.StoreBasicInfo;
+import dobong.life.domain.user.service.MyPageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
