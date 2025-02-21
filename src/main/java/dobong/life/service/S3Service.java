@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import dobong.life.util.DEFINE;
 import dobong.life.util.exception.S3BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,9 +72,9 @@ public class S3Service {
 
     }
 
-    public void deleteImage(String fileName){
+    public void deleteImage(String imgUrl){
         try{
-            amazonS3.deleteObject(bucket + "/" + s3FolderName, fileName);
+            amazonS3.deleteObject(bucket + "/" + s3FolderName, imgUrl);
         }catch (SdkClientException e){
             throw new S3BadRequestException("[ERROR] S3에 있는 이미지를 제거하는데 실패했습니다");
         }

@@ -37,6 +37,8 @@ public class User{
 
     private String password;
 
+    private String imgUrl;
+
     public static User create(UserSignUpDto userSignUpDto, PasswordEncoder passwordEncoder){
         String password = passwordEncoder
                 .encode(userSignUpDto.getPassword());
@@ -69,5 +71,13 @@ public class User{
                 .password("Oauth2!")
                 .providerType(null)
                 .role(Role.ROLE_USER).build();
+    }
+
+    public void updateImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void deleteImgUrl() {
+        this.imgUrl = null;
     }
 }
