@@ -1,5 +1,6 @@
 package dobong.life.service;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -30,7 +31,7 @@ public class S3Service {
             ".JPEG", ".PNG", ".webp", ".WEBP");
 
     // s3 이미지 업로드
-    public String uploadImages(MultipartFile multipartFile){
+    public String uploadImage(MultipartFile multipartFile){
         ObjectMetadata objectMetadata = new ObjectMetadata();
         
         String fileName = createFileName(multipartFile.getOriginalFilename());
@@ -46,7 +47,7 @@ public class S3Service {
                     .withCannedAcl(CannedAccessControlList.PublicRead);
 
             amazonS3.putObject(putObjectRequest);
-        }catch (IOException exception){
+        }catch (IOException e){
             throw new S3BadRequestException("[ERROR] S3에 이미지를 업로드하는데 실패했습니다");
         }
         return amazonS3.getUrl(bucket + "/" + s3FolderName, fileName).toString();
@@ -63,12 +64,19 @@ public class S3Service {
 
         String extension = fileName.substring(fileName.lastIndexOf("."));
         if(!FILE_EXTENSIONS.contains(extension)){
-            throw new S3BadRequestException("[ERROR] 잘못된 파일 형식입니다")
+            throw new S3BadRequestException("[ERROR] 잘못된 파일 형식입니다");
         }
 
         return extension;
 
     }
 
+    public void deleteImage(String fileName){
+        try{
+            amazonS3.deleteObject(bucket + "/" + s3FolderName, fileName);
+        }catch (SdkClientException e){
+            throw new S3BadRequestException("[ERROR] S3에 있는 이미지를 제거하는데 실패했습니다");
+        }
+    }
 
 }
