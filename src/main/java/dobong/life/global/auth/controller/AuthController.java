@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequiredArgsConstructor
 @ResponseBody
-public class UserController {
+public class AuthController {
 
     private  final AuthService authService;
 
