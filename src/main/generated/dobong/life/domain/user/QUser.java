@@ -25,7 +25,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath imgUrl = createString("imgUrl");
 
-    public final StringPath name = createString("name");
+    public final StringPath nickName = createString("nickName");
 
     public final StringPath password = createString("password");
 

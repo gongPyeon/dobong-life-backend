@@ -111,4 +111,8 @@ public class User{
     public void deleteImgUrl() {
         this.imgUrl = null;
     }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }

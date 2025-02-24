@@ -1,5 +1,6 @@
 package dobong.life.global.auth.service;
 
+import dobong.life.domain.user.service.query.UserQueryService;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.domain.user.User;
 import dobong.life.domain.user.repository.UserRepository;
@@ -17,26 +18,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signUp(UserSignUpDto userSignUpDto){
-        userRepository.findByEmail(userSignUpDto.getId())
-                .ifPresent(u -> {
-                    throw new DuplicateEmailException(BaseErrorCode.DUPLICATED_EMAIL);
-                });
+        userQueryService.isDuplicatedID(userSignUpDto.getId());
+        userQueryService.isDuplicatedNickName(userSignUpDto.getNickName());
+        userQueryService.isInvalidPwdCheck(userSignUpDto);
 
-        userRepository.findByNickName(userSignUpDto.getNickName())
-                .ifPresent(u -> {
-                    throw new DuplicateNicknameException(BaseErrorCode.DUPLICATED_NICKNAME);
-                });
+        userQueryService.save(userSignUpDto, passwordEncoder);
+    }
 
-        if(userSignUpDto.getPwd() != userSignUpDto.getPwdCheck()){
-            throw new InvalidPasswordException(BaseErrorCode.INVALID_PASSWORD);
-        }
+    @Transactional
+    public void updateNickName(Long userId, String nickName){ // TODO: 소셜로그인에서 이름정보가 필요없는지 (필요없다면 수정)
+        userQueryService.isDuplicatedNickName(nickName);
 
-        User user = User.create(userSignUpDto, passwordEncoder);
-        userRepository.save(user);
+        userQueryService.save(userId, nickName);
     }
 }
