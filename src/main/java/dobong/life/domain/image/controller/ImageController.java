@@ -1,6 +1,7 @@
 package dobong.life.domain.image.controller;
 
 import dobong.life.domain.image.controller.request.UploadImageRequest;
+import dobong.life.domain.image.service.ImageService;
 import dobong.life.global.auth.service.UserService;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.util.response.BaseResponse;
@@ -19,18 +20,18 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ImageController {
 
-    private final UserService userService;
+    private final ImageService imageService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponse<String> uploadImage(@AuthenticationPrincipal UserPrincipal userPrincipal,
             @ModelAttribute @Valid UploadImageRequest uploadImageRequest){
-        String message = userService.uploadImage(userPrincipal.getId(), uploadImageRequest.image());
+        String message = imageService.uploadImage(userPrincipal.getId(), uploadImageRequest.image());
         return new BaseResponse<>(message);
     }
 
     @DeleteMapping
     public BaseResponse<String> deleteImage(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        String message = userService.deleteImage(userPrincipal.getId());
+        String message = imageService.deleteImage(userPrincipal.getId());
         return new BaseResponse<>(message);
     }
 

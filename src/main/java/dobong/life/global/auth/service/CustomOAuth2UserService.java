@@ -42,7 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 oAuth2UserInfo.getEmail(),
                 oAuth2UserInfo.getOAuth2Id(),
                 providerType,
-                Role.ROLE_USER
+                Role.USER_OAUTH2
         );
 
         RegisterResponse registerResponse = userService.getOrRegisterUser(registerUserCommand);

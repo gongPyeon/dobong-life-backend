@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtProvider {
 
-    private final CustomUserDetailService customUserDetailService;
-
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final String ACCESS_TYPE = "access";
@@ -38,8 +36,7 @@ public class JwtProvider {
     @Value("${jwt.refresh.expiration}")
     private Long REFRESH_TOKEN_EXPIRE_TIME;
     private final Key key;
-    public JwtProvider(@Value("${jwt.secretKey}") String secretKey, CustomUserDetailService customUserDetailService){
-        this.customUserDetailService = customUserDetailService;
+    public JwtProvider(@Value("${jwt.secretKey}") String secretKey){
         this.key = Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(secretKey));
     }

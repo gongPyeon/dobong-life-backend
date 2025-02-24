@@ -21,6 +21,6 @@ public class UserSignUpDto {
 
     @NotBlank(message = "[ERROR] 이름은 필수입니다")
     private String name;
-    private Role role = Role.ROLE_USER;
+    private Role role = Role.USER_REGULAR;
 }
 

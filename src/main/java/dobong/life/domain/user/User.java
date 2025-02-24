@@ -45,7 +45,7 @@ public class User{
                 .email(userSignUpDto.getEmail())
                 .password(password)
                 .name(userSignUpDto.getName())
-                .role(Role.ROLE_USER)
+                .role(userSignUpDto.getRole())
                 .build();
     }
 
@@ -68,7 +68,7 @@ public class User{
                 .providerId("oauth2Id")
                 .password("Oauth2!")
                 .providerType(null)
-                .role(Role.ROLE_USER).build();
+                .role(Role.USER_OAUTH2).build();
     }
 
     public void updateImgUrl(String imgUrl) {

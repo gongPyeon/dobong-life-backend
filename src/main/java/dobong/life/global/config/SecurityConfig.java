@@ -6,6 +6,7 @@ import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticati
 import dobong.life.global.auth.handler.AuthenticationFailureHandler;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
+import dobong.life.global.auth.service.AuthenticationService;
 import dobong.life.global.auth.service.CustomOAuth2UserService;
 import dobong.life.global.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailService customUserDetailService;
+    private final AuthenticationService authenticationService;
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -67,7 +69,7 @@ public class SecurityConfig {
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), CustomJsonUsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, authenticationService), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
