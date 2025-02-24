@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.review;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,8 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import dobong.life.domain.review.ReviewTag;
-import dobong.life.domain.review.ReviewTagType;
 
 
 /**
@@ -17,7 +15,7 @@ import dobong.life.domain.review.ReviewTagType;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QReviewTag extends EntityPathBase<ReviewTag> {
 
-    private static final long serialVersionUID = -1373141748L;
+    private static final long serialVersionUID = 737781729L;
 
     public static final QReviewTag reviewTag = new QReviewTag("reviewTag");
 

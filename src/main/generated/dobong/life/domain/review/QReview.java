@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.review;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import dobong.life.domain.review.Review;
 
 
 /**
@@ -17,7 +16,7 @@ import dobong.life.domain.review.Review;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QReview extends EntityPathBase<Review> {
 
-    private static final long serialVersionUID = -1929184338L;
+    private static final long serialVersionUID = -448343815L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -27,7 +26,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final DateTimePath<java.time.LocalDateTime> date = createDateTime("date", java.time.LocalDateTime.class);
 
-    public final QDomain domain;
+    public final dobong.life.domain.store.QDomain domain;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -35,7 +34,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final NumberPath<Double> score = createNumber("score", Double.class);
 
-    public final QUser user;
+    public final dobong.life.domain.user.QUser user;
 
     public QReview(String variable) {
         this(Review.class, forVariable(variable), INITS);
@@ -55,8 +54,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.domain = inits.isInitialized("domain") ? new QDomain(forProperty("domain"), inits.get("domain")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        this.domain = inits.isInitialized("domain") ? new dobong.life.domain.store.QDomain(forProperty("domain"), inits.get("domain")) : null;
+        this.user = inits.isInitialized("user") ? new dobong.life.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

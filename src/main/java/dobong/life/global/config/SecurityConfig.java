@@ -7,7 +7,7 @@ import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
 import dobong.life.global.auth.jwt.JwtService;
 import dobong.life.global.auth.service.CustomOAuth2UserService;
-import dobong.life.global.auth.service.LoginService;
+import dobong.life.global.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
 
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final LoginService loginService;
+    private final CustomUserDetailService customUserDetailService;
 
     private final JwtService jwtService;
     private final ObjectMapper objectMapper;
@@ -84,7 +84,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(loginService);
+        provider.setUserDetailsService(customUserDetailService);
         return new ProviderManager(provider);
     }
 

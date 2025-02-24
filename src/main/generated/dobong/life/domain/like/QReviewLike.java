@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.like;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import dobong.life.domain.like.ReviewLike;
 
 
 /**
@@ -17,7 +16,7 @@ import dobong.life.domain.like.ReviewLike;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QReviewLike extends EntityPathBase<ReviewLike> {
 
-    private static final long serialVersionUID = 382048357L;
+    private static final long serialVersionUID = -1632634543L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -25,9 +24,9 @@ public class QReviewLike extends EntityPathBase<ReviewLike> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final QReview review;
+    public final dobong.life.domain.review.QReview review;
 
-    public final QUser user;
+    public final dobong.life.domain.user.QUser user;
 
     public QReviewLike(String variable) {
         this(ReviewLike.class, forVariable(variable), INITS);
@@ -47,8 +46,8 @@ public class QReviewLike extends EntityPathBase<ReviewLike> {
 
     public QReviewLike(Class<? extends ReviewLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.review = inits.isInitialized("review") ? new QReview(forProperty("review"), inits.get("review")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        this.review = inits.isInitialized("review") ? new dobong.life.domain.review.QReview(forProperty("review"), inits.get("review")) : null;
+        this.user = inits.isInitialized("user") ? new dobong.life.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

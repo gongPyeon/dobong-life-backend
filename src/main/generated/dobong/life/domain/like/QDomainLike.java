@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.like;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import dobong.life.domain.like.DomainLike;
 
 
 /**
@@ -17,17 +16,17 @@ import dobong.life.domain.like.DomainLike;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QDomainLike extends EntityPathBase<DomainLike> {
 
-    private static final long serialVersionUID = 1034280913L;
+    private static final long serialVersionUID = -980401987L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QDomainLike domainLike = new QDomainLike("domainLike");
 
-    public final QDomain domain;
+    public final dobong.life.domain.store.QDomain domain;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final QUser user;
+    public final dobong.life.domain.user.QUser user;
 
     public QDomainLike(String variable) {
         this(DomainLike.class, forVariable(variable), INITS);
@@ -47,8 +46,8 @@ public class QDomainLike extends EntityPathBase<DomainLike> {
 
     public QDomainLike(Class<? extends DomainLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.domain = inits.isInitialized("domain") ? new QDomain(forProperty("domain"), inits.get("domain")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        this.domain = inits.isInitialized("domain") ? new dobong.life.domain.store.QDomain(forProperty("domain"), inits.get("domain")) : null;
+        this.user = inits.isInitialized("user") ? new dobong.life.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

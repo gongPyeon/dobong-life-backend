@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.user;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,9 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import dobong.life.domain.user.User;
-import dobong.life.global.auth.enums.Role;
-import dobong.life.global.auth.enums.SocialType;
 
 
 /**
@@ -18,7 +15,7 @@ import dobong.life.global.auth.enums.SocialType;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = 1303121313L;
+    private static final long serialVersionUID = 1199166425L;
 
     public static final QUser user = new QUser("user");
 
@@ -26,15 +23,17 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath imgUrl = createString("imgUrl");
+
     public final StringPath name = createString("name");
 
     public final StringPath password = createString("password");
 
     public final StringPath providerId = createString("providerId");
 
-    public final EnumPath<SocialType> providerType = createEnum("providerType", SocialType.class);
+    public final EnumPath<dobong.life.global.auth.enums.SocialType> providerType = createEnum("providerType", dobong.life.global.auth.enums.SocialType.class);
 
-    public final EnumPath<Role> role = createEnum("role", Role.class);
+    public final EnumPath<dobong.life.global.auth.enums.Role> role = createEnum("role", dobong.life.global.auth.enums.Role.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

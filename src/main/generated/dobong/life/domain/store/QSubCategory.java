@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.store;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import dobong.life.domain.store.SubCategory;
 
 
 /**
@@ -17,7 +16,7 @@ import dobong.life.domain.store.SubCategory;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QSubCategory extends EntityPathBase<SubCategory> {
 
-    private static final long serialVersionUID = -1018437432L;
+    private static final long serialVersionUID = 326521436L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

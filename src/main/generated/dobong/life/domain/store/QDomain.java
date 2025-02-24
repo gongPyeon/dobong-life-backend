@@ -1,4 +1,4 @@
-package dobong.life.entity;
+package dobong.life.domain.store;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import dobong.life.domain.store.Domain;
 
 
 /**
@@ -17,7 +16,7 @@ import dobong.life.domain.store.Domain;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QDomain extends EntityPathBase<Domain> {
 
-    private static final long serialVersionUID = 1973934362L;
+    private static final long serialVersionUID = -1120290042L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

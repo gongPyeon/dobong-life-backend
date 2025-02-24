@@ -4,7 +4,6 @@ import dobong.life.global.auth.dto.RegisterResponse;
 import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.domain.user.User;
 import dobong.life.domain.user.repository.UserRepository;
-import dobong.life.domain.image.service.S3Service;
 import dobong.life.domain.user.service.query.UserQueryService;
 import dobong.life.global.util.constant.DEFINE;
 import jakarta.transaction.Transactional;
@@ -22,7 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserQueryService userQueryService;
-    private final S3Service s3Service;
+    //private final S3Service s3Service;
 
     @Transactional
     public RegisterResponse getOrRegisterUser(RegisterUserCommand registerUserCommand) {
@@ -47,15 +46,15 @@ public class UserService {
 
     public String uploadImage(Long userId, MultipartFile image) {
         User user = userQueryService.getUserById(userId);
-        String imgUrl = s3Service.uploadImage(image);
-        user.updateImgUrl(imgUrl);
+        //String imgUrl = s3Service.uploadImage(image);
+        //user.updateImgUrl(imgUrl);
 
         return DEFINE.FIX_IMG_OK;
     }
 
     public String deleteImage(Long userId) {
         User user = userQueryService.getUserById(userId);
-        s3Service.deleteImage(user.getImgUrl());
+        //s3Service.deleteImage(user.getImgUrl());
         user.deleteImgUrl();
 
         return DEFINE.DELETE_IMG_OK;

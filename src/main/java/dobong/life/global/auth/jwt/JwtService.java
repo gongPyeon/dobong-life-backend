@@ -1,8 +1,9 @@
 package dobong.life.global.auth.jwt;
 
 import dobong.life.global.auth.dto.TokenCommand;
-import dobong.life.global.auth.service.LoginService;
 import dobong.life.global.auth.exception.InvalidJwtException;
+import dobong.life.global.auth.service.CustomUserDetailService;
+import dobong.life.global.auth.service.principal.UserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtService {
 
-    private final LoginService loginService;
+    private final CustomUserDetailService customUserDetailService;
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
@@ -36,19 +38,21 @@ public class JwtService {
     @Value("${jwt.refresh.expiration}")
     private Long REFRESH_TOKEN_EXPIRE_TIME;
     private final Key key;
-    public JwtService(@Value("${jwt.secretKey}") String secretKey, LoginService loginService){
-        this.loginService = loginService;
+    public JwtService(@Value("${jwt.secretKey}") String secretKey, CustomUserDetailService customUserDetailService){
+        this.customUserDetailService = customUserDetailService;
         this.key = Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(secretKey));
     }
 
     public TokenCommand generateToken(Authentication authentication){
-        String name = authentication.getName();
-        String authorities = getAuthorities(authentication.getAuthorities());
-        log.info("generateToken 함수의 name = {}, authorities = {}", name, authorities);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        String accessToken = createAccessToken(name, authorities);
-        String refreshToken = createRefreshToken(name, authorities);
+        String email = userPrincipal.getEmail();
+        String authorities = getAuthorities(authentication.getAuthorities());
+        log.info("generateToken 함수의 email = {}, authorities = {}", email, authorities);
+
+        String accessToken = createAccessToken(email, authorities);
+        String refreshToken = createRefreshToken(email, authorities);
         log.info("generateToken 함수 실행, accessToken = {}, refreshToken = {}", accessToken, refreshToken);
 
         return TokenCommand.builder()
@@ -61,10 +65,17 @@ public class JwtService {
     }
 
     public Authentication getAuthentication(String accessToken){
-        Claims claims = validateToken(accessToken);
-        UserDetails userDetails = loginService.loadUserByUsername(claims.getSubject());
+        Claims claims = validateToken(extractBearer(accessToken));
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    private String extractBearer(String accessToken) {
+        if (accessToken.startsWith(BEARER_TYPE)) {
+            return accessToken = accessToken.substring(7);
+        }
+        return null;
     }
 
     public Claims validateToken(String accessToken) throws InvalidJwtException {
@@ -93,10 +104,10 @@ public class JwtService {
                 .collect(Collectors.joining(","));
     }
 
-    private String createAccessToken(String name, String authorities) {
+    private String createAccessToken(String email, String authorities) {
         Date now = new Date();
         String accessToken = Jwts.builder()
-                .setSubject(name)
+                .setSubject(email)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("type", ACCESS_TYPE)
                 .setIssuedAt(now)   //토큰 발행 시간 정보
@@ -107,10 +118,10 @@ public class JwtService {
         return accessToken;
     }
 
-    private String createRefreshToken(String name, String authorities){
+    private String createRefreshToken(String email, String authorities){
         Date now = new Date();
         String refreshToken = Jwts.builder()
-                .setSubject(name)
+                .setSubject(email)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("type", REFRESH_TYPE)
                 .setIssuedAt(now)

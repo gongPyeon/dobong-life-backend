@@ -48,6 +48,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return registerResponse.userId();
     }
 
+    public String getEmail() { return registerResponse.email(); }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
