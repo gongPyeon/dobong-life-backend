@@ -1,11 +1,11 @@
 package dobong.life.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import dobong.life.global.auth.handler.AuthenticationFailureHandler;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
-import dobong.life.global.auth.jwt.JwtService;
 import dobong.life.global.auth.service.CustomOAuth2UserService;
 import dobong.life.global.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +28,10 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig {
 
     private final CorsConfig corsConfig;
-
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailService customUserDetailService;
-
-    private final JwtService jwtService;
+    private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
-
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -70,7 +67,7 @@ public class SecurityConfig {
 
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtService), CustomJsonUsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,6 +1,8 @@
 package dobong.life.global.auth.jwt.filter;
 
-import dobong.life.global.auth.jwt.JwtService;
+import dobong.life.global.auth.jwt.JwtProvider;
+import dobong.life.global.auth.service.AuthenticationService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,8 @@ import java.util.Objects;
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private static final String HEADER = "Authorization";
-    private final JwtService jwtService;
+    private final JwtProvider jwtProvider;
+    private final AuthenticationService authenticationService;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
@@ -28,7 +31,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         log.info("doFilter의 accessToekn = {}", accessToken);
 
         if(Objects.nonNull(accessToken)) {
-            Authentication authentication = jwtService.getAuthentication(accessToken);
+            Claims claims = jwtProvider.validateToken(jwtProvider.extractBearer(accessToken));
+            Authentication authentication = authenticationService.getAuthentication(claims);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

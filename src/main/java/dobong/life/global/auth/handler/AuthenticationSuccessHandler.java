@@ -1,7 +1,7 @@
 package dobong.life.global.auth.handler;
 
 import dobong.life.global.auth.dto.TokenCommand;
-import dobong.life.global.auth.jwt.JwtService;
+import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.util.cookie.CookieUtils;
 import dobong.life.global.util.redis.RedisUtil;
 import dobong.life.global.auth.service.principal.UserPrincipal;
@@ -27,7 +27,7 @@ public class AuthenticationSuccessHandler
     @Value("${jwt.access.expiration}")
     private int ACCESS_TOKEN_MAXAGE;
 
-    private final JwtService jwtService;
+    private final JwtProvider jwtProvider;
     private final RedisUtil redisUtil;
     @PostConstruct
     public void init() {
@@ -37,7 +37,7 @@ public class AuthenticationSuccessHandler
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 모든 로그인에 JWT 생성
-        TokenCommand token = jwtService.generateToken(authentication);
+        TokenCommand token = jwtProvider.generateToken(authentication);
         CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

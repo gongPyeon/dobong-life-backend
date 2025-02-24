@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class JwtService {
+public class JwtProvider {
 
     private final CustomUserDetailService customUserDetailService;
 
@@ -38,7 +38,7 @@ public class JwtService {
     @Value("${jwt.refresh.expiration}")
     private Long REFRESH_TOKEN_EXPIRE_TIME;
     private final Key key;
-    public JwtService(@Value("${jwt.secretKey}") String secretKey, CustomUserDetailService customUserDetailService){
+    public JwtProvider(@Value("${jwt.secretKey}") String secretKey, CustomUserDetailService customUserDetailService){
         this.customUserDetailService = customUserDetailService;
         this.key = Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(secretKey));
@@ -63,15 +63,7 @@ public class JwtService {
                 .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
                 .build();
     }
-
-    public Authentication getAuthentication(String accessToken){
-        Claims claims = validateToken(extractBearer(accessToken));
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(claims.getSubject());
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    private String extractBearer(String accessToken) {
+    public String extractBearer(String accessToken) {
         if (accessToken.startsWith(BEARER_TYPE)) {
             return accessToken = accessToken.substring(7);
         }
