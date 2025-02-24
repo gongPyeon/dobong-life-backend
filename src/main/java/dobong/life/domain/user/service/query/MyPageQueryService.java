@@ -57,7 +57,7 @@ public class MyPageQueryService {
 
     private String getReviewerName(Review review) {
         if(review.getUser() != null){
-            return review.getUser().getName();
+            return review.getUser().getNickName();
         }
         return null;
     }

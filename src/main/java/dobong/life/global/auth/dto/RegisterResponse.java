@@ -14,7 +14,7 @@ public record RegisterResponse(
     public static RegisterResponse from(User user) {
         return new RegisterResponse(
                 user.getId(),
-                user.getName(),
+                user.getNickName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getProviderId(),

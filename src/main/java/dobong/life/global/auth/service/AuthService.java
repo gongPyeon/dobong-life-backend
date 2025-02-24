@@ -4,6 +4,10 @@ import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.domain.user.User;
 import dobong.life.domain.user.repository.UserRepository;
 import dobong.life.domain.like.exception.DuplicateException;
+import dobong.life.global.auth.exception.DuplicateEmailException;
+import dobong.life.global.auth.exception.DuplicateNicknameException;
+import dobong.life.global.auth.exception.InvalidPasswordException;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +22,18 @@ public class AuthService {
 
     @Transactional
     public void signUp(UserSignUpDto userSignUpDto){
-        if(userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()){
-            throw new DuplicateException();
+        userRepository.findByEmail(userSignUpDto.getId())
+                .ifPresent(u -> {
+                    throw new DuplicateEmailException(BaseErrorCode.DUPLICATED_EMAIL);
+                });
+
+        userRepository.findByNickName(userSignUpDto.getNickName())
+                .ifPresent(u -> {
+                    throw new DuplicateNicknameException(BaseErrorCode.DUPLICATED_NICKNAME);
+                });
+
+        if(userSignUpDto.getPwd() != userSignUpDto.getPwdCheck()){
+            throw new InvalidPasswordException(BaseErrorCode.INVALID_PASSWORD);
         }
 
         User user = User.create(userSignUpDto, passwordEncoder);

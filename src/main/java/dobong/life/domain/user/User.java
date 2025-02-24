@@ -4,6 +4,9 @@ import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.global.auth.enums.Role;
 import dobong.life.global.auth.enums.SocialType;
+import dobong.life.global.auth.exception.InvalidIDException;
+import dobong.life.global.auth.exception.InvalidNickNameException;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +24,7 @@ public class User{
 
     private String email;
 
-    private String name;
+    private String nickName;
 
     @Column(nullable = true)
     private String providerId;
@@ -39,20 +42,25 @@ public class User{
 
     public static User create(UserSignUpDto userSignUpDto, PasswordEncoder passwordEncoder){
         String password = passwordEncoder
-                .encode(userSignUpDto.getPassword());
+                .encode(userSignUpDto.getPwd());
+
+        isNickNameValid(userSignUpDto.getNickName());
+        isIDValid(userSignUpDto.getId());
 
         return User.builder()
-                .email(userSignUpDto.getEmail())
+                .email(userSignUpDto.getId())
                 .password(password)
-                .name(userSignUpDto.getName())
+                .nickName(userSignUpDto.getNickName())
                 .role(userSignUpDto.getRole())
                 .build();
     }
 
     public static User create(RegisterUserCommand registerUserCommand) {
+        isNickNameValid(registerUserCommand.name());
+
         return User.builder()
                 .email(registerUserCommand.email())
-                .name(registerUserCommand.name())
+                .nickName(registerUserCommand.name())
                 .password(null)
                 .providerId(registerUserCommand.providerId())
                 .providerType(registerUserCommand.providerType())
@@ -60,11 +68,36 @@ public class User{
                 .build();
     }
 
+    public static void isNickNameValid(String nickName) {
+        for (char c : nickName.toCharArray()) {
+            boolean isAlphabet = Character.isLetter(c);
+            boolean isDigit = Character.isDigit(c);
+            boolean isKorean = (c >= '가' && c <= '힣');
+
+            if (!(isAlphabet || isDigit || isKorean)) {
+                throw new InvalidNickNameException(BaseErrorCode.INVALID_NICKNAME);
+            }
+        }
+        return;
+    }
+
+    public static void isIDValid(String Id) {
+        for (char c : Id.toCharArray()) {
+            boolean isAlphabet = Character.isLetter(c);
+            boolean isDigit = Character.isDigit(c);
+
+            if (!(isAlphabet || isDigit)) {
+                throw new InvalidIDException(BaseErrorCode.INVALID_ID);
+            }
+        }
+        return;
+    }
+
     public static User create(Long id) { // test용
         return User.builder()
                 .id(id)
                 .email("test@naver.com")
-                .name("test")
+                .nickName("test")
                 .providerId("oauth2Id")
                 .password("Oauth2!")
                 .providerType(null)

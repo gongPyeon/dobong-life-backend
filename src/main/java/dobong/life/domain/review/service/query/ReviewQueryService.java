@@ -65,7 +65,7 @@ public class ReviewQueryService {
 
         boolean likeByUser = reviewLikeRepository.findByUserAndReview(user, review).isPresent();
 
-        return new ReviewDetailInfo(review.getId(), user.getName(), userReviewCount, review.getDate(),
+        return new ReviewDetailInfo(review.getId(), user.getNickName(), userReviewCount, review.getDate(),
                 review.getContent(), selectedKeywords, likeByUser, review.getLikeCount());
     }
 

@@ -34,7 +34,7 @@ public class MyPageResDto {
 
     public MyPageResDto(User user, int reviewCount, int reviewLikeCount, LikeCount likeCount) {
         this.email = user.getEmail();
-        this.name = user.getName();
+        this.name = user.getNickName();
         this.myReviewCount = reviewCount;
         this.myReviewLikeCount = reviewLikeCount;
         this.myFoodLike = likeCount.getFoodLikeCount();

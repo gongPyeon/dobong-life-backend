@@ -4,6 +4,7 @@ import dobong.life.global.auth.enums.Role;
 import dobong.life.global.util.annotation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,16 +12,20 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserSignUpDto {
 
-    @NotBlank(message = "[ERROR] 이메일은 필수입니다")
-    @Email(message = "유효한 이메일 형식이 아닙니다")
-    private String email;
+    @Size(min = 1, max = 20)
+    @NotBlank
+    private String Id;
 
-    @NotBlank(message = "[ERROR] 비밀번호는 필수입니다")
     @Password
-    private String password;
+    @Size(min = 8, max = 30)
+    @NotBlank
+    private String pwd;
 
-    @NotBlank(message = "[ERROR] 이름은 필수입니다")
-    private String name;
+    private String pwdCheck;
+
+    @Size(min = 1, max = 30)
+    @NotBlank
+    private String nickName;
     private Role role = Role.USER_REGULAR;
 }
 
