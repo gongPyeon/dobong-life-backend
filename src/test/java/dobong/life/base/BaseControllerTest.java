@@ -41,12 +41,4 @@ public abstract class BaseControllerTest {
         accessToken = BEARER + AuthFixture.accessToken();
     }
 
-//    @BeforeEach
-//    void mockMvcSetUp(final WebApplicationContext context) {
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-//                .alwaysDo(print())
-//                .addFilter(new CharacterEncodingFilter("UTF-8", true))
-//                .apply(springSecurity())
-//                .build();
-//    }
 }
