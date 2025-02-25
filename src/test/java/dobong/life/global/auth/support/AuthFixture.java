@@ -58,9 +58,9 @@ public final class AuthFixture {
         return tokenCommand.getAccessToken();
     }
 
-    public static UserSignUpDto userSignUpDtoById(String Id){
+    public static UserSignUpDto userSignUpDtoById(String id){
         return UserSignUpDto.builder()
-                .Id(Id)
+                .id(id)
                 .pwd(PWD)
                 .pwdCheck(PWD)
                 .nickName(NICKNAME)
@@ -70,7 +70,7 @@ public final class AuthFixture {
 
     public static UserSignUpDto userSignUpDtoByPwd(String pwd){
         return UserSignUpDto.builder()
-                .Id(EMAIL)
+                .id(EMAIL)
                 .pwd(pwd)
                 .pwdCheck(PWD)
                 .nickName(NICKNAME)
@@ -80,7 +80,7 @@ public final class AuthFixture {
 
     public static UserSignUpDto userSignUpDtoByName(String name){
         return UserSignUpDto.builder()
-                .Id(EMAIL)
+                .id(EMAIL)
                 .pwd(PWD)
                 .pwdCheck(PWD)
                 .nickName(name)

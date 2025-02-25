@@ -46,6 +46,7 @@ public class TestSecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/sign-up").permitAll()
                         .anyRequest().authenticated());
 
         // 중요: 필터 추가 방식을 프로덕션 코드와 동일하게 설정

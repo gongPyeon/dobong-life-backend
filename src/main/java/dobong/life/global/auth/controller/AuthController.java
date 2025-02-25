@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public class AuthController {
 
-    private  final AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/sign-up")
     public BaseResponse<String> signUp(@Valid @RequestBody UserSignUpDto userSignUpDto){
-        authService.signUp(userSignUpDto);
-        return new BaseResponse<>(DEFINE.SIGN_UP_OK);
+        String message = authService.signUp(userSignUpDto);
+        return new BaseResponse<>(message);
     }
 }

@@ -8,6 +8,7 @@ import dobong.life.domain.like.exception.DuplicateException;
 import dobong.life.global.auth.exception.DuplicateEmailException;
 import dobong.life.global.auth.exception.DuplicateNicknameException;
 import dobong.life.global.auth.exception.InvalidPasswordException;
+import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,14 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void signUp(UserSignUpDto userSignUpDto){
+    public String signUp(UserSignUpDto userSignUpDto){
         userQueryService.isDuplicatedID(userSignUpDto.getId());
         userQueryService.isDuplicatedNickName(userSignUpDto.getNickName());
         userQueryService.isInvalidPwdCheck(userSignUpDto);
 
         userQueryService.save(userSignUpDto, passwordEncoder);
+
+        return DEFINE.SIGN_UP_OK;
     }
 
     @Transactional
