@@ -40,6 +40,9 @@ public class AuthenticationSuccessHandler
         TokenCommand token = jwtProvider.generateToken(authentication);
         CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
 
+        // TEST를 위한 헤더설정
+        response.setHeader("Authorization", "Bearer " + token.getAccessToken());
+
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         redisUtil.saveRefreshToken(userPrincipal.getId(), token.getRefreshToken());
     }
