@@ -25,4 +25,34 @@ public class AuthExceptionHandler {
         log.error("DuplicateNicknameExceptionHandler.handle_DuplicateNicknameException <{}> {}", e.getMessage(), e);
         return BaseErrorResponse.of(BaseErrorCode.DUPLICATED_NICKNAME);
     }
+
+    @ExceptionHandler(InvalidIDException.class)
+    public ResponseEntity<BaseErrorResponse> handle_InvalidIDException(InvalidIDException e) {
+        log.error("InvalidIDExceptionHandler.handle_InvalidIDException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.INVALID_ID);
+    }
+
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<BaseErrorResponse> handle_InvalidJwtException(InvalidJwtException e) {
+        log.error("InvalidJwtExceptionExceptionHandler.handle_InvalidJwtException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidNickNameException.class)
+    public ResponseEntity<BaseErrorResponse> handle_InvalidNickNameException(InvalidNickNameException e) {
+        log.error("InvalidNickNameExceptionHandler.handle_InvalidNickNameException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.INVALID_NICKNAME);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<BaseErrorResponse> handle_InvalidPasswordException(InvalidPasswordException e) {
+        log.error("InvalidPasswordExceptionHandler.handle_InvalidPasswordException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.INVALID_PASSWORD);
+    }
+
+    @ExceptionHandler(InvalidProviderException.class)
+    public ResponseEntity<BaseErrorResponse> handle_InvalidProviderException(InvalidProviderException e) {
+        log.error("InvalidProviderExceptionHandler.handle_InvalidProviderException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.FORBIDDEN);
+    }
 }

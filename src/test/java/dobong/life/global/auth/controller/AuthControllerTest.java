@@ -65,4 +65,6 @@ class AuthControllerTest extends BaseControllerTest {
                 .andExpect(AuthResponseDto.expectedPostAuthDto());
     }
 
+    // 여기에 DTO Valid 부분을 작성
+
 }
