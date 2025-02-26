@@ -4,6 +4,7 @@ import dobong.life.global.auth.dto.TokenCommand;
 import dobong.life.global.auth.exception.InvalidJwtException;
 import dobong.life.global.auth.service.CustomUserDetailService;
 import dobong.life.global.auth.service.principal.UserPrincipal;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -84,7 +85,7 @@ public class JwtProvider {
             log.error("[ERROR] 유효하지 않은 액세스 토큰입니다", e);
         }
 
-        throw new InvalidJwtException("[ERROR] 유효하지 않은 액세스 토큰입니다.");
+        throw new InvalidJwtException(BaseErrorCode.INVALID_TOKEN);
     }
 
     private String getAuthorities(Collection<? extends GrantedAuthority> authorities) {

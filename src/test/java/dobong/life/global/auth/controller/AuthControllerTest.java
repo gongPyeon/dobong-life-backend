@@ -13,6 +13,7 @@ import dobong.life.global.auth.service.AuthService;
 import dobong.life.global.auth.support.AuthFixture;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -41,28 +42,32 @@ class AuthControllerTest extends BaseControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    @DisplayName("회원가입 성공")
-    void signUp_success() throws Exception {
+    @Nested
+    @DisplayName("회원가입 시")
+    class SignUp{
+        @Test
+        @DisplayName("성공")
+        void success() throws Exception {
 
-        // given
-        UserSignUpDto result = AuthFixture.userSignUpDtoById("konkuk1234");
-        log.info("UserSignUpDto = {}", result);
-        String content = objectMapper.writeValueAsString(result);
-        log.info("content = {}", content);
-        given(authService.signUp(any(UserSignUpDto.class))).willReturn("회원가입에 성공했습니다.");
+            // given
+            UserSignUpDto result = AuthFixture.userSignUpDtoById("konkuk1234");
+            log.info("UserSignUpDto = {}", result);
+            String content = objectMapper.writeValueAsString(result);
+            log.info("content = {}", content);
+            given(authService.signUp(any(UserSignUpDto.class))).willReturn("회원가입에 성공했습니다.");
 
-        //when
-        ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post("/sign-up")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
-                        .with(csrf())
-        );
+            //when
+            ResultActions resultActions = mockMvc.perform(
+                    MockMvcRequestBuilders.post("/sign-up")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(content)
+                            .with(csrf())
+            );
 
-        //then
-        resultActions.andExpect(status().isOk())
-                .andExpect(AuthResponseDto.expectedPostAuthDto());
+            //then
+            resultActions.andExpect(status().isOk())
+                    .andExpect(AuthResponseDto.expectedPostAuthDto());
+        }
     }
 
     // 여기에 DTO Valid 부분을 작성
