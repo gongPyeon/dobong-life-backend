@@ -58,6 +58,15 @@ public final class AuthFixture {
         return tokenCommand.getAccessToken();
     }
 
+    public static UserSignUpDto userSignUpDto(){
+        return UserSignUpDto.builder()
+                .id(EMAIL)
+                .pwd(PWD)
+                .pwdCheck(null)
+                .nickName(NICKNAME)
+                .build();
+    }
+
     public static UserSignUpDto userSignUpDtoById(String id){
         return UserSignUpDto.builder()
                 .id(id)
