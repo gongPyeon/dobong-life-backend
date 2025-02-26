@@ -30,6 +30,5 @@ public class UserSignUpDto {
     @Size(min = 1, max = 30)
     @NotBlank
     private String nickName;
-    private Role role = Role.USER_REGULAR;
 }
 

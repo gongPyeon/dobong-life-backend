@@ -64,7 +64,6 @@ public final class AuthFixture {
                 .pwd(PWD)
                 .pwdCheck(PWD)
                 .nickName(NICKNAME)
-                .role(Role.USER_REGULAR)
                 .build();
     }
 
@@ -74,7 +73,6 @@ public final class AuthFixture {
                 .pwd(pwd)
                 .pwdCheck(PWD)
                 .nickName(NICKNAME)
-                .role(Role.USER_REGULAR)
                 .build();
     }
 
@@ -84,7 +82,6 @@ public final class AuthFixture {
                 .pwd(PWD)
                 .pwdCheck(PWD)
                 .nickName(name)
-                .role(Role.USER_REGULAR)
                 .build();
     }
 }

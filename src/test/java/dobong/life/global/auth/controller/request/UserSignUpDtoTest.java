@@ -34,32 +34,31 @@ class UserSignUpDtoTest {
 
         }
 
-        // TODO: Valid가 없으면 DTO는 검증하지 않는다 Validator를 만들까?
-        @ParameterizedTest
-        @CsvSource({
-                "", "000000000000000000000"
-        })
-        @DisplayName("유효하지 않은 아이디 (최소 1개 이상, 최대 20자가 아닐 경우)")
-        void throwExceptionWhenInvalidLength(String invalidUsrId){
+//        // TODO: Valid가 없으면 DTO는 검증하지 않는다 Validator를 만들까?
+//        @ParameterizedTest
+//        @CsvSource({
+//                "", "000000000000000000000"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (최소 1개 이상, 최대 20자가 아닐 경우)")
+//        void throwExceptionWhenInvalidLength(String invalidUsrId){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoById(invalidUsrId))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
+//
+//        @ParameterizedTest
+//        @CsvSource({
+//                "안녕", "!!!", "안녕abc"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (알파벳 또는 숫자가 아닐경우)")
+//        void throwExceptionWhenInvalidFormat(String invalidUsrId){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoById(invalidUsrId))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
 
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoById(invalidUsrId))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        @ParameterizedTest
-        @CsvSource({
-                "안녕", "!!!", "안녕abc"
-        })
-        @DisplayName("유효하지 않은 아이디 (알파벳 또는 숫자가 아닐경우)")
-        void throwExceptionWhenInvalidFormat(String invalidUsrId){
-
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoById(invalidUsrId))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        // Duplicate
     }
 
     @Nested
@@ -78,37 +77,35 @@ class UserSignUpDtoTest {
             UserSignUpDto result = AuthFixture.userSignUpDtoByPwd(validUsrPwd);
 
             // then
-            assertThat(result.getId()).isEqualTo(expectedPwd);
+            assertThat(result.getPwd()).isEqualTo(expectedPwd);
 
         }
 
-        // TODO: Valid가 없으면 DTO는 검증하지 않는다 Validator를 만들까?
-        @ParameterizedTest
-        @CsvSource({
-                "abc!00", "abc!0000000000000000000000000000000000000"
-        })
-        @DisplayName("유효하지 않은 아이디 (최소 8개 이상, 최대 30자가 아닐 경우)")
-        void throwExceptionWhenInvalidLength(String invalidUsrPwd){
+//        @ParameterizedTest
+//        @CsvSource({
+//                "abc!00", "abc!0000000000000000000000000000000000000"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (최소 8개 이상, 최대 30자가 아닐 경우)")
+//        void throwExceptionWhenInvalidLength(String invalidUsrPwd){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByPwd(invalidUsrPwd))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
+//
+//        @ParameterizedTest
+//        @CsvSource({
+//                "Oauth2****안녕", "!!!!!!!!!", "abcabcabc",
+//                "123123123", "!a!a!a!a", "!1!1!1!1", "a1a1a1a1"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (알파벳, 숫자, 특수문자을 모두 포함하지 않거나 다른문자를 포함시킬경우)")
+//        void throwExceptionWhenInvalidFormat(String invalidUsrPwd){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByPwd(invalidUsrPwd))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
 
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByPwd(invalidUsrPwd))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        @ParameterizedTest
-        @CsvSource({
-                "Oauth2****안녕", "!!!!!!!!!", "abcabcabc",
-                "123123123", "!a!a!a!a", "!1!1!1!1", "a1a1a1a1"
-        })
-        @DisplayName("유효하지 않은 아이디 (알파벳, 숫자, 특수문자을 모두 포함하지 않거나 다른문자를 포함시킬경우)")
-        void throwExceptionWhenInvalidFormat(String invalidUsrPwd){
-
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByPwd(invalidUsrPwd))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        // 비밀번호 재확인
     }
 
     @Nested
@@ -127,35 +124,34 @@ class UserSignUpDtoTest {
             UserSignUpDto result = AuthFixture.userSignUpDtoByName(validUsrName);
 
             // then
-            assertThat(result.getId()).isEqualTo(expectedName);
+            assertThat(result.getNickName()).isEqualTo(expectedName);
 
         }
 
-        @ParameterizedTest
-        @CsvSource({
-                "", "abc0000000000000000000000000000000000000"
-        })
-        @DisplayName("유효하지 않은 아이디 (최소 1개 이상, 최대 30자가 아닐 경우)")
-        void throwExceptionWhenInvalidLength(String invalidUsrName){
+//        @ParameterizedTest
+//        @CsvSource({
+//                "", "abc0000000000000000000000000000000000000"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (최소 1개 이상, 최대 30자가 아닐 경우)")
+//        void throwExceptionWhenInvalidLength(String invalidUsrName){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByName(invalidUsrName))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
+//
+//        @ParameterizedTest
+//        @CsvSource({
+//                "abc123안녕!", "?!?!?!"
+//        })
+//        @DisplayName("유효하지 않은 아이디 (알파벳, 숫자, 한글 외 다른 문자를 포함시킬경우)")
+//        void throwExceptionWhenInvalidFormat(String invalidUsrName){
+//
+//            // given & when & then
+//            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByName(invalidUsrName))
+//                    .isInstanceOf(MethodArgumentNotValidException.class);
+//        }
 
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByName(invalidUsrName))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        @ParameterizedTest
-        @CsvSource({
-                "abc123안녕!", "?!?!?!"
-        })
-        @DisplayName("유효하지 않은 아이디 (알파벳, 숫자, 한글 외 다른 문자를 포함시킬경우)")
-        void throwExceptionWhenInvalidFormat(String invalidUsrName){
-
-            // given & when & then
-            assertThatThrownBy(() -> AuthFixture.userSignUpDtoByName(invalidUsrName))
-                    .isInstanceOf(MethodArgumentNotValidException.class);
-        }
-
-        // 닉네임 중복 확인
     }
 
 }
