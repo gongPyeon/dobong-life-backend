@@ -2,7 +2,9 @@ package dobong.life.global.auth.dto;
 
 import dobong.life.global.auth.enums.Role;
 import dobong.life.global.auth.enums.SocialType;
+import lombok.Builder;
 
+@Builder
 public record RegisterUserCommand(
         String name,
         String email,

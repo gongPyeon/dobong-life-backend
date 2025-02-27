@@ -1,9 +1,12 @@
 package dobong.life.global.auth.support;
 
+import dobong.life.domain.user.User;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.global.auth.dto.RegisterResponse;
+import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.dto.TokenCommand;
 import dobong.life.global.auth.enums.Role;
+import dobong.life.global.auth.enums.SocialType;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.service.AuthenticationService;
 import dobong.life.global.auth.service.CustomUserDetailService;
@@ -43,7 +46,7 @@ public final class AuthFixture {
     private static final String PROVIDER_ID = "PROVIDER_ID";
     private static final Role ROLE = Role.USER_OAUTH2;
     public static final String KEY = "WkdGN2tMZE9qM3RyTDRqYVhPZG5uV2t5QlJGV3VwREl1TFdGbFJXVlR3WkhwdldhQ1JX";
-    private static final String REGISTRATION_ID = "kakao";
+    private static final String PROVIDER = "kakao";
     private static final String REDIRECT_URI = "http://localhost:8080/login/oauth2/code/kakao";
     private static final String ACCESS_TOKEN = "access-token";
     private static final String AUTORIZATION_URI = "http://localhost:8080/login/oauth2/auth";
@@ -113,7 +116,7 @@ public final class AuthFixture {
     }
 
     private static ClientRegistration clientRegistration(){
-        return ClientRegistration.withRegistrationId(REGISTRATION_ID)
+        return ClientRegistration.withRegistrationId(PROVIDER)
                 .clientId(PROVIDER_ID)
                 .redirectUri(REDIRECT_URI)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -150,5 +153,25 @@ public final class AuthFixture {
         );
 
         return oAuth2User;
+    }
+
+    public static RegisterUserCommand registerUserCommand() {
+        return RegisterUserCommand.builder()
+                .name(NICKNAME)
+                .email(EMAIL)
+                .providerId(PROVIDER_ID)
+                .providerType(SocialType.KAKAO)
+                .role(ROLE)
+                .build();
+    }
+
+    public static User user() {
+        return User.builder()
+                .nickName(NICKNAME)
+                .email(EMAIL)
+                .providerType(SocialType.KAKAO)
+                .providerId(PROVIDER_ID)
+                .role(ROLE)
+                .build();
     }
 }
