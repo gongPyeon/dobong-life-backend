@@ -15,7 +15,18 @@ import lombok.NoArgsConstructor;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,6 +43,13 @@ public final class AuthFixture {
     private static final String PROVIDER_ID = "PROVIDER_ID";
     private static final Role ROLE = Role.USER_OAUTH2;
     public static final String KEY = "WkdGN2tMZE9qM3RyTDRqYVhPZG5uV2t5QlJGV3VwREl1TFdGbFJXVlR3WkhwdldhQ1JX";
+    private static final String REGISTRATION_ID = "kakao";
+    private static final String REDIRECT_URI = "http://localhost:8080/login/oauth2/code/kakao";
+    private static final String ACCESS_TOKEN = "access-token";
+    private static final String AUTORIZATION_URI = "http://localhost:8080/login/oauth2/auth";
+    private static final String TOKEN_URI = "http://localhost:8080/login/oauth2/token";
+    private static final String USERINFO_URI = "http://localhost:8080/login/oauth2/info";
+    private static final Long EXPIRED_TIME = 3600L;
     public static JwtProvider jwtProvider(){
         return new JwtProvider(KEY);
     }
@@ -92,5 +110,45 @@ public final class AuthFixture {
                 .pwdCheck(PWD)
                 .nickName(name)
                 .build();
+    }
+
+    private static ClientRegistration clientRegistration(){
+        return ClientRegistration.withRegistrationId(REGISTRATION_ID)
+                .clientId(PROVIDER_ID)
+                .redirectUri(REDIRECT_URI)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationUri(AUTORIZATION_URI)
+                .tokenUri(TOKEN_URI)
+                .userInfoUri(USERINFO_URI)
+                .userNameAttributeName(NICKNAME)
+                .build();
+    }
+
+    private static OAuth2AccessToken oAuth2AccessToken(){
+        return new OAuth2AccessToken(
+                OAuth2AccessToken.TokenType.BEARER,
+                ACCESS_TOKEN,
+                Instant.now(),
+                Instant.now().plusSeconds(EXPIRED_TIME)
+        );
+    }
+
+    public static OAuth2UserRequest oAuth2UserRequest(){
+        return new OAuth2UserRequest(clientRegistration(), oAuth2AccessToken());
+    }
+
+    public static OAuth2User oAuth2User(){
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", USERID);
+        attributes.put("name", NICKNAME);
+        attributes.put("email", EMAIL);
+
+        OAuth2User oAuth2User = new DefaultOAuth2User(
+                Collections.emptyList(),
+                attributes,
+                "name"
+        );
+
+        return oAuth2User;
     }
 }
