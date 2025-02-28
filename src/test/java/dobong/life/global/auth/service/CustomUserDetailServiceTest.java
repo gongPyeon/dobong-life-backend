@@ -25,7 +25,7 @@ class CustomUserDetailServiceTest {
     @InjectMocks
     CustomUserDetailService customUserDetailService;
     @Nested
-    @DisplayName("Oauth2 loadUserByUsername 호출 시")
+    @DisplayName("loadUserByUsername 호출 시")
     class loadUserByUsernameTest {
 
         @Test

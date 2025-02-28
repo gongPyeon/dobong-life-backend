@@ -16,9 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -82,8 +84,9 @@ class UserServiceTest {
         @DisplayName("성공: 사용자 조회")
         void getUserWhenUserExists() {
             //given
+            User user = AuthFixture.user();
             given(userRepository.findByEmail(any())).willReturn(
-                    Optional.empty());
+                    Optional.ofNullable(user));
 
             //when
             userService.getRegisterUser(email);
@@ -97,12 +100,12 @@ class UserServiceTest {
         @DisplayName("예외: 사용자 없음")
         void getUserWhenUserNotFound() {
             //given
-            User user = AuthFixture.user();
             given(userRepository.findByEmail(any())).willReturn(
-                    Optional.ofNullable(user));
+                    Optional.empty());
 
             // when & then
-            assertThrows(UserNotFoundException.class, () -> userService.getRegisterUser(email));
+            assertThatThrownBy(() -> userService.getRegisterUser(email))
+                    .isInstanceOf(UsernameNotFoundException.class);
         }
     }
 

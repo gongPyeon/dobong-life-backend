@@ -18,8 +18,8 @@ public enum BaseErrorCode implements StatusCode{
     INVALID_TOKEN(403, "[ERROR] 유효하지 않은 토큰입니다", HttpStatus.FORBIDDEN),
     DB_NOT_SAVE(500, "[ERROR] 데이터 저장을 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
     DUPLICATED_VALUE(400, "[ERROR] 중복된 요청입니다.", HttpStatus.BAD_REQUEST),
-    DUPLICATED_EMAIL(400, "[ERROR] 중복된 이메일입니다.", HttpStatus.BAD_REQUEST),
-    DUPLICATED_NICKNAME(400, "[ERROR] 중복된 닉네임입니다.", HttpStatus.BAD_REQUEST),
+    DUPLICATED_EMAIL(400, "이미 존재하는 아이디에요", HttpStatus.BAD_REQUEST),
+    DUPLICATED_NICKNAME(400, "이미 존재하는 닉네임이에요", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(400, "[ERROR] 비밀번호가 다릅니다.", HttpStatus.BAD_REQUEST),
     INVALID_NICKNAME(400, "[ERROR] 닉네임은 알파벳, 한글, 숫자만 포함할 수 있습니다.", HttpStatus.BAD_REQUEST),
     INVALID_ID(400, "[ERROR] 아이디는 알파벳, 숫자만 포함할 수 있습니다.", HttpStatus.BAD_REQUEST);

@@ -39,4 +39,14 @@ public class AuthService {
 
         userQueryService.save(userId, nickName);
     }
+
+    public String checkDupId(String id) {
+        userQueryService.isDuplicatedID(id);
+        return DEFINE.DUP_ID_OK;
+    }
+
+    public String checkDupName(String name) {
+        userQueryService.isDuplicatedNickName(name);
+        return DEFINE.DUP_NAME_OK;
+    }
 }
