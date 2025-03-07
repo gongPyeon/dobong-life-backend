@@ -5,6 +5,7 @@ import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import dobong.life.global.auth.handler.AuthenticationFailureHandler;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
+import dobong.life.global.auth.jwt.filter.ExceptionHandlerFilter;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
 import dobong.life.global.auth.service.AuthenticationService;
 import dobong.life.global.auth.service.CustomOAuth2UserService;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -34,6 +36,7 @@ public class SecurityConfig {
     private final AuthenticationService authenticationService;
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -67,9 +70,10 @@ public class SecurityConfig {
                         .deleteCookies("accessToken")
                         .logoutSuccessUrl("/test/logout"));
 
-        // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
+        // 순서 : LogoutFilter -> ExceptionHandler -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, authenticationService), CustomJsonUsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
