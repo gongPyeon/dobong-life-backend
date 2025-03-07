@@ -23,7 +23,7 @@ public class CustomJsonUsernamePasswordAuthenticationFilter
     private static final String HTTP_METHOD = "POST";
     private static final String CONTENT_TYPE = "application/json";
     private static final String USERNAME_KEY = "id";
-    private static final String PASSWORD_KEY = "password";
+    private static final String PASSWORD_KEY = "pwd";
     private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
             new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
 

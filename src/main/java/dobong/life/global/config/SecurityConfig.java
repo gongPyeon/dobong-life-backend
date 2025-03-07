@@ -52,7 +52,7 @@ public class SecurityConfig {
         // 요청에 대한 권한 설정
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/test/**", "/sign-up", "/login").permitAll()
+                        .requestMatchers("/test/**", "/auth/**", "/login").permitAll()
                         .anyRequest().authenticated());
 
         // oauth2 로그인

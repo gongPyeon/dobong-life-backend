@@ -25,7 +25,7 @@ public class AuthService {
     @Transactional
     public String signUp(UserSignUpDto userSignUpDto){
         userQueryService.isDuplicatedID(userSignUpDto.getId());
-        userQueryService.isDuplicatedNickName(userSignUpDto.getNickName());
+        userQueryService.isDuplicatedNickName(userSignUpDto.getNickname());
         userQueryService.isInvalidPwdCheck(userSignUpDto);
 
         userQueryService.save(userSignUpDto, passwordEncoder);
@@ -45,8 +45,8 @@ public class AuthService {
         return DEFINE.DUP_ID_OK;
     }
 
-    public String checkDupName(String name) {
-        userQueryService.isDuplicatedNickName(name);
+    public String checkDupNickName(String nickname) {
+        userQueryService.isDuplicatedNickName(nickname);
         return DEFINE.DUP_NAME_OK;
     }
 }

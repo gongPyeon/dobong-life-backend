@@ -10,10 +10,14 @@ import dobong.life.global.auth.exception.InvalidPasswordException;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserQueryService {
 
@@ -25,7 +29,7 @@ public class UserQueryService {
     }
 
     public void isInvalidPwdCheck(UserSignUpDto userSignUpDto) {
-        if(userSignUpDto.getPwd() != userSignUpDto.getPwdCheck()){
+        if(!userSignUpDto.getPwd().matches(userSignUpDto.getPwdCheck())){
             throw new InvalidPasswordException(BaseErrorCode.INVALID_PASSWORD);
         }
     }
@@ -37,11 +41,11 @@ public class UserQueryService {
                 });
     }
 
-    public void isDuplicatedID(String Id) {
-        userRepository.findByEmail(Id)
+    public void isDuplicatedID(String email) {
+        userRepository.findByEmail(email)
                 .ifPresent(u -> {
-                    throw new DuplicateEmailException(BaseErrorCode.DUPLICATED_EMAIL);
-                });
+            throw new DuplicateEmailException(BaseErrorCode.DUPLICATED_EMAIL);
+        });
     }
 
     @Transactional

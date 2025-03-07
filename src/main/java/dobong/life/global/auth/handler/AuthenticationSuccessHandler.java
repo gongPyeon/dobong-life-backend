@@ -31,20 +31,20 @@ public class AuthenticationSuccessHandler
     private final RedisUtil redisUtil;
     @PostConstruct
     public void init() {
-        setDefaultTargetUrl("/login-test");
+        setDefaultTargetUrl("/test/login");
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 모든 로그인에 JWT 생성
         TokenCommand token = jwtProvider.generateToken(authentication);
-        CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
+//        CookieUtils.addCookie(response, ACCESS_TOKEN, token.getAccessToken(), ACCESS_TOKEN_MAXAGE);
 
         // TEST를 위한 헤더설정
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        redisUtil.saveRefreshToken(userPrincipal.getId(), token.getRefreshToken());
+//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+//        redisUtil.saveRefreshToken(userPrincipal.getId(), token.getRefreshToken());
     }
 
 //    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

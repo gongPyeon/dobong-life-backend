@@ -29,6 +29,6 @@ public class UserSignUpDto {
 
     @Size(min = 1, max = 30)
     @NotBlank
-    private String nickName;
+    private String nickname;
 }
 

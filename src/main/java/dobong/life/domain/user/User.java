@@ -44,13 +44,13 @@ public class User{
         String password = passwordEncoder
                 .encode(userSignUpDto.getPwd());
 
-        isNickNameValid(userSignUpDto.getNickName());
+        isNickNameValid(userSignUpDto.getNickname());
         isIDValid(userSignUpDto.getId());
 
         return User.builder()
                 .email(userSignUpDto.getId())
                 .password(password)
-                .nickName(userSignUpDto.getNickName())
+                .nickName(userSignUpDto.getNickname())
                 .role(Role.USER_REGULAR)
                 .build();
     }

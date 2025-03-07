@@ -1,7 +1,9 @@
 package dobong.life.global.auth.handler;
 
+import dobong.life.global.auth.exception.AuthFailureException;
 import dobong.life.global.util.cookie.CookieUtils;
 import dobong.life.global.util.cookie.CookieAuthorizationRequestRepository;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +26,16 @@ public class AuthenticationFailureHandler
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
-        String targetUrl = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElse("/");
-
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", authenticationException.getLocalizedMessage())
-                .build().toUriString();
-
-        cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+//        String targetUrl = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+//                .map(Cookie::getValue)
+//                .orElse("/");
+//
+//        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
+//                .queryParam("error", authenticationException.getLocalizedMessage())
+//                .build().toUriString();
+//
+//        cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        throw new AuthFailureException(BaseErrorCode.FAIL_LOGIN);
     }
 }

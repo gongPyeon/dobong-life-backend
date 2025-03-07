@@ -55,4 +55,10 @@ public class AuthExceptionHandler {
         log.error("InvalidProviderExceptionHandler.handle_InvalidProviderException <{}> {}", e.getMessage(), e);
         return BaseErrorResponse.of(BaseErrorCode.FORBIDDEN);
     }
+
+    @ExceptionHandler(AuthFailureException.class)
+    public ResponseEntity<BaseErrorResponse> handle_AuthFailureException(AuthFailureException e) {
+        log.error("AuthFailureExceptionHandler.handle_AuthFailureException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
+    }
 }

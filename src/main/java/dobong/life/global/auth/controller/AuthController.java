@@ -6,15 +6,17 @@ import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @ResponseBody
+@Slf4j
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -25,15 +27,15 @@ public class AuthController {
         return new BaseResponse<>(message);
     }
 
-    @PostMapping("/{id}")
-    public BaseResponse<String> checkDupId(@PathVariable String id){
-        String message = authService.checkDupId(id);
+    @PostMapping("/id")
+    public BaseResponse<String> checkDupId(@RequestBody Map<String, String> request){
+        String message = authService.checkDupId(request.get("id"));
         return new BaseResponse<>(message);
     }
 
-    @PostMapping("/{name}")
-    public BaseResponse<String> checkDupName(@PathVariable String name){
-        String message = authService.checkDupName(name);
+    @PostMapping("/nickname")
+    public BaseResponse<String> checkDupName(@RequestBody Map<String, String> request){
+        String message = authService.checkDupNickName(request.get("nickname"));
         return new BaseResponse<>(message);
     }
 }
