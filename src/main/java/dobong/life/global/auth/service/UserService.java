@@ -40,7 +40,6 @@ public class UserService {
         User findUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("[ERROR] 사용자를 찾을 수 없습니다: " + email));
 
-        log.info("findUser = {}", findUser.getId());
         return RegisterResponse.from(findUser);
     }
 }

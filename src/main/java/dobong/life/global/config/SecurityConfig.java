@@ -1,7 +1,6 @@
 package dobong.life.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dobong.life.global.auth.handler.CustomAuthenticationProvider;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
@@ -19,7 +18,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -72,7 +70,7 @@ public class SecurityConfig {
         // 순서 : LogoutFilter -> ExceptionHandler -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, authenticationService), CustomJsonUsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -87,6 +85,12 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(customUserDetailService);
+
+        /**
+         * Spring Security에서는 사용자를 찾지 못했을 때 보안상의 이유로 UsernameNotFoundException을 캐치한 다음
+         * BadCredentialsException으로 변환하여 던지는 경우가 있다.
+         * 이는 공격자가 유효한 사용자명과 유효하지 않은 사용자명을 구분하지 못하게 하기 위함이다.
+         */
         provider.setHideUserNotFoundExceptions(false);
         return new ProviderManager(provider);
     }

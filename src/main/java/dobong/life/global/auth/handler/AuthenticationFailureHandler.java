@@ -1,20 +1,14 @@
 package dobong.life.global.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.oauth2.sdk.ErrorResponse;
 import dobong.life.global.util.response.BaseErrorResponse;
-import dobong.life.global.util.response.BaseException;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import dobong.life.global.util.response.status.StatusCode;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -26,10 +20,12 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+    // 로그인에 대한 예외
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
 
         try {
+            log.error("Authentication failure: {}", authenticationException.getMessage());
             if (authenticationException instanceof UsernameNotFoundException) {
                 setErrorResponse(BaseErrorCode.USER_NOT_FOUND, response);
             } else if (authenticationException instanceof BadCredentialsException) {
