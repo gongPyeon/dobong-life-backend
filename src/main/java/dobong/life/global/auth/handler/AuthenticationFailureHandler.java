@@ -25,7 +25,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
 
         try {
-            log.error("Authentication failure: {}", authenticationException.getMessage());
+            log.error(authenticationException.getMessage());
             if (authenticationException instanceof UsernameNotFoundException) {
                 setErrorResponse(BaseErrorCode.USER_NOT_FOUND, response);
             } else if (authenticationException instanceof BadCredentialsException) {

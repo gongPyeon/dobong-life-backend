@@ -69,23 +69,25 @@ public class JwtProvider {
     }
 
     public Claims validateToken(String accessToken) throws InvalidJwtException {
+        String error = "";
+
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
             Claims claims = claimsJws.getBody();
             return claims;
         }catch (SecurityException | MalformedJwtException e){
-            log.info("[ERROR] 토큰의 서명이 유효하지 않습니다");
+            error = "[ERROR] 토큰의 서명이 유효하지 않습니다";
         }catch (ExpiredJwtException e){
-            log.info("[ERROR] 토큰이 만료되었습니다");
+            error = "[ERROR] 토큰이 만료되었습니다";
         }catch (UnsupportedJwtException e){
-            log.info("[ERROR] 지원되지 않는 JWT 토큰입니다");
+            error = "[ERROR] 지원되지 않는 JWT 토큰입니다";
         }catch (IllegalArgumentException e){
-            log.info("[ERROR] JWT 클레임이 포함되어있지 않습니다");
+            error = "[ERROR] JWT 클레임이 포함되어있지 않습니다";
         }catch (Exception e) {
-            log.error("[ERROR] 유효하지 않은 액세스 토큰입니다", e);
+            error = "[ERROR] 유효하지 않은 액세스 토큰입니다";
         }
 
-        throw new InvalidJwtException(BaseErrorCode.INVALID_TOKEN);
+        throw new InvalidJwtException(error);
     }
 
     private String getAuthorities(Collection<? extends GrantedAuthority> authorities) {

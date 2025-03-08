@@ -13,7 +13,7 @@ public class OAuth2UserInfoFactory {
             case NAVER : return new NaverOAuth2User(attributes);
             case KAKAO : return new KakaoOAuth2User(attributes);
 
-            default : throw new InvalidProviderException(BaseErrorCode.INVALID_OAUTH2);
+            default : throw new InvalidProviderException("[ERROR] 지원하지 않은 소셜 플랫폼입니다");
         }
     }
 }

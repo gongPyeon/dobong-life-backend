@@ -5,8 +5,7 @@ import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.security.auth.message.AuthException;
 
 public class InvalidJwtException extends BaseException {
-    public InvalidJwtException(BaseErrorCode error) {
-        super(error, error.getMessage());
-    } // AuthException
-
+    public InvalidJwtException(String message) {
+        super(BaseErrorCode.UNAUTHORIZED, message);
+    }
 }

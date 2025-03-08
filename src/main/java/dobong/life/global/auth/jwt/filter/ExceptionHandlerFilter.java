@@ -12,16 +12,19 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
-    // do filter에 대한 보안적인 예외
+    // do filter에 대한 보안적인 예외 (jwt, oauth관련 예외)
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -29,12 +32,15 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (InvalidJwtException ex){
+        }catch (InvalidJwtException ex){
+            log.error(ex.getMessage());
             setErrorResponse(BaseErrorCode.INVALID_TOKEN, response);
-        } catch (InvalidProviderException ex){
+        }catch (InvalidProviderException ex){
+            log.error(ex.getMessage());
             setErrorResponse(BaseErrorCode.INVALID_OAUTH2, response);
         }catch (BaseException ex){
-            setErrorResponse(BaseErrorCode.FAIL_LOGIN, response);
+            log.error(ex.getMessage());
+            setErrorResponse(ex.getStatus(), response);
         }
     }
 

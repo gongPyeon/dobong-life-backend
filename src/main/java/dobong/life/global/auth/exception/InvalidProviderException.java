@@ -7,7 +7,7 @@ import jakarta.security.auth.message.AuthException;
 // TODO: 체크드 예외를 사용해야할지, AuthException
 public class InvalidProviderException extends BaseException {
 
-    public InvalidProviderException(BaseErrorCode error) {
-        super(error, error.getMessage());
+    public InvalidProviderException(String message) {
+        super(BaseErrorCode.FORBIDDEN, message);
     }
 }

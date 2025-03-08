@@ -25,7 +25,7 @@ class AuthExceptionHandlerTest {
     static class AuthExceptionTestController {
 
         @GetMapping("/inv-jwt")
-        public void invJwt() { throw new InvalidJwtException(BaseErrorCode.INVALID_TOKEN); }
+        public void invJwt() { throw new InvalidJwtException("[ERROR] 유효하지 않은 액세스 토큰입니다"); }
         @GetMapping("/dup-email")
         public void dupEmail() { throw new DuplicateEmailException(BaseErrorCode.DUPLICATED_EMAIL); }
         @GetMapping("/dup-name")
@@ -37,7 +37,7 @@ class AuthExceptionHandlerTest {
         @GetMapping("/inv-pwd")
         public void invPwd() { throw new InvalidPasswordException(BaseErrorCode.INVALID_PASSWORD);}
         @GetMapping("/inv-provider")
-        public void invProvider() { throw new InvalidProviderException(BaseErrorCode.INVALID_OAUTH2);}
+        public void invProvider() { throw new InvalidProviderException("[ERROR] 지원하지 않은 소셜 플랫폼입니다");}
     }
 
     MockMvc mockMvc;
