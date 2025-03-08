@@ -1,9 +1,9 @@
 package dobong.life.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dobong.life.global.auth.handler.CustomAuthenticationProvider;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
-import dobong.life.global.auth.handler.AuthenticationFailureHandler;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
 import dobong.life.global.auth.jwt.filter.ExceptionHandlerFilter;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
@@ -19,10 +19,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
@@ -57,23 +58,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/test/**", "/auth/**", "/login").permitAll()
                         .anyRequest().authenticated());
-
         // oauth2 로그인
         http
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // OAuth2 로그인 과정에서 사용자 정보를 가져오는 역할
-                        .successHandler(authenticationSuccessHandler) // 성공 핸들러
-                        .failureHandler(authenticationFailureHandler)); // 실패 핸들러
+                        .successHandler(authenticationSuccessHandler)
+                        .failureHandler(authenticationFailureHandler)); // 성공 핸들러
         // 로그아웃
         http
                 .logout(logout -> logout
                         .deleteCookies("accessToken")
                         .logoutSuccessUrl("/test/logout"));
-
         // 순서 : LogoutFilter -> ExceptionHandler -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, authenticationService), CustomJsonUsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
+//        http.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -88,6 +87,7 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(customUserDetailService);
+        provider.setHideUserNotFoundExceptions(false);
         return new ProviderManager(provider);
     }
 

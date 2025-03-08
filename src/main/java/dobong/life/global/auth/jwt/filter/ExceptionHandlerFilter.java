@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dobong.life.global.auth.exception.AuthFailureException;
 import dobong.life.global.util.response.BaseErrorResponse;
 import dobong.life.global.util.response.BaseException;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import dobong.life.global.util.response.status.StatusCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,8 +27,12 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response);
-        } catch (BaseException ex) {
-            setErrorResponse(ex.getStatus(), response);
+        } catch (UsernameNotFoundException ex){
+            setErrorResponse(BaseErrorCode.USER_NOT_FOUND, response);
+        } catch (BadCredentialsException ex){
+            setErrorResponse(BaseErrorCode.INVALID_PASSWORD, response);
+        }catch (BaseException ex){
+            setErrorResponse(BaseErrorCode.FAIL_LOGIN, response);
         }
     }
 
