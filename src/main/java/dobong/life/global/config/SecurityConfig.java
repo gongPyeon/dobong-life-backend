@@ -1,6 +1,7 @@
 package dobong.life.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dobong.life.global.auth.handler.CustomLogoutSuccessHandler;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import dobong.life.global.auth.handler.AuthenticationSuccessHandler;
@@ -36,6 +37,7 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -62,11 +64,10 @@ public class SecurityConfig {
                         .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // OAuth2 로그인 과정에서 사용자 정보를 가져오는 역할
                         .successHandler(authenticationSuccessHandler)
                         .failureHandler(authenticationFailureHandler)); // 성공 핸들러
-        // 로그아웃
+        // 로그아웃 (비어있을때도 로그아웃 성공이 뜬다)
         http
                 .logout(logout -> logout
-                        .deleteCookies("accessToken")
-                        .logoutSuccessUrl("/test/logout"));
+                        .logoutSuccessHandler(customLogoutSuccessHandler));
         // 순서 : LogoutFilter -> ExceptionHandler -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, authenticationService), CustomJsonUsernamePasswordAuthenticationFilter.class);

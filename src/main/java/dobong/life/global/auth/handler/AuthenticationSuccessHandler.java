@@ -5,6 +5,7 @@ import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.util.cookie.CookieUtils;
 import dobong.life.global.util.redis.RedisUtil;
 import dobong.life.global.auth.service.principal.UserPrincipal;
+import dobong.life.global.util.response.status.BaseCode;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
+
+import static dobong.life.global.util.response.ResponseUtil.setResponse;
 
 @Slf4j
 @Component
@@ -45,6 +48,7 @@ public class AuthenticationSuccessHandler
 
 //        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 //        redisUtil.saveRefreshToken(userPrincipal.getId(), token.getRefreshToken());
+        setResponse(BaseCode.SUCCESS_LOGIN, response);
     }
 
 //    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

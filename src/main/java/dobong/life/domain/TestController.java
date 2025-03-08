@@ -1,10 +1,17 @@
 package dobong.life.domain;
 
+import dobong.life.global.util.response.status.BaseCode;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.IOException;
+import java.net.http.HttpResponse;
+
+import static dobong.life.global.util.response.ResponseUtil.setResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,9 +24,8 @@ public class TestController {
     }
 
     @GetMapping("/logout")
-    @ResponseBody
-    public String logoutInfo() {
-        return "logout"; // login page로 변경
+    public void logoutInfo(HttpServletResponse response) throws IOException {
+        setResponse(BaseCode.SUCCESS_LOGOUT, response);
     }
 
     @GetMapping("/hi")

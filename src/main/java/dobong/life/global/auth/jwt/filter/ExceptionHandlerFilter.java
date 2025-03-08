@@ -21,11 +21,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static dobong.life.global.util.response.ResponseUtil.setResponse;
+
 @Component
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
     // do filter에 대한 보안적인 예외 (jwt, oauth관련 예외)
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -34,25 +35,14 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }catch (InvalidJwtException ex){
             log.error(ex.getMessage());
-            setErrorResponse(BaseErrorCode.INVALID_TOKEN, response);
+            setResponse(BaseErrorCode.INVALID_TOKEN, response);
         }catch (InvalidProviderException ex){
             log.error(ex.getMessage());
-            setErrorResponse(BaseErrorCode.INVALID_OAUTH2, response);
+            setResponse(BaseErrorCode.INVALID_OAUTH2, response);
         }catch (BaseException ex){
             log.error(ex.getMessage());
-            setErrorResponse(ex.getStatus(), response);
+            setResponse(ex.getStatus(), response);
         }
-    }
-
-    public void setErrorResponse(StatusCode status, HttpServletResponse response) throws IOException {
-
-        BaseErrorResponse baseErrorResponse = BaseErrorResponse.of(status).getBody();
-        response.setStatus(status.getCode());
-        response.setContentType("application/json; charset=UTF-8");
-
-        response.getWriter().write(
-                objectMapper.writeValueAsString(baseErrorResponse)
-        );
     }
 }
 

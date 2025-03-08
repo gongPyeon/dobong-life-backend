@@ -76,15 +76,15 @@ public class JwtProvider {
             Claims claims = claimsJws.getBody();
             return claims;
         }catch (SecurityException | MalformedJwtException e){
-            error = "[ERROR] 토큰의 서명이 유효하지 않습니다";
+            error = "[ERROR] 토큰의 서명이 유효하지 않습니다.";
         }catch (ExpiredJwtException e){
-            error = "[ERROR] 토큰이 만료되었습니다";
+            error = "[ERROR] 토큰이 만료되었습니다.";
         }catch (UnsupportedJwtException e){
-            error = "[ERROR] 지원되지 않는 JWT 토큰입니다";
+            error = "[ERROR] 지원되지 않는 JWT 토큰입니다.";
         }catch (IllegalArgumentException e){
-            error = "[ERROR] JWT 클레임이 포함되어있지 않습니다";
+            error = "[ERROR] JWT 클레임이 포함되어있지 않습니다.";
         }catch (Exception e) {
-            error = "[ERROR] 유효하지 않은 액세스 토큰입니다";
+            error = "[ERROR] 유효하지 않은 액세스 토큰입니다.";
         }
 
         throw new InvalidJwtException(error);
