@@ -32,10 +32,10 @@ public class JwtProvider {
     private static final String REFRESH_TYPE = "refresh";
 
     //@Value("${jwt.access.expiration}")
-    private Long ACCESS_TOKEN_EXPIRE_TIME = 3600000L;
+    private Long ACCESS_TOKEN_EXPIRE_TIME = 10000L;
 
     //@Value("${jwt.refresh.expiration}")
-    private Long REFRESH_TOKEN_EXPIRE_TIME = 6000000L;
+    private Long REFRESH_TOKEN_EXPIRE_TIME = 10000L;
     private final Key key;
     public JwtProvider(@Value("${jwt.secretKey}") String secretKey){
         this.key = Keys.hmacShaKeyFor(
@@ -68,11 +68,11 @@ public class JwtProvider {
         return null;
     }
 
-    public Claims validateToken(String accessToken) throws InvalidJwtException {
+    public Claims validateToken(String token) throws InvalidJwtException {
         String error = "";
 
         try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
             return claims;
         }catch (SecurityException | MalformedJwtException e){
@@ -123,19 +123,19 @@ public class JwtProvider {
 
         return refreshToken;
     }
+
+    public String generateTokenFromRefreshToken(String refreshToken) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        String email = claims.getSubject();
+        String authorities = claims.get(AUTHORITIES_KEY, String.class);
+
+        return createAccessToken(email, authorities);
+    }
+
 }
 
-//public String generateTokenFromRefreshToken(RefreshToken refreshToken) {
-//    Claims claims = Jwts.parserBuilder()
-//            .setSigningKey(key)
-//            .build()
-//            .parseClaimsJws(refreshToken.getRefreshToken())
-//            .getBody();
-//
-//    String username = claims.getSubject();
-//    log.info("username = {}", username);
-//    String authorities = claims.get(AUTHORITIES_KEY, String.class);
-//
-//    return createAccessToken(username, authorities);
-//}
-//

@@ -1,9 +1,12 @@
 package dobong.life.global.auth.controller;
 
 import dobong.life.global.auth.controller.request.UserSignUpDto;
+import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.service.AuthService;
 import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.response.BaseResponse;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,5 +40,12 @@ public class AuthController {
     public BaseResponse<String> checkDupName(@RequestBody Map<String, String> request){
         String message = authService.checkDupNickName(request.get("nickname"));
         return new BaseResponse<>(message);
+    }
+
+    @PostMapping("/refresh")
+    public BaseResponse<String> reissueToken(@RequestHeader("RefreshToken") String refreshToken){
+        String accessToken = authService.reissueToken(refreshToken);
+
+        return new BaseResponse<>(accessToken);
     }
 }

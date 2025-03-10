@@ -35,7 +35,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(InvalidJwtException.class)
     public ResponseEntity<BaseErrorResponse> handle_InvalidJwtException(InvalidJwtException e) {
         log.error("InvalidJwtExceptionExceptionHandler.handle_InvalidJwtException <{}> {}", e.getMessage(), e);
-        return BaseErrorResponse.of(BaseErrorCode.FORBIDDEN);
+        return BaseErrorResponse.of(BaseErrorCode.INVALID_TOKEN);
     }
 
     @ExceptionHandler(InvalidNickNameException.class)

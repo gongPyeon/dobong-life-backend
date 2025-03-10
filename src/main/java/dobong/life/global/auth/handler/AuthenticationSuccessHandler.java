@@ -46,8 +46,8 @@ public class AuthenticationSuccessHandler
         // TEST를 위한 헤더설정
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
-//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-//        redisUtil.saveRefreshToken(userPrincipal.getId(), token.getRefreshToken());
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        redisUtil.saveRefreshToken(userPrincipal.getEmail(), token.getRefreshToken());
         setResponse(BaseCode.SUCCESS_LOGIN, response);
     }
 
