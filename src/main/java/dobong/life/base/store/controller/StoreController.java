@@ -1,5 +1,6 @@
 package dobong.life.base.store.controller;
 
+import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresResDTO;
 import dobong.life.base.store.service.StoreService;
 import dobong.life.domain.store.controller.response.StoresResDto;
@@ -27,6 +28,13 @@ public class StoreController {
     public BaseResponse<StoresResDTO> viewStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         Long userId = userPrincipal.getId();
         StoresResDTO storesResDTO = storeService.getStoreList(userId);
+        return new BaseResponse<>(storesResDTO);
+    }
+
+    @GetMapping("/{categoryId}")
+    public BaseResponse<StoresByIdResDTO> viewStoreListByCategory(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId){
+        Long userId = userPrincipal.getId();
+        StoresByIdResDTO storesResDTO = storeService.getStoreListByCategory(userId, categoryId);
         return new BaseResponse<>(storesResDTO);
     }
 }

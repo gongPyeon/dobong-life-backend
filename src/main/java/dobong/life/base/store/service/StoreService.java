@@ -2,11 +2,15 @@ package dobong.life.base.store.service;
 
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
+import dobong.life.base.store.Tag;
+import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresResDTO;
+import dobong.life.base.store.dto.HashTagDTO;
 import dobong.life.base.store.dto.ItemDTO;
 import dobong.life.base.store.dto.StoresDTO;
 import dobong.life.base.store.service.query.CategoryQueryService;
 import dobong.life.base.store.service.query.DomainQueryService;
+import dobong.life.base.store.service.query.HashTagQueryService;
 import dobong.life.domain.user.service.query.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class StoreService {
     private CategoryQueryService categoryQueryService;
+    private HashTagQueryService hashTagQueryService;
     private DomainQueryService domainQueryService;
     public StoresResDTO getStoreList(Long userId){
         List<Category> categories = categoryQueryService.getAllCategory();
@@ -56,5 +61,24 @@ public class StoreService {
         }
 
         return itemDTOList;
+    }
+
+    public StoresByIdResDTO getStoreListByCategory(Long categoryId, Long userId) {
+        Category category = categoryQueryService.getCategory(categoryId);
+        String categoryName = category.getCategoryName();
+        List<HashTagDTO> hashTagDTOList = getHashTagDTOList(categoryId, userId);
+
+        return new StoresByIdResDTO(categoryId, categoryName, hashTagDTOList);
+    }
+
+    private List<HashTagDTO> getHashTagDTOList(Long categoryId, Long userId) {
+        List<Tag> tags = hashTagQueryService.getAllTag();
+        List<HashTagDTO> hashTagDTOList = new ArrayList<>();
+
+        for(Tag tag : tags){
+            List<ItemDTO> itemDTOList = getItemDTOList(categoryId, userId);
+            hashTagDTOList.add(new HashTagDTO(tag.getHashtagName(), itemDTOList));
+        }
+        return hashTagDTOList;
     }
 }
