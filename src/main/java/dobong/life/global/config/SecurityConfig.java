@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(info -> info.userService(customOAuth2UserService)) // OAuth2 로그인 과정에서 사용자 정보를 가져오는 역할
                         .successHandler(authenticationSuccessHandler)
-                        .failureHandler(authenticationFailureHandler)); // 성공 핸들러
+                        .failureHandler(authenticationFailureHandler));
         // 로그아웃 (비어있을때도 로그아웃 성공이 뜬다)
         http
                 .logout(logout -> logout

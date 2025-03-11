@@ -1,14 +1,17 @@
-package dobong.life.domain.user;
+package dobong.life.base.user;
 
-import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
+import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.enums.Role;
 import dobong.life.global.auth.enums.SocialType;
 import dobong.life.global.auth.exception.InvalidIDException;
 import dobong.life.global.auth.exception.InvalidNickNameException;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Builder
@@ -22,7 +25,7 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private String email; // userId
 
     private String nickName;
 
@@ -39,6 +42,8 @@ public class User{
     private String password;
 
     private String imgUrl;
+
+    private Boolean business = false;
 
     public static User create(UserSignUpDto userSignUpDto, PasswordEncoder passwordEncoder){
         String password = passwordEncoder
