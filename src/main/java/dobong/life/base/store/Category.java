@@ -1,6 +1,5 @@
 package dobong.life.base.store;
 
-import dobong.life.domain.store.ParentCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -4,6 +4,7 @@ import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.Tag;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
+import dobong.life.base.store.controller.response.StoresByQueryResDTO;
 import dobong.life.base.store.controller.response.StoresResDTO;
 import dobong.life.base.store.dto.HashTagDTO;
 import dobong.life.base.store.dto.ItemDTO;
@@ -50,17 +51,7 @@ public class StoreService {
         List<ItemDTO> itemDTOList = new ArrayList<>();
 
         List<Domain> domains = domainQueryService.findByCategoryId(categoryId);
-        for(Domain domain : domains){
-            String name = domain.getName();
-            String address = domain.getAddress();
-            Category categoryByDomain = domain.getCategory();
-            List<String> categories = categoryQueryService.getCategories(categoryByDomain);
-            boolean like = domainQueryService.getLikeByUser(domain, userId);
-
-            itemDTOList.add(new ItemDTO(name, address, categories, like));
-        }
-
-        return itemDTOList;
+        return getItemDTOS(userId, itemDTOList, domains);
     }
 
     public StoresByIdResDTO getStoreListByCategory(Long categoryId, Long userId) {
@@ -80,5 +71,31 @@ public class StoreService {
             hashTagDTOList.add(new HashTagDTO(tag.getHashtagName(), itemDTOList));
         }
         return hashTagDTOList;
+    }
+
+    public StoresByQueryResDTO searchStoreList(Long userId, String query, List<String> filter) {
+        List<ItemDTO> itemDTOList = getItemDTOListByQuery(userId, query, filter);
+        return new StoresByQueryResDTO(filter, query, itemDTOList);
+    }
+
+    private List<ItemDTO> getItemDTOListByQuery(Long userId, String query, List<String> filter) {
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+
+        List<Domain> domains = domainQueryService.findByQueryAndFilter(query, filter);
+        return getItemDTOS(userId, itemDTOList, domains);
+    }
+
+    private List<ItemDTO> getItemDTOS(Long userId, List<ItemDTO> itemDTOList, List<Domain> domains) {
+        for(Domain domain : domains){
+            String name = domain.getName();
+            String address = domain.getAddress();
+            Category categoryByDomain = domain.getCategory();
+            List<String> categories = categoryQueryService.getCategories(categoryByDomain);
+            boolean like = domainQueryService.getLikeByUser(domain, userId);
+
+            itemDTOList.add(new ItemDTO(name, address, categories, like));
+        }
+
+        return itemDTOList;
     }
 }

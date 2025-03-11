@@ -26,4 +26,9 @@ public class DomainQueryService {
     public boolean getLikeByUser(Domain domain, Long userId) {
         return domainLikeRepository.findByDomainAndUser(domain, userId).isPresent();
     }
+
+    public List<Domain> findByQueryAndFilter(String query, List<String> filter) {
+        return domainRepository.findByQueryAndFilter(query, filter).stream()
+                .collect(Collectors.toList());
+    }
 }
