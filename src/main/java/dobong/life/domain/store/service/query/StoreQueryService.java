@@ -12,6 +12,7 @@ import dobong.life.domain.user.User;
 import dobong.life.domain.store.exception.DomainNotFoundException;
 import dobong.life.domain.like.exception.DuplicateException;
 import dobong.life.domain.store.exception.SubCategoryNotFoundException;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class StoreQueryService {
     private final ReviewLikeRepository reviewLikeRepository;
     public Domain getDomain(Long storeId) {
         return domainRepository.findById(storeId)
-                .orElseThrow(() -> new DomainNotFoundException(storeId));
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "실패" + storeId));
     }
 
     public List<String> getMenus(Domain domain) {

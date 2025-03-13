@@ -1,22 +1,26 @@
 package dobong.life.base.store.service;
 
+import dobong.life.base.review.Review;
+import dobong.life.base.review.service.query.KeywordQueryService;
+import dobong.life.base.review.service.query.MiddleQueryService;
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.Tag;
+import dobong.life.base.store.controller.response.StoreResDTO;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresByQueryResDTO;
 import dobong.life.base.store.controller.response.StoresResDTO;
-import dobong.life.base.store.dto.HashTagDTO;
-import dobong.life.base.store.dto.ItemDTO;
-import dobong.life.base.store.dto.StoresDTO;
+import dobong.life.base.store.dto.*;
 import dobong.life.base.store.service.query.CategoryQueryService;
 import dobong.life.base.store.service.query.DomainQueryService;
 import dobong.life.base.store.service.query.HashTagQueryService;
 import dobong.life.domain.user.service.query.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.Store;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,8 @@ public class StoreService {
     private CategoryQueryService categoryQueryService;
     private HashTagQueryService hashTagQueryService;
     private DomainQueryService domainQueryService;
+    private MiddleQueryService middleQueryService;
+
     public StoresResDTO getStoreList(Long userId){
         List<Category> categories = categoryQueryService.getAllCategory();
         List<StoresDTO> storesDTOS = getStoresDTOList(categories, userId);
@@ -97,5 +103,48 @@ public class StoreService {
         }
 
         return itemDTOList;
+    }
+
+    public StoreResDTO getStore(Long userId, Long storeId) {
+        ItemDTO itemDTO = getItemDTO(userId, storeId);
+        ReviewsDTO reviewsDTO = getReviewsDTO();
+
+        return new StoreResDTO(itemDTO, reviewsDTO);
+    }
+
+    // TODO : 리뷰와 가게 정보를 같이 반환할때
+    private ReviewsDTO getReviewsDTO() {
+        List<String> keywords = middleQueryService.findAllBy(); // 정렬
+        double averageRating = calculateRating();
+        int reviewCount = 0; // 리뷰개수
+        List<ReviewDTO> reviewDTOList = getReviewDTO();
+        return new ReviewsDTO(keywords, averageRating, reviewCount, reviewDTOList);
+    }
+
+    private List<ReviewDTO> getReviewDTO() {
+        List<ReviewDTO> reviewDTOList = new ArrayList<>();
+
+        List<Review> reviews;
+
+        for(Review review : reviews){
+            Long reviewId;
+            String userName;
+            LocalDateTime reviewDate;
+            String reviewContent;
+            List<String> selectedKeywords;
+            boolean likeByUser;
+            int likeCount;
+            reviewDTOList.add(new ReviewDTO(reviewId, userName, reviewDate, reviewContent, selectedKeywords, likeByUser, likeCount));
+        }
+        return reviewDTOList;
+    }
+
+    private ItemDTO getItemDTO(Long userId, Long storeId){
+        Domain domain = domainQueryService.findById(storeId);
+        Category categoryByDomain = domain.getCategory();
+        List<String> categories = categoryQueryService.getCategories(categoryByDomain);
+        boolean like = domainQueryService.getLikeByUser(domain, userId);
+
+        return new ItemDTO(domain.getName(), domain.getAddress(), categories, like);
     }
 }

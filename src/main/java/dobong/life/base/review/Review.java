@@ -1,7 +1,7 @@
 package dobong.life.base.review;
 
-import dobong.life.domain.store.Domain;
-import dobong.life.domain.user.User;
+import dobong.life.base.store.Domain;
+import dobong.life.base.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

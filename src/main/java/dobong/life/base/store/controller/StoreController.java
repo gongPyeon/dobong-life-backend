@@ -1,5 +1,6 @@
 package dobong.life.base.store.controller;
 
+import dobong.life.base.store.controller.response.StoreResDTO;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresByQueryResDTO;
 import dobong.life.base.store.controller.response.StoresResDTO;
@@ -43,6 +44,13 @@ public class StoreController {
                                                              @RequestParam String query, @RequestParam List<String> filter){
         Long userId = userPrincipal.getId();
         StoresByQueryResDTO resDTO = storeService.searchStoreList(userId, query, filter);
+        return new BaseResponse<>(resDTO);
+    }
+
+    @GetMapping("/item/{storeId}")
+    public BaseResponse<StoreResDTO> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long storeId){
+        Long userId = userPrincipal.getId();
+        StoreResDTO resDTO = storeService.getStore(userId, storeId);
         return new BaseResponse<>(resDTO);
     }
 }

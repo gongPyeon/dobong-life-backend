@@ -3,7 +3,9 @@ package dobong.life.base.store.service.query;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.repository.DomainLikeRepository;
 import dobong.life.base.store.repository.DomainRepository;
+import dobong.life.domain.store.exception.DomainNotFoundException;
 import dobong.life.domain.user.User;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,10 @@ public class DomainQueryService {
     public List<Domain> findByQueryAndFilter(String query, List<String> filter) {
         return domainRepository.findByQueryAndFilter(query, filter).stream()
                 .collect(Collectors.toList());
+    }
+
+    public Domain findById(Long storeId) {
+        return domainRepository.findById(storeId)
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 상점 아이디 " + storeId + "를 찾을 수 없습니다"));
     }
 }

@@ -17,7 +17,8 @@ public class CategoryQueryService {
 
     public Category getCategory(Long categoryId){
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.NOT_FOUND,"[ERROR] "+categoryId+"에 해당하는 카테고리를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.NOT_FOUND,
+                        "[ERROR] "+categoryId+"에 해당하는 카테고리를 찾을 수 없습니다"));
     }
 
     public List<Category> getAllCategory(){
