@@ -42,6 +42,7 @@ public class ReviewQueryService {
 
         ReviewLike reviewLike = new ReviewLike(user, review);
         reviewLikeRepository.save(reviewLike);
+        review.updateLikeCount();
     }
 
     private boolean checkReviewLike(User user, Review review) {
