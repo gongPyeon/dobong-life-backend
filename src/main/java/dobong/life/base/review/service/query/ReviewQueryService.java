@@ -5,7 +5,9 @@ import dobong.life.base.review.exception.ReviewNotFoundException;
 import dobong.life.base.review.repository.ReviewLikeRepository;
 import dobong.life.base.review.repository.ReviewRepository;
 import dobong.life.base.review.Review;
+import dobong.life.base.store.dto.ReviewDTO;
 import dobong.life.base.user.User;
+import dobong.life.base.store.Domain;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +35,10 @@ public class ReviewQueryService {
 
     @Transactional
     public void updateReviewLike(User user, Review review) {
-        if(checkReviewLike(user, review))
-            removeReviewLike(User user, Review review);
+        if(checkReviewLike(user, review)) {
+            removeReviewLike(user, review);
+            return;
+        }
 
         ReviewLike reviewLike = new ReviewLike(user, review);
         reviewLikeRepository.save(reviewLike);
@@ -58,5 +62,23 @@ public class ReviewQueryService {
     @Transactional
     public void deleteReview(Review review) {
         reviewRepository.delete(review);
+    }
+
+    public double calculateRating(Domain domain) {
+        return reviewRepository.findByDomain(domain).get().stream()
+                .mapToDouble(r -> r.getScore()).average().orElse(0.0);
+    }
+
+    public int getReviewCount(Domain domain) {
+        return (int) reviewRepository.findByDomain(domain).stream().count();
+    }
+
+    public List<Review> findByDomain(Domain domain) {
+        return reviewRepository.findByDomain(domain).orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+                "[ERROR] "+domain.getName()+"에 해당하는 리뷰를 찾을 수 없습니다"));
+    }
+
+    public boolean likeByUser(User user, Review review) {
+        return reviewLikeRepository.findByUserAndReview(user, review).isPresent();
     }
 }

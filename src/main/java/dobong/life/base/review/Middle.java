@@ -23,8 +23,13 @@ public class Middle {
     @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 
-    public Middle(Review review, Keyword keyword) {
+    @ManyToOne
+    @JoinColumn(name = "domain_id")
+    private Keyword domain;
+
+    public Middle(Review review, Keyword keyword, Domain domain) {
         this.review = review;
         this.keyword = keyword;
+        this.domain = domain;
     }
 }

@@ -43,13 +43,6 @@ public class StoreController {
         return new BaseResponse<>(resDTO);
     }
 
-    @GetMapping("/item/{storeId}")
-    public BaseResponse<StoreResDTO> viewStore(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long storeId){
-        Long userId = userPrincipal.getId();
-        StoreResDTO resDTO = storeService.getStore(userId, storeId);
-        return new BaseResponse<>(resDTO);
-    }
-
     @GetMapping("/like")
     public BaseResponse<StoreLikeResDTO> viewStoreLike(@AuthenticationPrincipal UserPrincipal userPrincipal){
         Long userId = userPrincipal.getId();

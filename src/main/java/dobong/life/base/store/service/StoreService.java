@@ -109,47 +109,4 @@ public class StoreService {
         List<Domain> domains = domainQueryService.findByUserId(userId);
         return getItemDTOS(userId, domains);
     }
-
-    public StoreResDTO getStore(Long userId, Long storeId) {
-        ItemDTO itemDTO = getItemDTO(userId, storeId);
-        ReviewsDTO reviewsDTO = getReviewsDTO();
-
-        return new StoreResDTO(itemDTO, reviewsDTO);
-    }
-
-    // TODO : 리뷰와 가게 정보를 같이 반환할때
-    private ReviewsDTO getReviewsDTO() {
-        List<String> keywords = middleQueryService.findAllBy(); // 정렬
-        double averageRating = calculateRating();
-        int reviewCount = 0; // 리뷰개수
-        List<ReviewDTO> reviewDTOList = getReviewDTO();
-        return new ReviewsDTO(keywords, averageRating, reviewCount, reviewDTOList);
-    }
-
-    private List<ReviewDTO> getReviewDTO() {
-        List<ReviewDTO> reviewDTOList = new ArrayList<>();
-
-        List<Review> reviews;
-
-        for(Review review : reviews){
-            Long reviewId;
-            String userName;
-            LocalDateTime reviewDate;
-            String reviewContent;
-            List<String> selectedKeywords;
-            boolean likeByUser;
-            int likeCount;
-            reviewDTOList.add(new ReviewDTO(reviewId, userName, reviewDate, reviewContent, selectedKeywords, likeByUser, likeCount));
-        }
-        return reviewDTOList;
-    }
-
-    private ItemDTO getItemDTO(Long userId, Long storeId){
-        Domain domain = domainQueryService.findById(storeId);
-        Category categoryByDomain = domain.getCategory();
-        List<String> categories = categoryQueryService.getCategories(categoryByDomain);
-        boolean like = domainQueryService.getLikeByUser(domain, userId);
-
-        return new ItemDTO(domain.getName(), domain.getAddress(), categories, like);
-    }
 }

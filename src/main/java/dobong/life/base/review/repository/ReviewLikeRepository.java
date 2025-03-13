@@ -1,8 +1,8 @@
 package dobong.life.base.review.repository;
 
 import dobong.life.base.review.Review;
+import dobong.life.base.review.ReviewLike;
 import dobong.life.base.user.User;
-import dobong.life.domain.like.ReviewLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
