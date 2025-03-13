@@ -82,4 +82,8 @@ public class ReviewQueryService {
     public boolean likeByUser(User user, Review review) {
         return reviewLikeRepository.findByUserAndReview(user, review).isPresent();
     }
+
+    public List<Review> findByUserId(Long userId) {
+        return reviewRepository.findByUserId(userId);
+    }
 }

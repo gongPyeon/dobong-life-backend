@@ -35,6 +35,7 @@ public class ReviewController {
         return new BaseResponse<>(message);
     }
 
+    // TODO: 본인 댓글일때만 삭제 가능하도록 설정
     @DeleteMapping("/review/{reviewId}")
     public BaseResponse<String> deleteReviewLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                  @PathVariable Long reviewId){

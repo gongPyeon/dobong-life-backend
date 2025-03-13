@@ -17,6 +17,7 @@ import dobong.life.base.user.User;
 import dobong.life.base.user.service.query.UserQueryService;
 import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.response.status.BaseCode;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,6 @@ public class ReviewService {
     public BaseCode deleteReview(Long reviewId) {
         Review review = reviewQueryService.getReviewById(reviewId);
         reviewQueryService.deleteReview(review);
-
         return BaseCode.SUCCESS_REVIEW;
     }
 

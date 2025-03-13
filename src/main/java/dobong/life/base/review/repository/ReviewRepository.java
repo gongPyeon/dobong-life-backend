@@ -11,4 +11,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<List<Review>> findByDomain(Domain domain);
+
+    @Query("SELECT r FROM Review r " + "WHERE r.user.id = :userId")
+    List<Review> findByUserId(Long userId);
 }
