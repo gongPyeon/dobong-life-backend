@@ -1,6 +1,4 @@
 package dobong.life.base.review;
-
-import dobong.life.base.review.Review;
 import dobong.life.base.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

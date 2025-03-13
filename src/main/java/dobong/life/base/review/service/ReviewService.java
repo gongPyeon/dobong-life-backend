@@ -11,6 +11,7 @@ import dobong.life.base.store.service.query.DomainQueryService;
 import dobong.life.base.user.User;
 import dobong.life.base.user.service.query.UserQueryService;
 import dobong.life.global.util.constant.DEFINE;
+import dobong.life.global.util.response.status.BaseCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,5 +59,22 @@ public class ReviewService {
                 .map(keyword -> new Middle(review, keywordQueryService.getKeyword(keyword)))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public String updateReviewLikeByUser(Long userId, Long reviewId) {
+        User user = userQueryService.getUserById(userId);
+        Review review = reviewQueryService.getReviewById(reviewId);
+
+        domainQueryService.updateReviewLike(user, review);
+
+        return DEFINE.LIKE_OK;
+    }
+
+    public BaseCode deleteReview(Long reviewId) {
+        Review review = reviewQueryService.getReviewById(reviewId);
+        reviewQueryService.deleteReview(review);
+
+        return BaseCode.SUCCESS_REVIEW;
     }
 }

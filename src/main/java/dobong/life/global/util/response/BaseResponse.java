@@ -18,4 +18,9 @@ public class BaseResponse<T> {
     public BaseResponse(T result) {
         this.result = result;
     }
+
+    public BaseResponse(BaseCode baseCode) {
+        code = baseCode.getCode();
+        message = baseCode.getMessage();
+    }
 }

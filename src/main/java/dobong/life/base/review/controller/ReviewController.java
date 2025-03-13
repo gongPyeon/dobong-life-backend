@@ -5,13 +5,12 @@ import dobong.life.base.review.service.ReviewService;
 import dobong.life.domain.review.controller.request.MyPageReviewInfo;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.util.response.BaseResponse;
+import dobong.life.global.util.response.status.BaseCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +24,21 @@ public class ReviewController {
         Long userId = userPrincipal.getId();
         String message = reviewService.saveReview(reviewReqDTO, userId);
         return new BaseResponse<>(message);
+    }
+
+    @PostMapping("/review/{reviewId}/like")
+    public BaseResponse<String> updateReviewLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @PathVariable Long reviewId){
+        Long userId = userPrincipal.getId();
+        String message = reviewService.updateReviewLikeByUser(userId, reviewId);
+        return new BaseResponse<>(message);
+    }
+
+    @DeleteMapping("/review/{reviewId}")
+    public BaseResponse<String> deleteReviewLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @PathVariable Long reviewId){
+        BaseCode baseCode = reviewService.deleteReview(reviewId);
+        return new BaseResponse<>(baseCode);
     }
 
 }
