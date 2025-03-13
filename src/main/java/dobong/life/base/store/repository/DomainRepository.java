@@ -1,6 +1,7 @@
 package dobong.life.base.store.repository;
 
 import dobong.life.base.store.Domain;
+import dobong.life.base.store.DomainLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,6 +20,4 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
             "   OR d.category.subCategoryName IN :filter" +
             ")")
     List<Domain> findByQueryAndFilter(String query, List<String> filter);
-
-
 }

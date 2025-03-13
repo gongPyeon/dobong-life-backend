@@ -6,10 +6,7 @@ import dobong.life.base.review.service.query.MiddleQueryService;
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.Tag;
-import dobong.life.base.store.controller.response.StoreResDTO;
-import dobong.life.base.store.controller.response.StoresByIdResDTO;
-import dobong.life.base.store.controller.response.StoresByQueryResDTO;
-import dobong.life.base.store.controller.response.StoresResDTO;
+import dobong.life.base.store.controller.response.*;
 import dobong.life.base.store.dto.*;
 import dobong.life.base.store.service.query.CategoryQueryService;
 import dobong.life.base.store.service.query.DomainQueryService;
@@ -54,10 +51,8 @@ public class StoreService {
     }
 
     private List<ItemDTO> getItemDTOList(Long categoryId, Long userId) {
-        List<ItemDTO> itemDTOList = new ArrayList<>();
-
         List<Domain> domains = domainQueryService.findByCategoryId(categoryId);
-        return getItemDTOS(userId, itemDTOList, domains);
+        return getItemDTOS(userId, domains);
     }
 
     public StoresByIdResDTO getStoreListByCategory(Long categoryId, Long userId) {
@@ -85,13 +80,13 @@ public class StoreService {
     }
 
     private List<ItemDTO> getItemDTOListByQuery(Long userId, String query, List<String> filter) {
-        List<ItemDTO> itemDTOList = new ArrayList<>();
-
         List<Domain> domains = domainQueryService.findByQueryAndFilter(query, filter);
-        return getItemDTOS(userId, itemDTOList, domains);
+        return getItemDTOS(userId, domains);
     }
 
-    private List<ItemDTO> getItemDTOS(Long userId, List<ItemDTO> itemDTOList, List<Domain> domains) {
+    private List<ItemDTO> getItemDTOS(Long userId, List<Domain> domains) {
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+
         for(Domain domain : domains){
             String name = domain.getName();
             String address = domain.getAddress();
@@ -103,6 +98,16 @@ public class StoreService {
         }
 
         return itemDTOList;
+    }
+
+    public StoreLikeResDTO getStoreLikeList(Long userId){
+        List<ItemDTO> itemDTOList = getItemDTOList(userId);
+        return new StoreLikeResDTO(itemDTOList);
+    }
+
+    private List<ItemDTO> getItemDTOList(Long userId) {
+        List<Domain> domains = domainQueryService.findByUserId(userId);
+        return getItemDTOS(userId, domains);
     }
 
     public StoreResDTO getStore(Long userId, Long storeId) {

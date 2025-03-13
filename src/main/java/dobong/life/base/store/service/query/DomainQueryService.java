@@ -2,10 +2,10 @@ package dobong.life.base.store.service.query;
 
 import dobong.life.base.review.Review;
 import dobong.life.base.store.Domain;
+import dobong.life.base.store.DomainLike;
+import dobong.life.base.store.exception.DomainNotFoundException;
 import dobong.life.base.store.repository.DomainLikeRepository;
 import dobong.life.base.store.repository.DomainRepository;
-import dobong.life.base.user.User;
-import dobong.life.domain.store.exception.DomainNotFoundException;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,8 +39,7 @@ public class DomainQueryService {
         return domainRepository.findById(storeId)
                 .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 상점 아이디 " + storeId + "를 찾을 수 없습니다"));
     }
-
-    public void updateReviewLike(User user, Review review) {
-
+    public List<Domain> findByUserId(Long userId) {
+        return domainLikeRepository.findByUserId(userId);
     }
 }
