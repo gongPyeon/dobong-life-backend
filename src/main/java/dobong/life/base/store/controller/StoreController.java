@@ -49,4 +49,12 @@ public class StoreController {
         StoreLikeResDTO resDTO = storeService.getStoreLikeList(userId);
         return new BaseResponse<>(resDTO);
     }
+
+    @PostMapping("/item/{storeId}/like")
+    public BaseResponse<String> updateStoreLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @PathVariable Long storeId){
+        Long userId = userPrincipal.getId();
+        String message = storeService.updateStoreLikeByUser(userId, storeId);
+        return new BaseResponse<>(message);
+    }
 }

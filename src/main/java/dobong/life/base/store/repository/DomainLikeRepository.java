@@ -3,7 +3,7 @@ package dobong.life.base.store.repository;
 import com.fasterxml.jackson.databind.introspect.AnnotationCollector;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.DomainLike;
-import dobong.life.domain.user.User;
+import dobong.life.base.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,5 +16,4 @@ public interface DomainLikeRepository extends JpaRepository<DomainLike, Long> {
 
     @Query("SELECT d.domain FROM DomainLike d " + "WHERE d.user.id = :userId")
     List<Domain> findByUserId(Long userId);
-
 }

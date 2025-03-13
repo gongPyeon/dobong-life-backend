@@ -11,7 +11,9 @@ import dobong.life.base.store.dto.*;
 import dobong.life.base.store.service.query.CategoryQueryService;
 import dobong.life.base.store.service.query.DomainQueryService;
 import dobong.life.base.store.service.query.HashTagQueryService;
-import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.base.user.User;
+import dobong.life.base.user.service.query.UserQueryService;
+import dobong.life.global.util.constant.DEFINE;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.Store;
@@ -29,6 +31,7 @@ public class StoreService {
     private HashTagQueryService hashTagQueryService;
     private DomainQueryService domainQueryService;
     private MiddleQueryService middleQueryService;
+    private UserQueryService userQueryService;
 
     public StoresResDTO getStoreList(Long userId){
         List<Category> categories = categoryQueryService.getAllCategory();
@@ -108,5 +111,14 @@ public class StoreService {
     private List<ItemDTO> getItemDTOList(Long userId) {
         List<Domain> domains = domainQueryService.findByUserId(userId);
         return getItemDTOS(userId, domains);
+    }
+
+    public String updateStoreLikeByUser(Long userId, Long storeId) {
+        User user = userQueryService.getUserById(userId);
+        Domain domain = domainQueryService.findById(storeId);
+
+        domainQueryService.updateStoreLike(user, domain);
+
+        return DEFINE.LIKE_OK;
     }
 }

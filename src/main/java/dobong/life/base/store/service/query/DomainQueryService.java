@@ -1,12 +1,16 @@
 package dobong.life.base.store.service.query;
 
 import dobong.life.base.review.Review;
+import dobong.life.base.review.ReviewLike;
+import dobong.life.base.review.exception.ReviewNotFoundException;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.DomainLike;
 import dobong.life.base.store.exception.DomainNotFoundException;
 import dobong.life.base.store.repository.DomainLikeRepository;
 import dobong.life.base.store.repository.DomainRepository;
+import dobong.life.base.user.User;
 import dobong.life.global.util.response.status.BaseErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +45,29 @@ public class DomainQueryService {
     }
     public List<Domain> findByUserId(Long userId) {
         return domainLikeRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public void updateStoreLike(User user, Domain domain) {
+        if(checkDomainLike(user.getId(), domain))
+            removeStoreLike(user, domain);
+
+        DomainLike domainLike = new DomainLike(user, domain);
+        domainLikeRepository.save(domainLike);
+    }
+
+    private boolean checkDomainLike(Long usrId, Domain domain) {
+        return domainLikeRepository.findByDomainAndUser(domain, usrId).isPresent();
+    }
+
+    private DomainLike getStoreLike(User user, Domain domain) {
+        return domainLikeRepository.findByDomainAndUser(domain, user.getId())
+                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+                        "[ERROR] "+domain.getId()+"에 해당하는 상점을 찾을 수 없습니다"));
+    }
+
+    @Transactional
+    public void removeStoreLike(User user, Domain domain){
+        domainLikeRepository.delete(getStoreLike(user, domain));
     }
 }
