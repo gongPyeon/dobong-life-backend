@@ -1,6 +1,6 @@
 package dobong.life.global.auth.support;
 
-import dobong.life.domain.user.User;
+import dobong.life.base.user.User;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.global.auth.dto.RegisterResponse;
 import dobong.life.global.auth.dto.RegisterUserCommand;
@@ -84,7 +84,7 @@ public final class AuthFixture {
                 .id(EMAIL)
                 .pwd(PWD)
                 .pwdCheck(null)
-                .nickName(NICKNAME)
+                .nickname(NICKNAME)
                 .build();
     }
 
@@ -93,7 +93,7 @@ public final class AuthFixture {
                 .id(id)
                 .pwd(PWD)
                 .pwdCheck(PWD)
-                .nickName(NICKNAME)
+                .nickname(NICKNAME)
                 .build();
     }
 
@@ -102,7 +102,7 @@ public final class AuthFixture {
                 .id(EMAIL)
                 .pwd(pwd)
                 .pwdCheck(PWD)
-                .nickName(NICKNAME)
+                .nickname(NICKNAME)
                 .build();
     }
 
@@ -111,7 +111,7 @@ public final class AuthFixture {
                 .id(EMAIL)
                 .pwd(PWD)
                 .pwdCheck(PWD)
-                .nickName(name)
+                .nickname(name)
                 .build();
     }
 

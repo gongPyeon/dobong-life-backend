@@ -1,10 +1,7 @@
 package dobong.life.global.auth.service;
 
-import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.base.user.service.query.UserQueryService;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
-import dobong.life.domain.user.User;
-import dobong.life.domain.user.repository.UserRepository;
-import dobong.life.domain.like.exception.DuplicateException;
 import dobong.life.global.auth.exception.*;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.service.principal.UserPrincipal;

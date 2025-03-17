@@ -2,7 +2,6 @@ package dobong.life.base.user.controller;
 
 import dobong.life.base.user.controller.response.*;
 import dobong.life.base.user.service.MyPageService;
-import dobong.life.domain.user.controller.response.MyPageReviewResDto;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.util.response.BaseResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package dobong.life.global.auth.service;
 
-import dobong.life.domain.user.User;
-import dobong.life.domain.user.exception.UserNotFoundException;
-import dobong.life.domain.user.repository.UserRepository;
+import dobong.life.base.user.User;
+import dobong.life.base.user.exception.UserNotFoundException;
+import dobong.life.base.user.repository.UserRepository;
 import dobong.life.global.auth.dto.RegisterResponse;
 import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.enums.Role;

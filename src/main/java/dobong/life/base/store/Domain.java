@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -22,7 +23,8 @@ public class Domain {
     private String imgUrl;
     private String mapUrl;
     private String address;
-    private LocalDateTime time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String day;
 
     @Column(columnDefinition = "TEXT")

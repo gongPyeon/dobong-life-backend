@@ -15,7 +15,7 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
     @Query("SELECT d FROM Domain d " +
             "WHERE d.name LIKE %:query% " +
             "AND ( " +
-            "   :filter IS EMPTY " +
+            "   :filter IS NULL " +
             "   OR d.category.categoryName IN :filter " +
             "   OR d.category.subCategoryName IN :filter" +
             ")")

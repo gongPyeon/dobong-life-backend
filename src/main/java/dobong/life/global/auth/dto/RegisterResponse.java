@@ -1,6 +1,6 @@
 package dobong.life.global.auth.dto;
 
-import dobong.life.domain.user.User;
+import dobong.life.base.user.User;
 import dobong.life.global.auth.enums.Role;
 
 public record RegisterResponse(

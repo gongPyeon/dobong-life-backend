@@ -3,7 +3,6 @@ package dobong.life.base.review.controller;
 import dobong.life.base.review.controller.request.ReviewReqDTO;
 import dobong.life.base.review.service.ReviewService;
 import dobong.life.base.store.controller.response.StoreResDTO;
-import dobong.life.domain.review.controller.request.MyPageReviewInfo;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.util.response.BaseResponse;
 import dobong.life.global.util.response.status.BaseCode;

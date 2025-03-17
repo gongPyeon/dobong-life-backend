@@ -1,8 +1,5 @@
 package dobong.life.global.util.exception;
 
-import dobong.life.domain.like.exception.DuplicateException;
-import dobong.life.domain.store.exception.SubCategoryNotFoundException;
-import dobong.life.domain.user.exception.UserNotFoundException;
 import dobong.life.global.util.response.BaseErrorResponse;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -49,22 +46,22 @@ public class BaseExceptionHandler {
         return BaseErrorResponse.of(BaseErrorCode.DB_NOT_SAVE);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<BaseErrorResponse> handle_UserNotFoundException(UserNotFoundException e) {
-        log.error("UserNotFoundExceptionHandler.handle_UserNotFoundException <{}> {}", e.getMessage(), e);
-        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-    }
-
-    @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<BaseErrorResponse> handle_DuplicateException(DuplicateException e) {
-        log.error("DuplicateExceptionHandler.handle_DuplicateException <{}> {}", e.getMessage(), e);
-        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-    }
-    @ExceptionHandler(SubCategoryNotFoundException.class)
-    public ResponseEntity<BaseErrorResponse> handle_SubCategoryNotFoundException(SubCategoryNotFoundException e) {
-        log.error("SubCategoryNotFoundExceptionHandler.handle_SubCategoryNotFoundException <{}> {}", e.getMessage(), e);
-        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-    }
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public ResponseEntity<BaseErrorResponse> handle_UserNotFoundException(UserNotFoundException e) {
+//        log.error("UserNotFoundExceptionHandler.handle_UserNotFoundException <{}> {}", e.getMessage(), e);
+//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
+//    }
+//
+//    @ExceptionHandler(DuplicateException.class)
+//    public ResponseEntity<BaseErrorResponse> handle_DuplicateException(DuplicateException e) {
+//        log.error("DuplicateExceptionHandler.handle_DuplicateException <{}> {}", e.getMessage(), e);
+//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
+//    }
+//    @ExceptionHandler(SubCategoryNotFoundException.class)
+//    public ResponseEntity<BaseErrorResponse> handle_SubCategoryNotFoundException(SubCategoryNotFoundException e) {
+//        log.error("SubCategoryNotFoundExceptionHandler.handle_SubCategoryNotFoundException <{}> {}", e.getMessage(), e);
+//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
+//    }
 
 
 }

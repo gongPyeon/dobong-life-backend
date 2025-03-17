@@ -1,6 +1,6 @@
 package dobong.life.base;
 
-import dobong.life.domain.user.repository.UserRepository;
+import dobong.life.base.user.repository.UserRepository;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
 import dobong.life.global.auth.service.AuthenticationService;

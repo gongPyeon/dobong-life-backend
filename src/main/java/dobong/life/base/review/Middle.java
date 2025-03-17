@@ -25,7 +25,7 @@ public class Middle {
 
     @ManyToOne
     @JoinColumn(name = "domain_id")
-    private Keyword domain;
+    private Domain domain;
 
     public Middle(Review review, Keyword keyword, Domain domain) {
         this.review = review;
