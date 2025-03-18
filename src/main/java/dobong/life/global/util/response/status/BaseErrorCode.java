@@ -18,7 +18,7 @@ public enum BaseErrorCode implements StatusCode{
 
     INVALID_OAUTH2(403, "지원하지 않는 소셜 로그인이에요", HttpStatus.FORBIDDEN),
     INVALID_TOKEN(403, "유효하지 않은 토큰이에요", HttpStatus.FORBIDDEN),
-    DB_NOT_SAVE(500, "데이터 저장을 실패했어요", HttpStatus.INTERNAL_SERVER_ERROR),
+    DB_NOT_SAVE(500, "DB 작업을 실패했어요", HttpStatus.INTERNAL_SERVER_ERROR),
     DUPLICATED_VALUE(400, "중복된 요청이에요.", HttpStatus.BAD_REQUEST),
     DUPLICATED_EMAIL(400, "이미 존재하는 아이디에요", HttpStatus.BAD_REQUEST),
     DUPLICATED_NICKNAME(400, "이미 존재하는 닉네임이에요", HttpStatus.BAD_REQUEST),

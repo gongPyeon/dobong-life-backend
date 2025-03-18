@@ -68,7 +68,6 @@ public class DomainQueryService {
     public List<Domain> findByUserId(Long userId) {
         return domainLikeRepository.findByUserId(userId)
                 .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 사용자가 찜한 목록이 없습니다"));
-
     }
 
     @Transactional

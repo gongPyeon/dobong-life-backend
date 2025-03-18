@@ -18,4 +18,16 @@ public class StoreExceptionHandler {
         log.error("DomainNotFoundExceptionHandler.handle_DomainNotFoundException <{}> {}", e.getMessage(), e);
         return BaseErrorResponse.of(e.getStatus());
     }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<BaseErrorResponse> handle_CategoryNotFoundException(CategoryNotFoundException e) {
+        log.error("CategoryNotFoundExceptionHandler.handle_CategoryNotFoundException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(e.getStatus());
+    }
+
+    @ExceptionHandler(HashTagNotFoundException.class)
+    public ResponseEntity<BaseErrorResponse> handle_HashTagNotFoundException(HashTagNotFoundException e) {
+        log.error("HashTagNotFoundExceptionHandler.handle_HashTagNotFoundException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(e.getStatus());
+    }
 }

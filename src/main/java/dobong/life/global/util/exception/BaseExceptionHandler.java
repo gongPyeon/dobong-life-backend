@@ -45,23 +45,4 @@ public class BaseExceptionHandler {
         log.error("DataIntegrityViolationExceptionHandler.handle_DataIntegrityViolationException <{}> {}", e.getMessage(), e);
         return BaseErrorResponse.of(BaseErrorCode.DB_NOT_SAVE);
     }
-
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public ResponseEntity<BaseErrorResponse> handle_UserNotFoundException(UserNotFoundException e) {
-//        log.error("UserNotFoundExceptionHandler.handle_UserNotFoundException <{}> {}", e.getMessage(), e);
-//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-//    }
-//
-//    @ExceptionHandler(DuplicateException.class)
-//    public ResponseEntity<BaseErrorResponse> handle_DuplicateException(DuplicateException e) {
-//        log.error("DuplicateExceptionHandler.handle_DuplicateException <{}> {}", e.getMessage(), e);
-//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-//    }
-//    @ExceptionHandler(SubCategoryNotFoundException.class)
-//    public ResponseEntity<BaseErrorResponse> handle_SubCategoryNotFoundException(SubCategoryNotFoundException e) {
-//        log.error("SubCategoryNotFoundExceptionHandler.handle_SubCategoryNotFoundException <{}> {}", e.getMessage(), e);
-//        return BaseErrorResponse.of(BaseErrorCode.NOT_FOUND);
-//    }
-
-
 }
