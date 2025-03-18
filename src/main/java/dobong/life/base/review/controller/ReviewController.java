@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("/review/create")
+    @PostMapping("/review")
     public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                @Valid @RequestBody ReviewReqDTO reviewReqDTO){
         Long userId = userPrincipal.getId();
