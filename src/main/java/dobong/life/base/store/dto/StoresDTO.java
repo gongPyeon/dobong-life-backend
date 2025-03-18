@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Validated
 public class StoresDTO {
-    private Long categoryId;
     private String categoryName;
     private List<ItemDTO> items;
 }

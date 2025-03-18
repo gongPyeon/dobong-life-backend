@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface DomainRepository extends JpaRepository<Domain, Long> {
-    @Query("SELECT d FROM Domain d " + "WHERE d.category.id = :categoryId")
-    List<Domain> findByCategoryId(Long categoryId);
+    @Query("SELECT d FROM Domain d " + "WHERE d.category.categoryName = :categoryName")
+    Optional<List<Domain>> findByCategoryName(String categoryName);
 
     @Query("SELECT d FROM Domain d " +
             "WHERE d.name LIKE %:query% " +
@@ -19,5 +20,8 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
             "   OR d.category.categoryName IN :filter " +
             "   OR d.category.subCategoryName IN :filter" +
             ")")
-    List<Domain> findByQueryAndFilter(String query, List<String> filter);
+    Optional<List<Domain>> findByQueryAndFilter(String query, List<String> filter);
+
+    @Query("SELECT d FROM Domain d " + "WHERE d.tag.hashtagName = :hashTag")
+    Optional<List<Domain>> findByHashTag(String hashTag);
 }

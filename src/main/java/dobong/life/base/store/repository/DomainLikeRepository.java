@@ -15,5 +15,5 @@ public interface DomainLikeRepository extends JpaRepository<DomainLike, Long> {
     Optional<DomainLike> findByDomainAndUser(Domain domain, Long userId);
 
     @Query("SELECT d.domain FROM DomainLike d " + "WHERE d.user.id = :userId")
-    List<Domain> findByUserId(Long userId);
+    Optional<List<Domain>> findByUserId(Long userId);
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @Slf4j
 public class StoreExceptionHandler {
-    @ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<BaseErrorResponse> handle_DuplicateEmailException(DuplicateEmailException e) {
-        log.error("DuplicateEmailExceptionHandler.handle_DuplicateEmailException <{}> {}", e.getMessage(), e);
-        return BaseErrorResponse.of(BaseErrorCode.DUPLICATED_EMAIL);
+    @ExceptionHandler(DomainNotFoundException.class)
+    public ResponseEntity<BaseErrorResponse> handle_DomainNotFoundException(DomainNotFoundException e) {
+        log.error("DomainNotFoundExceptionHandler.handle_DomainNotFoundException <{}> {}", e.getMessage(), e);
+        return BaseErrorResponse.of(e.getStatus());
     }
 }

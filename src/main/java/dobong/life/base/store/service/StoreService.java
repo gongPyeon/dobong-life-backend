@@ -27,51 +27,58 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class StoreService {
-    private CategoryQueryService categoryQueryService;
-    private HashTagQueryService hashTagQueryService;
-    private DomainQueryService domainQueryService;
-    private MiddleQueryService middleQueryService;
-    private UserQueryService userQueryService;
+    private final CategoryQueryService categoryQueryService;
+    private final HashTagQueryService hashTagQueryService;
+    private final DomainQueryService domainQueryService;
+    private final MiddleQueryService middleQueryService;
+    private final UserQueryService userQueryService;
+
+    private static final int CATEGORY_MAX = 8;
+    private static final int ITEM_MAX = 3;
+    private static final int PAGE_SIZE = 0;
 
     public StoresResDTO getStoreList(Long userId){
-        List<Category> categories = categoryQueryService.getAllCategory();
+        List<String> categories = categoryQueryService.getAllCategory();
         List<StoresDTO> storesDTOS = getStoresDTOList(categories, userId);
         
         return new StoresResDTO(storesDTOS);
     }
 
-    private List<StoresDTO> getStoresDTOList(List<Category> categories, Long userId) {
+    private List<StoresDTO> getStoresDTOList(List<String> categories, Long userId) {
         List<StoresDTO> storesDTOList = new ArrayList<>();
 
-        for(Category category : categories){
-            Long categoryId = category.getId();
-            String categoryName = category.getCategoryName();
-            List<ItemDTO> itemDTOList = getItemDTOList(categoryId, userId);
+        for(String categoryName : categories){
+            List<ItemDTO> itemDTOList = getItemDTOListByCategory(categoryName, userId, ITEM_MAX, PAGE_SIZE);
 
-            storesDTOList.add(new StoresDTO(categoryId, categoryName, itemDTOList));
+            storesDTOList.add(new StoresDTO(categoryName, itemDTOList));
         }
         return storesDTOList;
     }
 
-    private List<ItemDTO> getItemDTOList(Long categoryId, Long userId) {
-        List<Domain> domains = domainQueryService.findByCategoryId(categoryId);
+    private List<ItemDTO> getItemDTOListByCategory(String categoryName, Long userId, int max, int page) {
+        List<Domain> domains = domainQueryService.findByCategoryName(categoryName, max, page);
         return getItemDTOS(userId, domains);
     }
 
-    public StoresByIdResDTO getStoreListByCategory(Long categoryId, Long userId) {
-        Category category = categoryQueryService.getCategory(categoryId);
-        String categoryName = category.getCategoryName();
-        List<HashTagDTO> hashTagDTOList = getHashTagDTOList(categoryId, userId);
-
-        return new StoresByIdResDTO(categoryId, categoryName, hashTagDTOList);
+    private List<ItemDTO> getItemDTOListByHashTag(String hashTag, Long userId) {
+        List<Domain> domains = domainQueryService.findByHashTag(hashTag);
+        return getItemDTOS(userId, domains);
     }
 
-    private List<HashTagDTO> getHashTagDTOList(Long categoryId, Long userId) {
-        List<Tag> tags = hashTagQueryService.getAllTag();
+    public StoresByIdResDTO getStoreListByCategory(String categoryName, Long userId, int page) {
+        List<HashTagDTO> hashTagDTOList = getHashTagDTOList(categoryName, userId);
+        List<ItemDTO> etcList = getItemDTOListByCategory(categoryName, userId, CATEGORY_MAX, page);
+        int pageSize = domainQueryService.getPageSize(categoryName);
+
+        return new StoresByIdResDTO(page, pageSize, categoryName, hashTagDTOList, etcList);
+    }
+
+    private List<HashTagDTO> getHashTagDTOList(String categoryName, Long userId) {
+        List<Tag> tags = hashTagQueryService.getAllTag(categoryName);
         List<HashTagDTO> hashTagDTOList = new ArrayList<>();
 
         for(Tag tag : tags){
-            List<ItemDTO> itemDTOList = getItemDTOList(categoryId, userId);
+            List<ItemDTO> itemDTOList = getItemDTOListByHashTag(tag.getHashtagName(), userId);
             hashTagDTOList.add(new HashTagDTO(tag.getHashtagName(), itemDTOList));
         }
         return hashTagDTOList;

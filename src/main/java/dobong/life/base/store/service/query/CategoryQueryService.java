@@ -5,12 +5,13 @@ import dobong.life.base.store.Category;
 import dobong.life.base.store.exception.CategoryNotFoundException;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class CategoryQueryService {
     private final CategoryRepository categoryRepository;
@@ -21,8 +22,10 @@ public class CategoryQueryService {
                         "[ERROR] "+categoryId+"에 해당하는 카테고리를 찾을 수 없습니다"));
     }
 
-    public List<Category> getAllCategory(){
-        return categoryRepository.findAll();
+    public List<String> getAllCategory(){
+        return categoryRepository.findAllCategoryNames()
+                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.NOT_FOUND,
+                        "[ERROR] 저장되어있는 카테고리가 없습니다"));
     }
 
     public List<String> getCategories(Category categoryByDomain) {

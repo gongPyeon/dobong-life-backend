@@ -32,10 +32,10 @@ public class JwtProvider {
     private static final String REFRESH_TYPE = "refresh";
 
     //@Value("${jwt.access.expiration}")
-    private Long ACCESS_TOKEN_EXPIRE_TIME = 10000L;
+    private Long ACCESS_TOKEN_EXPIRE_TIME = 100000000L;
 
     //@Value("${jwt.refresh.expiration}")
-    private Long REFRESH_TOKEN_EXPIRE_TIME = 10000L;
+    private Long REFRESH_TOKEN_EXPIRE_TIME = 100000000L;
     private final Key key;
     public JwtProvider(@Value("${jwt.secretKey}") String secretKey){
         this.key = Keys.hmacShaKeyFor(

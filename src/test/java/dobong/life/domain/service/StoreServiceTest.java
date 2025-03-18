@@ -1,22 +1,5 @@
 package dobong.life.domain.service;
 
-import dobong.life.domain.store.controller.response.StoreItemResDto;
-import dobong.life.domain.store.controller.response.StoresFilterResDto;
-import dobong.life.domain.store.controller.response.StoresResDto;
-import dobong.life.domain.store.service.StoreService;
-import dobong.life.domain.store.dto.ItemInfo;
-import dobong.life.domain.store.dto.StoreBasicInfo;
-import dobong.life.domain.store.dto.StoreDetailInfo;
-import dobong.life.domain.store.Category;
-import dobong.life.domain.store.Domain;
-import dobong.life.domain.user.User;
-import dobong.life.domain.store.service.query.CategoryQueryService;
-import dobong.life.domain.store.service.query.StoreQueryService;
-import dobong.life.domain.store.service.query.TagQueryService;
-import dobong.life.domain.user.service.query.UserQueryService;
-import dobong.life.domain.store.exception.CategoryNotFoundException;
-import dobong.life.domain.store.exception.DomainNotFoundException;
-import dobong.life.domain.user.exception.UserNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

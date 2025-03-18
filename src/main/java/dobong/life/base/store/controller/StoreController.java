@@ -28,16 +28,18 @@ public class StoreController {
         return new BaseResponse<>(resDTO);
     }
 
-    @GetMapping("/{categoryId}")
-    public BaseResponse<StoresByIdResDTO> viewStoreListByCategory(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long categoryId){
+    @GetMapping("/{categoryName}/{page}")
+    public BaseResponse<StoresByIdResDTO> viewStoreListByCategory(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                                  @PathVariable String categoryName, @PathVariable int page){
         Long userId = userPrincipal.getId();
-        StoresByIdResDTO resDTO = storeService.getStoreListByCategory(userId, categoryId);
+        StoresByIdResDTO resDTO = storeService.getStoreListByCategory(categoryName, userId, page);
         return new BaseResponse<>(resDTO);
     }
 
     @GetMapping("/search")
     public BaseResponse<StoresByQueryResDTO> searchStoreList(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                             @RequestParam String query, @RequestParam List<String> filter){
+                                                             @RequestParam(required = false, defaultValue = "") String query,
+                                                             @RequestParam(required = false) List<String> filter){
         Long userId = userPrincipal.getId();
         StoresByQueryResDTO resDTO = storeService.searchStoreList(userId, query, filter);
         return new BaseResponse<>(resDTO);
