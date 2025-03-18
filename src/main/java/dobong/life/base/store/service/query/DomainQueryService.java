@@ -73,8 +73,10 @@ public class DomainQueryService {
 
     @Transactional
     public void updateStoreLike(User user, Domain domain) {
-        if(checkDomainLike(user.getId(), domain))
+        if(checkDomainLike(user.getId(), domain)) {
             removeStoreLike(user, domain);
+            return;
+        }
 
         DomainLike domainLike = new DomainLike(user, domain);
         domainLikeRepository.save(domainLike);
