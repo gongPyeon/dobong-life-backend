@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +28,7 @@ public class DomainQueryService {
     public List<Domain> findByCategoryName(String categoryName, int max, int page){
         int offset = max * page;
         return domainRepository.findByCategoryName(categoryName)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException
                         (BaseErrorCode.NOT_FOUND, "[ERROR] " + categoryName + "에 해당하는 상점을 찾을 수 없습니다"))
                 .stream()
@@ -43,6 +45,7 @@ public class DomainQueryService {
 
     public List<Domain> findByHashTag(String hashTag) {
         return domainRepository.findByHashTag(hashTag)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException
                         (BaseErrorCode.NOT_FOUND, "[ERROR] " + hashTag + "에 해당하는 상점을 찾을 수 없습니다"))
                 .stream()
@@ -56,6 +59,7 @@ public class DomainQueryService {
 
     public List<Domain> findByQueryAndFilter(String query, List<String> filter) {
         return domainRepository.findByQueryAndFilter(query, filter)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 검색한 상점을 찾을 수 없습니다"))
                 .stream()
                 .collect(Collectors.toList());
@@ -67,6 +71,7 @@ public class DomainQueryService {
     }
     public List<Domain> findByUserId(Long userId) {
         return domainLikeRepository.findByUserId(userId)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 사용자가 찜한 목록이 없습니다"));
     }
 
