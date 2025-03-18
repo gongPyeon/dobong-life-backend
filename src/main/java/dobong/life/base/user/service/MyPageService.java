@@ -25,10 +25,10 @@ import java.util.List;
 @Slf4j
 public class MyPageService {
 
-    private UserQueryService userQueryService;
-    private ReviewQueryService reviewQueryService;
-    private MiddleQueryService middleQueryService;
-    private Setting setting;
+    private final UserQueryService userQueryService;
+    private final ReviewQueryService reviewQueryService;
+    private final MiddleQueryService middleQueryService;
+    private final Setting setting;
 
     public MyPageResDTO getMyPage(Long userId) {
         User user = userQueryService.getUserById(userId);
