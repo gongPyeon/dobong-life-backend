@@ -2,9 +2,11 @@ package dobong.life.base.review.service.query;
 
 import dobong.life.base.review.Middle;
 import dobong.life.base.review.Review;
+import dobong.life.base.review.exception.ReviewNotFoundException;
 import dobong.life.base.review.repository.MiddleRepository;
 import dobong.life.base.store.Domain;
 import dobong.life.base.user.User;
+import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,11 @@ public class MiddleQueryService {
     }
 
     public List<String> getKeywords(Review review) {
-        return middleRepository.findByReview(review);
+        return middleRepository.findByReview(review).orElseThrow(() -> new ReviewNotFoundException
+                (BaseErrorCode.NOT_FOUND, "[ERROR] 중간테이블에서 키워드를 찾을 수 없습니다"))
+                .stream()
+                .map(middle -> middle.getKeyword().getReviewKwdName())
+                .collect(Collectors.toList());
     }
 
     private static List<String> getStrings(Map<String, Long> frequencyMap) {

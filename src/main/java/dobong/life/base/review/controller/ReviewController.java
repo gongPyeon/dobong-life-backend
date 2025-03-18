@@ -13,12 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/dobong")
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("/review")
+    @PostMapping("/review/create")
     public BaseResponse<String> createMyReview(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                @Valid @RequestBody ReviewReqDTO reviewReqDTO){
         Long userId = userPrincipal.getId();

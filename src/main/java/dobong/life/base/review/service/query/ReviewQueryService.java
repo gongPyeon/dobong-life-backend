@@ -1,7 +1,9 @@
 package dobong.life.base.review.service.query;
 
+import dobong.life.base.review.Middle;
 import dobong.life.base.review.ReviewLike;
 import dobong.life.base.review.exception.ReviewNotFoundException;
+import dobong.life.base.review.repository.MiddleRepository;
 import dobong.life.base.review.repository.ReviewLikeRepository;
 import dobong.life.base.review.repository.ReviewRepository;
 import dobong.life.base.review.Review;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ReviewQueryService {
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final MiddleRepository middleRepository;
 
     @Transactional
     public void saveReview(Review review) {
@@ -62,6 +65,9 @@ public class ReviewQueryService {
 
     @Transactional
     public void deleteReview(Review review) {
+        List<Middle> middles = middleRepository.findByReview(review).orElseThrow(
+                ()->new ReviewNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 리뷰 중간 테이블을 찾을 수 없습니다"));
+        middleRepository.deleteAll(middles);
         reviewRepository.delete(review);
     }
 

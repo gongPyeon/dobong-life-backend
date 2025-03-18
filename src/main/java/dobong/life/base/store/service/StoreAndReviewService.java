@@ -7,6 +7,7 @@ import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.controller.response.StoreResDTO;
 import dobong.life.base.store.dto.ItemDTO;
+import dobong.life.base.store.dto.ItemDetailDTO;
 import dobong.life.base.store.dto.ReviewDTO;
 import dobong.life.base.store.dto.ReviewsDTO;
 import dobong.life.base.store.service.query.CategoryQueryService;
@@ -28,10 +29,10 @@ public class StoreAndReviewService {
     private final CategoryQueryService categoryQueryService;
 
     public StoreResDTO getStore(Long userId, Long storeId) {
-        ItemDTO itemDTO = getItemDTO(userId, storeId);
+        ItemDetailDTO itemDetailDTO = getItemDetailDTO(userId, storeId);
         ReviewsDTO reviewsDTO = getReviewsDTO(storeId);
 
-        return new StoreResDTO(itemDTO, reviewsDTO);
+        return new StoreResDTO(itemDetailDTO, reviewsDTO);
     }
 
     private ReviewsDTO getReviewsDTO(Long storeId) {
@@ -63,12 +64,13 @@ public class StoreAndReviewService {
         return reviewDTOList;
     }
 
-    private ItemDTO getItemDTO(Long userId, Long storeId){
+    private ItemDetailDTO getItemDetailDTO(Long userId, Long storeId){
         Domain domain = domainQueryService.findById(storeId);
         Category categoryByDomain = domain.getCategory();
         List<String> categories = categoryQueryService.getCategories(categoryByDomain);
         boolean like = domainQueryService.getLikeByUser(domain, userId);
 
-        return new ItemDTO(domain.getName(), domain.getAddress(), categories, like);
+        return new ItemDetailDTO(domain.getName(), domain.getAddress(), categories, domain.getStartTime(),
+                domain.getEndTime(), domain.getDay(), domain.getDescription(), like);
     }
 }

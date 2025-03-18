@@ -1,6 +1,5 @@
 package dobong.life.base.review.controller.request;
 
-import dobong.life.domain.review.controller.request.MyPageReviewInfo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,7 +15,6 @@ import java.util.List;
 public class ReviewReqDTO {
     @NotNull(message = "가게 ID는 필수입니다")
     private Long storeId;
-    private String name;
 
     private double rating;
 
