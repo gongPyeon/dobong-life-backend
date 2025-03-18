@@ -39,8 +39,8 @@ public class ReviewController {
     @DeleteMapping("/review/{reviewId}")
     public BaseResponse<String> deleteReviewLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                  @PathVariable Long reviewId){
-        BaseCode baseCode = reviewService.deleteReview(reviewId);
-        return new BaseResponse<>(baseCode);
+        String message = reviewService.deleteReview(reviewId);
+        return new BaseResponse<>(message);
     }
 
 }

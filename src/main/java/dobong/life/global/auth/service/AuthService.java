@@ -4,8 +4,6 @@ import dobong.life.base.user.service.query.UserQueryService;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.global.auth.exception.*;
 import dobong.life.global.auth.jwt.JwtProvider;
-import dobong.life.global.auth.service.principal.UserPrincipal;
-import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.redis.RedisUtil;
 import dobong.life.global.util.response.status.BaseCode;
 import dobong.life.global.util.response.status.BaseErrorCode;
@@ -33,7 +31,7 @@ public class AuthService {
 
         userQueryService.save(userSignUpDto, passwordEncoder);
 
-        return DEFINE.SIGN_UP_OK;
+        return BaseCode.SUCCESS_SIGN_UP.getMessage();
     }
 
     @Transactional
@@ -45,12 +43,12 @@ public class AuthService {
 
     public String checkDupId(String id) {
         userQueryService.isDuplicatedID(id);
-        return DEFINE.DUP_ID_OK;
+        return BaseCode.DUP_ID_OK.getMessage();
     }
 
     public String checkDupNickName(String nickname) {
         userQueryService.isDuplicatedNickName(nickname);
-        return DEFINE.DUP_NAME_OK;
+        return BaseCode.DUP_NAME_OK.getMessage();
     }
 
 

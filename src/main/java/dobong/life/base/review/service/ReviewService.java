@@ -8,14 +8,9 @@ import dobong.life.base.review.service.query.ReviewQueryService;
 import dobong.life.base.review.Review;
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
-import dobong.life.base.store.controller.response.StoreResDTO;
-import dobong.life.base.store.dto.ItemDTO;
-import dobong.life.base.store.dto.ReviewDTO;
-import dobong.life.base.store.dto.ReviewsDTO;
 import dobong.life.base.store.service.query.DomainQueryService;
 import dobong.life.base.user.User;
 import dobong.life.base.user.service.query.UserQueryService;
-import dobong.life.global.util.constant.DEFINE;
 import dobong.life.global.util.response.status.BaseCode;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import jakarta.transaction.Transactional;
@@ -49,7 +44,7 @@ public class ReviewService {
         List<Middle> middles = createMiddle(reviewDTO.getSelectedKeywords(), review, domain);
         middleQueryService.saveMiddle(middles);
 
-        return DEFINE.REVIEW_OK;
+        return BaseCode.SUCCESS_SAVE_REVIEW.getMessage();
     }
 
     private Review createReview(ReviewReqDTO reviewDTO, User user, Domain domain) {
@@ -75,13 +70,13 @@ public class ReviewService {
 
         reviewQueryService.updateReviewLike(user, review);
 
-        return DEFINE.LIKE_OK;
+        return BaseCode.SUCCESS_UPDATE_LIKE.getMessage();
     }
 
-    public BaseCode deleteReview(Long reviewId) {
+    public String deleteReview(Long reviewId) {
         Review review = reviewQueryService.getReviewById(reviewId);
         reviewQueryService.deleteReview(review);
-        return BaseCode.SUCCESS_REVIEW;
+        return BaseCode.SUCCESS_DELETE_REVIEW.getMessage();
     }
 
 

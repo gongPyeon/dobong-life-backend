@@ -13,7 +13,7 @@ import dobong.life.base.store.service.query.DomainQueryService;
 import dobong.life.base.store.service.query.HashTagQueryService;
 import dobong.life.base.user.User;
 import dobong.life.base.user.service.query.UserQueryService;
-import dobong.life.global.util.constant.DEFINE;
+import dobong.life.global.util.response.status.BaseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.Store;
@@ -126,6 +126,6 @@ public class StoreService {
 
         domainQueryService.updateStoreLike(user, domain);
 
-        return DEFINE.LIKE_OK;
+        return BaseCode.SUCCESS_UPDATE_LIKE.getMessage();
     }
 }
