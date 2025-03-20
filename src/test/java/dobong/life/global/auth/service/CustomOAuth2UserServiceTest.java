@@ -6,7 +6,6 @@ import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.global.auth.enums.Role;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.auth.support.AuthFixture;
-import dobong.life.global.util.constant.DEFINE;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -30,7 +30,6 @@ public class StoreService {
     private final CategoryQueryService categoryQueryService;
     private final HashTagQueryService hashTagQueryService;
     private final DomainQueryService domainQueryService;
-    private final MiddleQueryService middleQueryService;
     private final UserQueryService userQueryService;
 
     private static final int CATEGORY_MAX = 8;

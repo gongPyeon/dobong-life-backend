@@ -1,6 +1,7 @@
 package dobong.life.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dobong.life.base.store.service.StoreService;
 import dobong.life.global.auth.jwt.JwtProvider;
 import dobong.life.global.auth.jwt.filter.JwtAuthenticationFilter;
 import dobong.life.global.auth.service.AuthenticationService;
@@ -31,6 +32,9 @@ public abstract class BaseControllerTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @MockitoBean
+    protected StoreService storeService;
 
     @Autowired
     protected ObjectMapper objectMapper;

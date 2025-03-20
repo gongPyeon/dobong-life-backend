@@ -4,6 +4,7 @@ import dobong.life.base.store.Domain;
 import dobong.life.base.store.dto.HashTagDTO;
 import dobong.life.base.store.dto.ItemDTO;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.validation.annotation.Validated;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@Validated
+@Builder
 public class StoresByIdResDTO {
     private int currentPage;
     private int pageSize;
