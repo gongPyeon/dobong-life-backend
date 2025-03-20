@@ -30,7 +30,7 @@ public class DomainQueryService {
         return domainRepository.findByCategoryName(categoryName)
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException
-                        (BaseErrorCode.NOT_FOUND, "[ERROR] " + categoryName + "에 해당하는 상점을 찾을 수 없습니다"))
+                        (BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] " + categoryName + "에 해당하는 상점을 찾을 수 없습니다"))
                 .stream()
                 .skip(offset)
                 .limit(max)
@@ -40,14 +40,14 @@ public class DomainQueryService {
     public int getPageSize(String categoryName){
         return domainRepository.findByCategoryName(categoryName)
                 .orElseThrow(() -> new DomainNotFoundException
-                        (BaseErrorCode.NOT_FOUND, "[ERROR] " + categoryName + "에 해당하는 상점을 찾을 수 없습니다")).size();
+                        (BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] " + categoryName + "에 해당하는 상점을 찾을 수 없습니다")).size();
     }
 
     public List<Domain> findByHashTag(String hashTag) {
         return domainRepository.findByHashTag(hashTag)
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DomainNotFoundException
-                        (BaseErrorCode.NOT_FOUND, "[ERROR] " + hashTag + "에 해당하는 상점을 찾을 수 없습니다"))
+                        (BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] " + hashTag + "에 해당하는 상점을 찾을 수 없습니다"))
                 .stream()
                 .limit(MAX)
                 .collect(Collectors.toList());
@@ -60,19 +60,19 @@ public class DomainQueryService {
     public List<Domain> findByQueryAndFilter(String query, List<String> filter) {
         return domainRepository.findByQueryAndFilter(query, filter)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 검색한 상점을 찾을 수 없습니다"))
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] 검색한 상점을 찾을 수 없습니다"))
                 .stream()
                 .collect(Collectors.toList());
     }
 
     public Domain findById(Long storeId) {
         return domainRepository.findById(storeId)
-                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 상점 아이디 " + storeId + "를 찾을 수 없습니다"));
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] 상점 아이디 " + storeId + "를 찾을 수 없습니다"));
     }
     public List<Domain> findByUserId(Long userId) {
         return domainLikeRepository.findByUserId(userId)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 사용자가 찜한 목록이 없습니다"));
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND, "[ERROR] 사용자가 찜한 목록이 없습니다"));
     }
 
     @Transactional
@@ -92,7 +92,7 @@ public class DomainQueryService {
 
     private DomainLike getStoreLike(User user, Domain domain) {
         return domainLikeRepository.findByDomainAndUser(domain, user.getId())
-                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND,
                         "[ERROR] "+domain.getId()+"에 해당하는 상점을 찾을 수 없습니다"));
     }
 

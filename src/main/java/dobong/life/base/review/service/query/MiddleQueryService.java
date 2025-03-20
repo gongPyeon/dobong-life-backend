@@ -37,8 +37,10 @@ public class MiddleQueryService {
     }
 
     public List<String> getKeywords(Review review) {
-        return middleRepository.findByReview(review).orElseThrow(() -> new ReviewNotFoundException
-                (BaseErrorCode.NOT_FOUND, "[ERROR] 중간테이블에서 키워드를 찾을 수 없습니다"))
+        return middleRepository.findByReview(review)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new ReviewNotFoundException
+                (BaseErrorCode.MIDDLE_NOT_FOUND, "[ERROR] 중간테이블에서 키워드를 찾을 수 없습니다"))
                 .stream()
                 .map(middle -> middle.getKeyword().getReviewKwdName())
                 .collect(Collectors.toList());

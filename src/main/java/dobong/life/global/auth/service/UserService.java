@@ -4,8 +4,6 @@ import dobong.life.global.auth.dto.RegisterResponse;
 import dobong.life.global.auth.dto.RegisterUserCommand;
 import dobong.life.base.user.User;
 import dobong.life.base.user.repository.UserRepository;
-import dobong.life.base.user.service.query.UserQueryService;
-import dobong.life.global.util.constant.DEFINE;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

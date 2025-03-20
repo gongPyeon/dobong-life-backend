@@ -29,7 +29,14 @@ public enum BaseErrorCode implements StatusCode{
     FAIL_LOGIN(401, "로그인에 실패했어요", HttpStatus.UNAUTHORIZED),
     INVALID_PASSWORD(401, "비밀번호가 달라요", HttpStatus.UNAUTHORIZED),
     USER_NOT_FOUND(401, "해당 사용자를 찾을 수 없어요", HttpStatus.UNAUTHORIZED),
-    INVALID_REISSUE(401, "액세스 토큰 갱신에 실패했어요", HttpStatus.UNAUTHORIZED);
+    INVALID_REISSUE(401, "액세스 토큰 갱신에 실패했어요", HttpStatus.UNAUTHORIZED),
+
+    KEYWORD_NOT_FOUND(404, "키워드를 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    REVIEW_NOT_FOUND(404, "리뷰를 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    MIDDLE_NOT_FOUND(404, "중간 테이블을 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    DOMAIN_NOT_FOUND(404, "도메인을 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    HASHTAG_NOT_FOUND(404, "해시태그를 찾을 수 없어요", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

@@ -18,13 +18,13 @@ public class CategoryQueryService {
 
     public Category getCategory(Long categoryId){
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.CATEGORY_NOT_FOUND,
                         "[ERROR] "+categoryId+"에 해당하는 카테고리를 찾을 수 없습니다"));
     }
 
     public List<String> getAllCategory(){
         return categoryRepository.findAllCategoryNames()
-                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new CategoryNotFoundException(BaseErrorCode.CATEGORY_NOT_FOUND,
                         "[ERROR] 저장되어있는 카테고리가 없습니다"));
     }
 

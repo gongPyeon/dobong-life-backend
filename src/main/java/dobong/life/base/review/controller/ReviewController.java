@@ -1,6 +1,7 @@
 package dobong.life.base.review.controller;
 
 import dobong.life.base.review.controller.request.ReviewReqDTO;
+import dobong.life.base.review.controller.response.ReviewsResDTO;
 import dobong.life.base.review.service.ReviewService;
 import dobong.life.base.store.controller.response.StoreResDTO;
 import dobong.life.global.auth.service.principal.UserPrincipal;
@@ -42,5 +43,4 @@ public class ReviewController {
         String message = reviewService.deleteReview(reviewId);
         return new BaseResponse<>(message);
     }
-
 }

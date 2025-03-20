@@ -31,7 +31,7 @@ public class ReviewQueryService {
 
     public Review getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.REVIEW_NOT_FOUND,
                         "[ERROR] "+reviewId+"에 해당하는 리뷰를 찾을 수 없습니다"));
 
     }
@@ -54,7 +54,7 @@ public class ReviewQueryService {
 
     private ReviewLike getReviewLike(User user, Review review) {
         return reviewLikeRepository.findByUserAndReview(user, review)
-                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.REVIEW_NOT_FOUND,
                         "[ERROR] "+review.getId()+"에 해당하는 리뷰를 찾을 수 없습니다"));
     }
 
@@ -66,7 +66,7 @@ public class ReviewQueryService {
     @Transactional
     public void deleteReview(Review review) {
         List<Middle> middles = middleRepository.findByReview(review).orElseThrow(
-                ()->new ReviewNotFoundException(BaseErrorCode.NOT_FOUND, "[ERROR] 리뷰 중간 테이블을 찾을 수 없습니다"));
+                ()->new ReviewNotFoundException(BaseErrorCode.REVIEW_NOT_FOUND, "[ERROR] 리뷰 중간 테이블을 찾을 수 없습니다"));
         middleRepository.deleteAll(middles);
         reviewRepository.delete(review);
     }
@@ -81,7 +81,9 @@ public class ReviewQueryService {
     }
 
     public List<Review> findByDomain(Domain domain) {
-        return reviewRepository.findByDomain(domain).orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.NOT_FOUND,
+        return reviewRepository.findByDomain(domain)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new ReviewNotFoundException(BaseErrorCode.REVIEW_NOT_FOUND,
                 "[ERROR] "+domain.getName()+"에 해당하는 리뷰를 찾을 수 없습니다"));
     }
 

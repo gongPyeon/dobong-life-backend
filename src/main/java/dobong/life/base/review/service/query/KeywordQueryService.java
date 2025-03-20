@@ -21,7 +21,7 @@ public class KeywordQueryService {
 
     public Keyword getKeyword(String keyword) {
         return keywordRepository.findByReviewKwdName(keyword)
-                .orElseThrow(() -> new KeywordNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new KeywordNotFoundException(BaseErrorCode.KEYWORD_NOT_FOUND,
                         "[ERROR] "+keyword+"를 찾을 수 없습니다"));
     }
 }

@@ -20,7 +20,7 @@ public class UserQueryService {
 
     public User getUserById(long userId){
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(BaseErrorCode.NOT_FOUND,
+                .orElseThrow(() -> new UserNotFoundException(BaseErrorCode.USER_NOT_FOUND,
                         "[ERROR] "+userId+"에 해당하는 사용자를 찾을 수 없습니다"));
     }
 

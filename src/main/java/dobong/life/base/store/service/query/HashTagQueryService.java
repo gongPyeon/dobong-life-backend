@@ -16,7 +16,8 @@ public class HashTagQueryService {
 
     public List<Tag> getAllTag(String categoryName){
         return tagRepository.findAll(categoryName)
-                .orElseThrow(() -> new HashTagNotFoundException(BaseErrorCode.NOT_FOUND,
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new HashTagNotFoundException(BaseErrorCode.HASHTAG_NOT_FOUND,
                         "[ERROR] "+categoryName+"에 해당되는 태그가 없습니다"));
     }
 }
