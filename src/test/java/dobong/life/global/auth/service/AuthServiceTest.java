@@ -1,13 +1,13 @@
 package dobong.life.global.auth.service;
 
-import dobong.life.domain.user.service.query.UserQueryService;
+import dobong.life.base.user.service.query.UserQueryService;
 import dobong.life.global.auth.controller.request.UserSignUpDto;
 import dobong.life.global.auth.exception.DuplicateEmailException;
 import dobong.life.global.auth.exception.DuplicateNicknameException;
 import dobong.life.global.auth.exception.InvalidPasswordException;
 import dobong.life.global.auth.service.principal.UserPrincipal;
 import dobong.life.global.auth.support.AuthFixture;
-import dobong.life.global.util.constant.DEFINE;
+import dobong.life.global.util.response.status.BaseCode;
 import dobong.life.global.util.response.status.BaseErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,20 +46,20 @@ class AuthServiceTest {
         @DisplayName("성공")
         void success(){
             // given
-//            doNothing().when(userQueryService).isDuplicatedID(userSignUpDto.getId());
-//            doNothing().when(userQueryService).isDuplicatedNickName(userSignUpDto.getNickName());
-//            doNothing().when(userQueryService).isInvalidPwdCheck(userSignUpDto);
-//            doNothing().when(userQueryService).save(userSignUpDto, passwordEncoder);
+            doNothing().when(userQueryService).isDuplicatedID(userSignUpDto.getId());
+            doNothing().when(userQueryService).isDuplicatedNickName(userSignUpDto.getNickname());
+            doNothing().when(userQueryService).isInvalidPwdCheck(userSignUpDto);
+            doNothing().when(userQueryService).save(userSignUpDto, passwordEncoder);
 
             // when
             String result = authService.signUp(userSignUpDto);
 
             // then
-//            assertEquals(DEFINE.SIGN_UP_OK, result);
-//            verify(userQueryService).isDuplicatedID(userSignUpDto.getId());
-//            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickName());
-//            verify(userQueryService).isInvalidPwdCheck(userSignUpDto);
-//            verify(userQueryService).save(userSignUpDto, passwordEncoder);
+            assertEquals(BaseCode.SUCCESS_SIGN_UP.getMessage(), result);
+            verify(userQueryService).isDuplicatedID(userSignUpDto.getId());
+            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickname());
+            verify(userQueryService).isInvalidPwdCheck(userSignUpDto);
+            verify(userQueryService).save(userSignUpDto, passwordEncoder);
         }
 
         @Test
@@ -86,12 +86,12 @@ class AuthServiceTest {
             doNothing().when(userQueryService).isDuplicatedID(userSignUpDto.getId());
             doThrow(new DuplicateNicknameException(BaseErrorCode.DUPLICATED_NICKNAME))
                     .when(userQueryService)
-                    .isDuplicatedNickName(userSignUpDto.getNickName());
+                    .isDuplicatedNickName(userSignUpDto.getNickname());
 
             // then
             assertThrows(DuplicateNicknameException.class, () -> authService.signUp(userSignUpDto));
             verify(userQueryService).isDuplicatedID(userSignUpDto.getId());
-            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickName());
+            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickname());
             verify(userQueryService, never()).isInvalidPwdCheck(any());
             verify(userQueryService, never()).save(any(UserSignUpDto.class), any());
         }
@@ -101,13 +101,13 @@ class AuthServiceTest {
         void throwInvalidPwdException(){
             // when
             doNothing().when(userQueryService).isDuplicatedID(userSignUpDto.getId());
-            doNothing().when(userQueryService).isDuplicatedNickName(userSignUpDto.getNickName());
+            doNothing().when(userQueryService).isDuplicatedNickName(userSignUpDto.getNickname());
             doThrow(new InvalidPasswordException(BaseErrorCode.INVALID_PASSWORD)).when(userQueryService).isInvalidPwdCheck(userSignUpDto);
 
             // then
             assertThrows(InvalidPasswordException.class, () -> authService.signUp(userSignUpDto));
             verify(userQueryService).isDuplicatedID(userSignUpDto.getId());
-            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickName());
+            verify(userQueryService).isDuplicatedNickName(userSignUpDto.getNickname());
             verify(userQueryService).isInvalidPwdCheck(userSignUpDto);
             verify(userQueryService, never()).save(any(UserSignUpDto.class), any());
         }

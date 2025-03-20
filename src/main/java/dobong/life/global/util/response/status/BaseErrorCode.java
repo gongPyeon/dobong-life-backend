@@ -36,7 +36,12 @@ public enum BaseErrorCode implements StatusCode{
     MIDDLE_NOT_FOUND(404, "중간 테이블을 찾을 수 없어요", HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없어요", HttpStatus.NOT_FOUND),
     DOMAIN_NOT_FOUND(404, "도메인을 찾을 수 없어요", HttpStatus.NOT_FOUND),
-    HASHTAG_NOT_FOUND(404, "해시태그를 찾을 수 없어요", HttpStatus.NOT_FOUND);
+    HASHTAG_NOT_FOUND(404, "해시태그를 찾을 수 없어요", HttpStatus.NOT_FOUND),
+
+    FAIL_IMG(500, "이미지 처리를 실패했어요", HttpStatus.INTERNAL_SERVER_ERROR),
+    IMG_NOT_FOUND(404, "이미지를 찾을 수 없어요", HttpStatus.NOT_FOUND),
+    INVALID_IMG(400, "지원하지 않은 파일이에요", HttpStatus.BAD_REQUEST),
+    INVALID_IMG_FORMAT(400, "지원하지 않은 파일형식이에요", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

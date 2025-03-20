@@ -54,4 +54,9 @@ public class UserQueryService {
         User user = getUserById(userId);
         user.updateNickName(nickName);
     }
+
+    @Transactional
+    public void save(User user){
+        userRepository.save(user);
+    }
 }

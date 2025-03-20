@@ -124,7 +124,7 @@ class UserSignUpDtoTest {
             UserSignUpDto result = AuthFixture.userSignUpDtoByName(validUsrName);
 
             // then
-            assertThat(result.getNickName()).isEqualTo(expectedName);
+            assertThat(result.getNickname()).isEqualTo(expectedName);
 
         }
 

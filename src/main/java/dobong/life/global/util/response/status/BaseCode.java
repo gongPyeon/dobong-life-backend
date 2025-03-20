@@ -15,7 +15,7 @@ public enum BaseCode implements StatusCode{
     SUCCESS_UPDATE_LIKE(200, "좋아요가 적용됐어요"),
     SUCCESS_SIGN_UP(200, "회원가입을 완료했어요"),
     SUCCESS_DELETE_IMG(200, "성공적으로 이미지가 삭제되었어요"),
-    SUCCESS_FIX_IMG(200, "성공적으로 이미지가 변경되었어요"),
+    SUCCESS_FIX_IMG(200, "성공적으로 이미지가 업데이트되었어요"),
     DUP_ID_OK(200, "성공적으로 이미지가 변경되었어요"),
     DUP_NAME_OK(200, "성공적으로 이미지가 변경되었어요");
 
