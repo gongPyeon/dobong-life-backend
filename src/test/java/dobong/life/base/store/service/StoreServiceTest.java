@@ -175,6 +175,41 @@ class StoreServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("검색어에 따른 상점 조회 서비스 실행 시 ")
+    class GetSearchStoreListTest{
+        @Test
+        @DisplayName(":성공")
+        void getSearchStoreList_success(){
+            // given
+            String query = StoreFixture.QUERY;
+            List<String> filter = StoreFixture.FILTER;
+            given(domainQueryService.findByQueryAndFilter(query, filter)).willReturn(testStoreDTOList);
 
+            // when
+            StoresByQueryResDTO result = storeService.searchStoreList(userId, query, filter);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getFilter().size()).isEqualTo(filter.size());
+            assertThat(result.getQuery()).isEqualTo(query);
+            assertThat(result.getItemDTOList().get(0).getName())
+                    .isEqualTo(testStoreDTOList.get(0).getName());
+        }
+
+        @Test
+        @DisplayName("검색어에 해당하는 상점이 없을 경우:실패")
+        void getSearchStoreList_storeNotFound(){
+            // given
+            String query = StoreFixture.QUERY;
+            List<String> filter = StoreFixture.FILTER;
+            given(domainQueryService.findByQueryAndFilter(query,filter)).willThrow(new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND,
+                    "[ERROR] 검색한 상점을 찾을 수 없습니다"));
+
+            // when & then
+            assertThrows(DomainNotFoundException.class,
+                    ()-> storeService.searchStoreList(userId, query, filter));
+        }
+    }
 
 }
