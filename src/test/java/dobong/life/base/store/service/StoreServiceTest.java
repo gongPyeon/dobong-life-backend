@@ -212,4 +212,35 @@ class StoreServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("찜목록 서비스 실행 시 ")
+    class GetStoreLikeTest{
+        @Test
+        @DisplayName(":성공")
+        void getStoreLike_success(){
+            // given
+            given(domainQueryService.findByUserId(userId)).willReturn(testStoreDTOList);
+
+            // when
+            StoreLikeResDTO result = storeService.getStoreLikeList(userId);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getItemDTOList().get(0).getName())
+                    .isEqualTo(testStoreDTOList.get(0).getName());
+        }
+
+        @Test
+        @DisplayName("찜목록에 해당하는 상점이 없을 경우:실패")
+        void getStoreLike_storeNotFound(){
+            // given
+            given(domainQueryService.findByUserId(userId)).willThrow(new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND,
+                    "[ERROR] 사용자가 찜한 목록이 없습니다"));
+
+            // when & then
+            assertThrows(DomainNotFoundException.class,
+                    ()-> storeService.getStoreLikeList(userId));
+        }
+    }
+
 }
