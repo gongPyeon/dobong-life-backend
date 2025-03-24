@@ -2,6 +2,7 @@ package dobong.life.base.store.support;
 
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
+import dobong.life.base.store.Tag;
 import dobong.life.base.store.controller.response.StoreLikeResDTO;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresByQueryResDTO;
@@ -98,5 +99,12 @@ public final class StoreFixture {
         );
 
         return list;
+    }
+
+    public static Tag tag() {
+        return Tag.builder()
+                .id(1L)
+                .hashtagName(HASH_TAG)
+                .build();
     }
 }
