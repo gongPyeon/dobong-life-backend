@@ -1,5 +1,7 @@
 package dobong.life.base.store.support;
 
+import dobong.life.base.store.Category;
+import dobong.life.base.store.Domain;
 import dobong.life.base.store.controller.response.StoreLikeResDTO;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresByQueryResDTO;
@@ -11,6 +13,7 @@ import dobong.life.global.auth.controller.request.UserSignUpDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public final class StoreFixture {
@@ -78,5 +81,22 @@ public final class StoreFixture {
                 .name(STORE_NAME)
                 .categories(CATEGORIES)
                 .build();
+    }
+
+    public static Category category() {
+        return Category.builder()
+                .id(1L)
+                .categoryName("음식")
+                .subCategoryName("한식")
+                .name("국밥")
+                .build();
+    }
+
+    public static List<Domain> domainList() {
+        List<Domain> list = Arrays.asList(
+                new Domain(1L, "마약순대국밥")
+        );
+
+        return list;
     }
 }

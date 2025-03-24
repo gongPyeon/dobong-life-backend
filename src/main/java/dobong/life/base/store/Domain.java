@@ -37,4 +37,9 @@ public class Domain {
     @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public Domain(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
