@@ -243,4 +243,51 @@ class StoreServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("상점 좋아요(찜) 서비스 실행 시 ")
+    class UpdateStoreLikeTest{
+        @Test
+        @DisplayName(":성공")
+        void updateStoreLike_success(){
+            // given
+            Domain testDomain = testStoreDTOList.get(0);
+            given(userQueryService.getUserById(userId)).willReturn(testUser);
+            given(domainQueryService.findById(storeId)).willReturn(testDomain);
+
+            // when
+            String result = storeService.updateStoreLikeByUser(userId, storeId);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result).isEqualTo(BaseCode.SUCCESS_UPDATE_LIKE.getMessage());
+
+        }
+
+        @Test
+        @DisplayName("좋아요를 요청한 사용자가 없을 경우:실패")
+        void updateStoreLike_userNotFound(){
+            // given
+            given(userQueryService.getUserById(userId)).willThrow(new UserNotFoundException(BaseErrorCode.USER_NOT_FOUND,
+                    "[ERROR] "+userId+"에 해당하는 사용자를 찾을 수 없습니다"));
+
+            // when & then
+            assertThrows(UserNotFoundException.class,
+                    ()-> storeService.updateStoreLikeByUser(userId, storeId));
+        }
+
+        @Test
+        @DisplayName("좋아요를 요청한 상점이 없을 경우:실패")
+        void updateStoreLike_storeNotFound(){
+            // given
+            given(userQueryService.getUserById(userId)).willReturn(testUser);
+            given(domainQueryService.findById(storeId)).willThrow(new DomainNotFoundException(BaseErrorCode.DOMAIN_NOT_FOUND,
+                    "[ERROR] 상점 아이디 " + storeId + "를 찾을 수 없습니다"));
+
+            // when & then
+            assertThrows(DomainNotFoundException.class,
+                    ()-> storeService.updateStoreLikeByUser(userId, storeId));
+
+        }
+    }
+
 }
