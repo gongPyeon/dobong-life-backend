@@ -51,4 +51,24 @@ class ReviewControllerTest extends BaseControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value(BaseCode.SUCCESS_SAVE_REVIEW.getMessage()));
     }
+
+    @Test
+    @DisplayName("리뷰좋아요 :성공")
+    void updateReviewLikeTest() throws Exception{
+        //given
+        String message = BaseCode.SUCCESS_UPDATE_LIKE.getMessage();
+        given(reviewService.updateReviewLikeByUser(anyLong(), anyLong())).willReturn(message);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post("/dobong/review/1/like")
+                        .header(AUTHORIZATION, accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf())
+        ).andDo(print());
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(BaseCode.SUCCESS_UPDATE_LIKE.getMessage()));
+    }
 }
