@@ -71,4 +71,24 @@ class ReviewControllerTest extends BaseControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value(BaseCode.SUCCESS_UPDATE_LIKE.getMessage()));
     }
+
+    @Test
+    @DisplayName("리뷰삭제 :성공")
+    void deleteReviewLikeTest() throws Exception{
+        //given
+        String message = BaseCode.SUCCESS_DELETE_REVIEW.getMessage();
+        given(reviewService.deleteReview(anyLong())).willReturn(message);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/dobong/review/1")
+                        .header(AUTHORIZATION, accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf())
+        ).andDo(print());
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(BaseCode.SUCCESS_DELETE_REVIEW.getMessage()));
+    }
 }
