@@ -1,10 +1,12 @@
 package dobong.life.base.store.support;
 
+import dobong.life.base.review.Review;
 import dobong.life.base.store.Category;
 import dobong.life.base.store.Domain;
 import dobong.life.base.store.Tag;
 import dobong.life.base.store.controller.response.*;
 import dobong.life.base.store.dto.*;
+import dobong.life.global.auth.support.AuthFixture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -147,6 +149,18 @@ public final class StoreFixture {
                 .day("월")
                 .description("")
                 .like(false)
+                .build();
+    }
+
+    public static List<Review> reviewList(){
+        List<Review> list = Arrays.asList(review());
+        return list;
+    }
+
+    private static Review review() {
+        return Review.builder()
+                .user(AuthFixture.user())
+                .domain(domain())
                 .build();
     }
 }
