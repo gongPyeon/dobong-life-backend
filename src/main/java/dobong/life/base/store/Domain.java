@@ -38,8 +38,9 @@ public class Domain {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public Domain(Long id, String name) {
+    public Domain(Long id, String name, Category category) {
         this.id = id;
         this.name = name;
+        this.category = category;
     }
 }

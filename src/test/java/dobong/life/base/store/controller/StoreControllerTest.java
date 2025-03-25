@@ -1,7 +1,7 @@
 package dobong.life.base.store.controller;
 
 import dobong.life.base.BaseControllerTest;
-import dobong.life.base.store.controller.expected.dto.StoreResDTO;
+import dobong.life.base.store.controller.expected.dto.StoreResDto;
 import dobong.life.base.store.controller.response.StoreLikeResDTO;
 import dobong.life.base.store.controller.response.StoresByIdResDTO;
 import dobong.life.base.store.controller.response.StoresByQueryResDTO;
@@ -45,7 +45,7 @@ class StoreControllerTest extends BaseControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(StoreResDTO.expectedGetStoresResDTO());
+                .andExpect(StoreResDto.expectedGetStoresResDTO());
     }
 
     @Test
@@ -64,7 +64,7 @@ class StoreControllerTest extends BaseControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(StoreResDTO.expectedGetStoresByIdResDTO());
+                .andExpect(StoreResDto.expectedGetStoresByIdResDTO());
     }
 
     @Test
@@ -83,7 +83,7 @@ class StoreControllerTest extends BaseControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(StoreResDTO.expectedGetStoresByQueryResDTO());
+                .andExpect(StoreResDto.expectedGetStoresByQueryResDTO());
     }
 
     @Test
@@ -102,7 +102,7 @@ class StoreControllerTest extends BaseControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(StoreResDTO.expectedGetStoreLikeResDTO());
+                .andExpect(StoreResDto.expectedGetStoreLikeResDTO());
     }
     @Test
     @DisplayName("상점에 대한 찜 적용:성공")

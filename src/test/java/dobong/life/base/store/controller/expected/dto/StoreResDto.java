@@ -6,7 +6,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-public class StoreResDTO {
+public class StoreResDto {
     public static ResultMatcher expectedGetStoresResDTO() {
         return result -> {
             MockMvcResultMatchers.jsonPath("$.result.storesDTOList[0].categoryName").value(StoreFixture.CATEGORY_NAME).match(result);
@@ -46,6 +46,16 @@ public class StoreResDTO {
             MockMvcResultMatchers.jsonPath("$.result.itemDTOList[0].address").value(StoreFixture.ADDRESS).match(result);
             MockMvcResultMatchers.jsonPath("$.result.itemDTOList[0].categories", containsInAnyOrder(StoreFixture.CATEGORIES));
             MockMvcResultMatchers.jsonPath("$.result.itemDTOList[0].like").value(false).match(result);
+        };
+    }
+
+    public static ResultMatcher expectedGetStoreResDTO() {
+        return result -> {
+            MockMvcResultMatchers.jsonPath("$.result.itemDetailDTO.name").value(StoreFixture.STORE_NAME).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.itemDetailDTO.address").value(StoreFixture.ADDRESS).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.itemDetailDTO.categories", containsInAnyOrder(StoreFixture.CATEGORIES));
+            MockMvcResultMatchers.jsonPath("$.result.itemDetailDTO.like").value(false).match(result);
+            MockMvcResultMatchers.jsonPath("$.result.reviewsDTO.reviewDTOList[0].userName").value("홍길동").match(result);
         };
     }
 }
