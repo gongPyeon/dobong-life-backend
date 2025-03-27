@@ -13,6 +13,7 @@ public class CorsConfig {
     public CorsConfigurationSource configurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin(CLIENT_URL);
+        corsConfiguration.addAllowedOrigin("http://localhost:8080");
         corsConfiguration.addAllowedMethod("*"); // 모든 HTTP 메소드 허용
         corsConfiguration.addAllowedHeader("*"); // 모든 헤더 허용
 

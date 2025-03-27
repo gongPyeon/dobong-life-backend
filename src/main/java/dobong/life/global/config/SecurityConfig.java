@@ -56,7 +56,14 @@ public class SecurityConfig {
         // 요청에 대한 권한 설정
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/test/**", "/auth/**", "/login").permitAll()
+                        .requestMatchers("/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/test/**",
+                                "/auth/**",
+                                "/login").permitAll()
                         .anyRequest().authenticated());
         // oauth2 로그인
         http

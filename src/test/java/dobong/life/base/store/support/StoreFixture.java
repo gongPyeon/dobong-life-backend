@@ -157,7 +157,7 @@ public final class StoreFixture {
         return list;
     }
 
-    private static Review review() {
+    public static Review review() {
         return Review.builder()
                 .user(AuthFixture.user())
                 .domain(domain())

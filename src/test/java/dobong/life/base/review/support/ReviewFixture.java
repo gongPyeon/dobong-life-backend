@@ -1,5 +1,6 @@
 package dobong.life.base.review.support;
 
+import dobong.life.base.review.Review;
 import dobong.life.base.review.controller.request.ReviewReqDTO;
 import dobong.life.base.store.support.StoreFixture;
 
